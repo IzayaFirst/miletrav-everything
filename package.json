@@ -1,0 +1,33 @@
+{
+  "name": "senior",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint *.js",
+    "dev": " node app.js  ",
+    "build": "next build",
+    "start": "NODE_ENV=production node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "next": "^2.4.3",
+    "react": "^15.5.4",
+    "react-cookie": "1.0.4",
+    "react-dom": "^15.5.4",
+    "universal-cookie": "^2.0.8"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
+    "eslint-plugin-flowtype": "^2.34.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.3",
+    "eslint-config-airbnb": "^14.1.0"
+  }
+}
