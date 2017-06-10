@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react'
+import Head from 'next/head'
 
-class Header extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        );
-    }
-}
+const Header = () => (
+  <Head>
+    <title>MileTrav Everything</title>
+    <link rel="stylesheet" href="/asset/bootstrap.css" />
+    <link rel="stylesheet" href="/asset/miletrav.css" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+  </Head>
+)
 
 export default Header

@@ -13,5 +13,10 @@
         "react/jsx-filename-extension": 0,
         "react/react-in-jsx-scope": 0,
         "func-names": 0
+    },
+    "eslintConfig": {
+        "globals": {
+            "window": true
+        }
     }
 }
