@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
-import RegisterLayout from '../components/Layout/RegisterLayout'
 
 class register extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header script={['//maps.googleapis.com/maps/api/js?key=AIzaSyBoUj5VmkPUQDWK3HCwGYlIzDGe-n2EInk&libraries=places&language=en&region=TH']} />
         <Navbar />
-        <RegisterLayout />
       </div>
     );
   }
