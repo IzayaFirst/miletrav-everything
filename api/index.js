@@ -10,7 +10,7 @@ export async function get({ url, params, authType, authToken }) {
   }
 }
 
-export async function post({ url, data, authType = 'Bearer', authToken }) {
+export async function post({ url, data, authType = '', authToken = ''}) {
   const method = 'post'
   const res = await axiosRequest({ baseURL, url, method, data, authType, authToken })
   return {
@@ -38,13 +38,16 @@ export async function del({ url, params, authType, authToken }) {
 }
 
 function axiosRequest({ url, method, params, data, authType = 'Basic', authToken }) {
-  return axios.request({
-    baseURL,
-    url,
-    method,
-    headers: Object.assign({ 'Content-Type': 'application/json' }, { Authorization: `${authType} ${authToken}` }),
-    withCredentials: false,
-    data: Object.assign({}, data),
-    params: Object.assign({}, params),
-  })
+  
+    return axios.request({
+      baseURL,
+      url,
+      method,
+      headers: Object.assign({ 'Content-Type': 'application/json' }, { Authorization: `${authType} ${authToken}` }),
+      withCredentials: false,
+      data: Object.assign({}, data),
+      params: Object.assign({}, params),
+    })
+ 
+
 }

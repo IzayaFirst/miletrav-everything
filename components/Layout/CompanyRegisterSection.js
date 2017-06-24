@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Geosuggest from 'react-geosuggest';
+import * as Api from '../../api'
+import { isRequired, minimumLength } from '../../helpers/validation'
+import { savingCookies } from '../../helpers/cookies'
 
 class CompanyRegisterSection extends Component {
   constructor(props) {
@@ -12,10 +15,96 @@ class CompanyRegisterSection extends Component {
       country_code: '',
       lat: 0,
       lng: 0,
+      validate_organize_name: true,
+      validate_username: true,
+      validate_password: true,
+      validate_location: true,
+      errorMsg: '',
     }
   }
-  setLocation(location) {
-    console.log(location)
+  setLocation(location) {    
+    const code = location.gmaps.address_components.filter(val => val.types[0] === 'country')
+    this.setState({
+      location: location.description,
+      lat: location.location.lat,
+      lng: location.location.lng,
+      country_code: code[0].short_name,
+    })
+  }
+  setOrganizeName(e) {    
+    e.preventDefault()
+    this.setState({
+      organize_name: e.target.value.trim(),
+    })
+  }
+  setUsername(e) {
+    e.preventDefault()
+    this.setState({
+      username: e.target.value,
+    })
+  }
+  setPassword(e) {
+    e.preventDefault()
+    this.setState({
+      password: e.target.value,
+    })
+  }
+  async register(e) {
+    e.preventDefault()
+    const {
+      organize_name,
+      username,
+      password,
+      location,
+      country_code,
+      lat,
+      lng,
+    } = this.state
+    const validate_organize_name = isRequired(organize_name)
+    const validate_username = isRequired(username)
+    const validate_password = isRequired(password) && minimumLength(password, 6)
+    const validate_location = isRequired(location)
+    this.setState({
+        validate_organize_name, 
+        validate_username, 
+        validate_password, 
+        validate_location,
+    })
+    if (this.canSave({ validate_organize_name, validate_username, validate_password, validate_location })) {
+      try {
+          const register = await Api.post({
+            url: '/users', 
+            data: {
+              organize_name,
+              username,
+              password,
+              location,
+              country_code,
+              lat,
+              lng,
+              is_company: true,
+            },
+          })
+          const auth = await Api.post({
+            url: '/auth/local', 
+            data: {
+              username,
+              password,
+            }
+          })
+          savingCookies({ data: auth.axiosData })
+      } catch(error) {
+          const err = Object.assign({}, error);
+          if (err.request.status === 400) {
+            this.setState({
+              errorMsg: 'Username has already been used'
+            })
+          }
+      }
+    }
+  }
+  canSave({ validate_organize_name, validate_username, validate_password, validate_location }) {
+    return validate_organize_name && validate_username && validate_password && validate_location
   }
   render() {
     return (
@@ -41,8 +130,15 @@ class CompanyRegisterSection extends Component {
                       <div className="auth-form-column">
                         <div className="row">
                           <div className="col-sm-12">
-                            <input type="text" className="form-control form-miletrav"/>
+                            <input type="text" onChange={this.setOrganizeName.bind(this)} className="form-control form-miletrav"/>
                           </div>
+                            {
+                              !this.state.validate_organize_name && (
+                                <div className="error-status">
+                                    Please fill in username
+                                </div>  
+                              )
+                            }
                         </div>
                       </div>
                     </div>
@@ -53,8 +149,15 @@ class CompanyRegisterSection extends Component {
                       <div className="auth-form-column">
                         <div className="row">
                           <div className="col-sm-12">
-                            <input type="text" className="form-control form-miletrav"/>
+                            <input type="text" onChange={this.setUsername.bind(this)} className="form-control form-miletrav"/>
                           </div>
+                            {
+                              !this.state.validate_username && (
+                                <div className="error-status">
+                                    Please fill in username
+                                </div>  
+                              )
+                            }
                         </div>
                       </div>
                     </div>
@@ -66,8 +169,15 @@ class CompanyRegisterSection extends Component {
                       <div className="auth-form-column">
                         <div className="row">
                           <div className="col-sm-12">
-                            <input type="password" className="form-control form-miletrav"/>
+                            <input type="password" onChange={this.setPassword.bind(this)}  className="form-control form-miletrav"/>
                           </div>
+                          {
+                              !this.state.validate_password && (
+                                <div className="error-status">
+                                    Can't be blank and must contains 6 characters
+                                </div>  
+                              )
+                            }
                         </div>
                       </div>
                     </div>
@@ -83,11 +193,27 @@ class CompanyRegisterSection extends Component {
                               placeholder="Location"
                             />                          
                           </div>
+                          {
+                              !this.state.validate_location && (
+                                <div className="error-status">
+                                  Please fill in your location and select a choice from the dropdown
+                                </div>  
+                              )
+                            }
                         </div>
                       </div>
                     </div>
+                                          {
+                        !this.state.errorMsg !== '' && (
+                          <div className="row">
+                            <div className="error-code" style={{ margin: '30px auto 18px auto' }}>
+                              {this.state.errorMsg}
+                            </div>  
+                          </div>
+                        )
+                      }
                     <div className="setup-submit">
-                      <button className="btn btn-primary btn-register">
+                      <button onClick={this.register.bind(this)} className="btn btn-primary btn-register">
                         Register
                       </button>
                     </div>
@@ -130,6 +256,19 @@ class CompanyRegisterSection extends Component {
         </div>
       <style jsx>
         {`
+          .error-code {
+            text-align: center
+            color: #e62117;
+            font-size: 12px;
+            font-weight: 400;
+            padding-left: 20px;
+          }
+          .error-status {
+            color: #e62117;
+            font-size: 12px;
+            font-weight: 400;
+            padding-left: 20px;
+          }
           .reason-title {
             margin-top: 15px;
             margin-bottom: 15px;
@@ -180,7 +319,7 @@ class CompanyRegisterSection extends Component {
             width: 250px;
           }
           .setup-submit {
-            margin: 30px auto 18px auto;
+            margin: 10px auto 18px auto;
             width: 250px;
           }
           .auth-form-column.form-title {
