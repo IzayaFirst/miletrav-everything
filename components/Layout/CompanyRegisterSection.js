@@ -93,6 +93,7 @@ class CompanyRegisterSection extends Component {
             }
           })
           savingCookies({ data: auth.axiosData })
+          window.location = '/dashboard'
       } catch(error) {
           const err = Object.assign({}, error);
           if (err.request.status === 400) {

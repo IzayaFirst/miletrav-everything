@@ -6,7 +6,7 @@ class register extends Component {
   render() {
     return (
       <div>
-        <Header script={['//maps.googleapis.com/maps/api/js?key=AIzaSyBoUj5VmkPUQDWK3HCwGYlIzDGe-n2EInk&libraries=places&language=en&region=TH']} />
+        <Header script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4']} />
         <Navbar />
       </div>
     );
