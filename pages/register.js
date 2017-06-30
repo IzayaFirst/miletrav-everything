@@ -3,6 +3,13 @@ import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
 
 class register extends Component {
+  static async getInitialProps({ req = {}, res = {}}) {
+    const token = getCookiesFromReq(req)
+    if (token) {
+      res.redirect('/')
+    }
+    return {}
+  }
   render() {
     return (
       <div>

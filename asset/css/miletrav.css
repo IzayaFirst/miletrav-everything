@@ -1,6 +1,9 @@
 body, html {
   font-family: 'Kanit', sans-serif;
 }
+#content {
+  padding-top: 60px;
+}
 .form-miletrav {
   height: 38px;
   font-size: 14px;

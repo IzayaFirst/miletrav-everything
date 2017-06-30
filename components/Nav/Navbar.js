@@ -26,23 +26,26 @@ class Navbar extends Component {
           </Bar.Header>
           <Bar.Collapse>
             {
-              this.props.token && (
+              !this.props.token.data.is_company && (
                 <Nav pullRight>
                    <DropdownButton eventKey={1} title={<ImgTitle token={this.props.token} />} style={{ marginTop: 15 }}>
                      <MenuItem eventKey={1.1}>Profile</MenuItem>
                      <MenuItem eventKey={1.2}>Guide Book</MenuItem>
                      <div className="divider" />
-                     <MenuItem eventKey={1.2}>Logout</MenuItem>
+                     <MenuItem eventKey={1.3}>Logout</MenuItem>
                   </DropdownButton>
-                  <style jsx>{`
-                        .btn-default {
-                          border-color: transparent !important;
-                        }
-                        .caret {
-                          display: none !important;
-                        }
-                    `}
-                  </style>
+                </Nav>
+              )
+            }
+            {
+              this.props.token.data.is_company && (
+                <Nav pullRight>
+                   <DropdownButton eventKey={1} title={<ImgTitle token={this.props.token} />} style={{ marginTop: 15 }}>
+                     <MenuItem eventKey={1.1}>Company Profile</MenuItem>
+                     <MenuItem eventKey={1.2}>Dashboard</MenuItem>
+                     <div className="divider" />
+                     <MenuItem eventKey={1.3}>Logout</MenuItem>
+                  </DropdownButton>
                 </Nav>
               )
             }
