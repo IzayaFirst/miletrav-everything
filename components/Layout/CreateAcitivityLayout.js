@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import * as Api from '../../api'
+import * as cookie from '../../helpers/cookies'
 
 class CreateAcitivityLayout extends Component {
   constructor(props) {
@@ -7,8 +9,25 @@ class CreateAcitivityLayout extends Component {
       activity: [],
     }
   }
-  componentDidMount() {
-    
+  async newExperience(e) {
+      const token = cookie.getCookies({ cookieName: "mttk" })
+      try {
+        const newExp = await Api.post({
+          url: '/activities',
+          data: {
+            uuid: btoa(new Date().getTime()),
+            activity_name: "New Experience",
+            userId: token.data.id,
+          },
+          authType: 'Bearer',
+          authToken: token.token
+        })
+        window.location = '/create-experience/'+newExp.axiosData.uuid
+      } catch (error) {
+         console.log(error)
+         const err = Object.assign({}, error);
+      }
+
   }
   render() {
     return (
@@ -19,15 +38,15 @@ class CreateAcitivityLayout extends Component {
               <div className="welcome-container">
                 <div>
                   <div className="welcome-text">
-                      Welcome Back
-                      <span>Keep track of and edit all your experiences. Happy hosting!</span>
+                      <div className="txt-mt-pink">Welcome Back</div>
+                      <span className="txt-mt-blue-midnight">Keep track of and edit all your experiences. Happy hosting!</span>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-sm-4">
               <div className="create">
-                <button className="btn btn-primary">New Experience</button>
+                <a onClick={this.newExperience.bind(this)} className="btn btn-primary">New Experience</a>
               </div>
             </div>
           </div>

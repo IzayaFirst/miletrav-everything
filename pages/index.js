@@ -7,16 +7,13 @@ import CreateAcitivityLayout from '../components/Layout/CreateAcitivityLayout'
 class index extends Component {
   static async getInitialProps({ req = {}, res = {}}) {
     const token = getCookiesFromReq(req)
-    if (token) {
-      return { token }
-    }
-    return {}
+    return { token }
   }
   render() {
     return (
       <div>
         <Header />
-        <Navbar token={this.props.token} />
+        <Navbar token={this.props.token ? this.props.token : false} />
         {
           this.props.token && (
             <CreateAcitivityLayout /> 

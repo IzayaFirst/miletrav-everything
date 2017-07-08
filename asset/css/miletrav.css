@@ -107,3 +107,93 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 .geosuggest__item--active:focus {
   background: #ccc;
 }
+
+@media only screen and (max-width: 768px) {
+  .is-not-mobile {
+      display: none;
+   }
+}
+
+@media only screen and (min-width: 768px) {
+  .mobile-only {
+      display: none;
+   }
+}
+
+.mt-gradient-1 {
+    background: rgba(230, 50, 110, 1);
+    background: -moz-linear-gradient(left, rgba(230, 50, 110, 1) 0%, rgba(250, 215, 60, 1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(230, 50, 110, 1)), color-stop(100%, rgba(250, 215, 60, 1)));
+    background: -webkit-linear-gradient(left, rgba(230, 50, 110, 1) 0%, rgba(250, 215, 60, 1) 100%);
+    background: -o-linear-gradient(left, rgba(230, 50, 110, 1) 0%, rgba(250, 215, 60, 1) 100%);
+    background: -ms-linear-gradient(left, rgba(230, 50, 110, 1) 0%, rgba(250, 215, 60, 1) 100%);
+    background: linear-gradient(to right, rgba(230, 50, 110, 1) 0%, rgba(250, 215, 60, 1) 100%);
+}
+
+.mt-pink {
+  background: #E6326E;
+}
+
+.txt-mt-pink {
+  color: #E6326E;
+}
+
+.gw-yellow {
+  background: #FAD73C;
+}
+
+.txt-mt-yellow {
+  background: #FAD73C;
+}
+
+.mt-gradient-2 {
+  background: rgba(255, 109, 60, 1);
+  background: -moz-linear-gradient(left, rgba(255, 109, 60, 1) 0%, rgba(134, 15, 185, 1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255, 109, 60, 1)), color-stop(100%, rgba(134, 15, 185, 1)));
+  background: -webkit-linear-gradient(left, rgba(255, 109, 60, 1) 0%, rgba(134, 15, 185, 1) 100%);
+  background: -o-linear-gradient(left, rgba(255, 109, 60, 1) 0%, rgba(134, 15, 185, 1) 100%);
+  background: -ms-linear-gradient(left, rgba(255, 109, 60, 1) 0%, rgba(134, 15, 185, 1) 100%);
+  background: linear-gradient(to right, rgba(255, 109, 60, 1) 0%, rgba(134, 15, 185, 1) 100%);
+}
+
+.mt-orange {
+  background: #FF6E3C;
+}
+
+.txt-mt-orange {
+  color: #FF6E3C;
+}
+
+.mt-gradient-3 {
+  background: rgba(145, 15, 210, 1);
+  background: -moz-linear-gradient(left, rgba(145, 15, 210, 1) 0%, rgba(45, 50, 190, 1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(145, 15, 210, 1)), color-stop(100%, rgba(45, 50, 190, 1)));
+  background: -webkit-linear-gradient(left, rgba(145, 15, 210, 1) 0%, rgba(45, 50, 190, 1) 100%);
+  background: -o-linear-gradient(left, rgba(145, 15, 210, 1) 0%, rgba(45, 50, 190, 1) 100%);
+  background: -ms-linear-gradient(left, rgba(145, 15, 210, 1) 0%, rgba(45, 50, 190, 1) 100%);
+  background: linear-gradient(to right, rgba(145, 15, 210, 1) 0%, rgba(45, 50, 190, 1) 100%);
+}
+
+.mt-purple-light {
+    background: #910FD2;
+}
+
+.txt-mt-purple-light {
+    background: #910FD2;
+}
+
+.gw-blue {
+  background: #2D32BE;
+}
+
+.txt-mt-blue {
+  color: #2D32BE;
+}
+
+.mt-blue-midnight {
+  background: #231946;
+}
+
+.txt-mt-blue-midnight {
+    color: #231946;
+}

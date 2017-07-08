@@ -5,6 +5,9 @@ import Headroom from 'react-headroom'
 class Navbar extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      token: props.token,
+    }
   }
   goToRegisterCompany(e) {
     e.preventDefault()
@@ -16,7 +19,7 @@ class Navbar extends Component {
   }
   render() {
     return (
-      <Headroom style={{ height: 71 }}>
+      <Headroom>
         <Bar collapseOnSelect>
           <Bar.Header>
             <Bar.Brand>
@@ -24,46 +27,21 @@ class Navbar extends Component {
             </Bar.Brand>
             <Bar.Toggle />
           </Bar.Header>
-          <Bar.Collapse>
-            {
-              !this.props.token.data.is_company && (
-                <Nav pullRight>
-                   <DropdownButton eventKey={1} title={<ImgTitle token={this.props.token} />} style={{ marginTop: 15 }}>
-                     <MenuItem eventKey={1.1}>Profile</MenuItem>
-                     <MenuItem eventKey={1.2}>Guide Book</MenuItem>
-                     <div className="divider" />
-                     <MenuItem eventKey={1.3}>Logout</MenuItem>
-                  </DropdownButton>
-                </Nav>
-              )
-            }
-            {
-              this.props.token.data.is_company && (
-                <Nav pullRight>
-                   <DropdownButton eventKey={1} title={<ImgTitle token={this.props.token} />} style={{ marginTop: 15 }}>
-                     <MenuItem eventKey={1.1}>Company Profile</MenuItem>
-                     <MenuItem eventKey={1.2}>Dashboard</MenuItem>
-                     <div className="divider" />
-                     <MenuItem eventKey={1.3}>Logout</MenuItem>
-                  </DropdownButton>
-                </Nav>
-              )
-            }
-            {
-              !this.props.token && (
-                <Nav pullRight>
-                  <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>Host with Miletrav</NavItem>
-                  <NavItem eventKey={2} style={{ paddingTop: 8 }}>Login</NavItem>
-                  <NavItem eventKey={3}>
-                    <ButtonToolbar>
-                      <Button onClick={this.goToRegister.bind(this)}  bsStyle="primary">Register</Button>
-                    </ButtonToolbar>
-                  </NavItem>
-                </Nav>
-              )
-            }
-            
-          </Bar.Collapse>
+          {
+            this.state.token ? 
+            <Menu token={this.state.token} /> : 
+            <Bar.Collapse>
+             <Nav pullRight>
+                <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>Host with Miletrav</NavItem>
+                <NavItem eventKey={2} style={{ paddingTop: 8 }}>Login</NavItem>
+                <NavItem eventKey={3}>
+                  <ButtonToolbar>
+                    <Button onClick={this.goToRegister.bind(this)}  bsStyle="primary">Register</Button>
+                  </ButtonToolbar>
+                </NavItem>
+              </Nav>
+            </Bar.Collapse>
+          }
         </Bar>
       </Headroom>
     )
@@ -92,5 +70,46 @@ const ImgTitle = ({ token }) => (
       }
     `}
     </style>
+  </div>
+)
+
+const Menu = ({ token }) => (
+  <div>
+    {
+      token.data.is_company && (
+      <div>
+        <Nav pullRight className="is-not-mobile">
+          <DropdownButton eventKey={1} title={<ImgTitle token={token} />} style={{ paddingTop: 8 }}>
+            <MenuItem eventKey={1.1}>Company Profile</MenuItem>
+            <MenuItem eventKey={1.2}>Dashboard</MenuItem>
+            <div className="divider" />
+            <MenuItem eventKey={1.3}>Logout</MenuItem>
+          </DropdownButton>
+        </Nav>
+         <Bar.Collapse>
+            <Nav pullRight className="mobile-only">
+              <NavItem eventKey={1}>Company Profile</NavItem>
+              <NavItem eventKey={2}>Dashboard</NavItem>
+              <div className="divider" />
+              <NavItem eventKey={3}>Logout</NavItem>
+            </Nav>
+        </Bar.Collapse>
+      </div>
+      )
+    }
+    {
+      !token.data.is_company && (
+      <Bar.Collapse>
+        <Nav pullRight>
+          <DropdownButton eventKey={1} title={<ImgTitle token={this.props.token} />} style={{ marginTop: 15 }}>
+            <MenuItem eventKey={1.1}>Profile</MenuItem>
+            <MenuItem eventKey={1.2}>Guide Book</MenuItem>
+            <div className="divider" />
+            <MenuItem eventKey={1.3}>Logout</MenuItem>
+          </DropdownButton>
+        </Nav>
+      </Bar.Collapse>
+      )
+    }
   </div>
 )

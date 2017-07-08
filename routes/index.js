@@ -11,11 +11,22 @@ const middlewareFunction = {
     return Object.assign({}, req.query, req.params, req.cookies)
   },
   requireMember: (req, res, next) => {
-    console.log(req.cookies)
     if (! req.cookies.mttk) {
       res.redirect('/')
     } else {
       next()
     }
   },
+  requireMemberCompany: (req, res, next) => {
+    if (! req.cookies.mttk) {
+      res.redirect('/')
+    } else {
+      const token = JSON.parse(req.cookies.mttk)
+      if (token.data.is_company) {
+        next()
+      } else {
+        res.redirect('/')
+      }
+    }
+  },  
 }

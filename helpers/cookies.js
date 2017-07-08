@@ -9,7 +9,7 @@ export function savingCookies({ cookieName = 'mttk', data }) {
   })
 }
 
-export function removeCookies({ cookieName }) {
+export function removeCookies({ cookieName = 'mttk' }) {
   const cookie = new Cookies()
   cookie.set(cookieName, '', {
     path: '/',
@@ -23,4 +23,8 @@ export function getCookiesFromReq({ cookies = {} }) {
   } else {
     return null
   }
+}
+export function getCookies({ cookieName = 'mttk' }) {
+  const cookie = new Cookies()
+  return cookie.get(cookieName)
 }

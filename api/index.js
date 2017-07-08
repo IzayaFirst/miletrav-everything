@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL  = '//localhost:3030'
+const baseURL  = 'http://localhost:3030'
 
 export async function get({ url, params, authType, authToken }) {
   const method = 'get'
@@ -37,8 +37,8 @@ export async function del({ url, params, authType, authToken }) {
   }
 }
 
-function axiosRequest({ url, method, params, data, authType = 'Basic', authToken }) {
-  
+function axiosRequest({ url, method, params, data, authType = 'Basic', authToken = '' }) {
+    console.log(baseURL, url)
     return axios.request({
       baseURL,
       url,
@@ -48,6 +48,4 @@ function axiosRequest({ url, method, params, data, authType = 'Basic', authToken
       data: Object.assign({}, data),
       params: Object.assign({}, params),
     })
- 
-
 }
