@@ -16,6 +16,13 @@ export default class Header extends Component {
               <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kanit"/>
               <meta name="viewport" content="initial-scale=1.0, width=device-width" />
               {
+                  this.props.css.map((css , index) => {
+                      return (
+                        <link key={index} rel="stylesheet" href={css} />
+                      )
+                  })
+              }
+              {
                   this.props.script.map((scriptPath , index) => {
                       return (
                           <script key={index} type="text/javascript" src={scriptPath} />
@@ -28,7 +35,7 @@ export default class Header extends Component {
 }
 Header.defaultProps = {
   script: [],
-  cssStyle: [],
+  css: [],
 }
 
 Header.PropTypes = {

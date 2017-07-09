@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import moment from 'moment'
 import { getCookiesFromReq }from '../../helpers/cookies'
 import Header from '../../components/Header/Header'
 import Navbar from '../../components/Nav/Navbar'
 import * as Api from '../../api'
 import ExperienceDetail from '../../components/Step/ExperienceDetail'
+import CoverAndShowcase from '../../components/Step/CoverAndShowcase'
+import { UploadCoverPhoto, UploadShowcase }  from '../../helpers/uploadToFirebase'
 
 class create extends Component {
   static async getInitialProps({ req = {}, res = {}}) {
@@ -16,8 +19,17 @@ class create extends Component {
           userId: token.data.id,
         }
     })
+    const showcase = await Api.get({
+      url: '/showcases',
+      params: {
+        activityId: myExp.data[0].id,
+      },
+    })
+    const categories = await Api.get({
+        url: '/categories',
+    })
    
-    return { token, uuid, myExp }
+    return { token, uuid, myExp, categories, showcase }
   }
 
   state = {
@@ -30,23 +42,127 @@ class create extends Component {
     lat: this.props.myExp.data[0].lat || 0,
     lng: this.props.myExp.data[0].lng || 0,
     step: 1,
+    categories: this.props.categories.data || [],
+    city: this.props.myExp.data[0].city || '',
+    cover_photo: this.props.myExp.data[0].cover_photo || 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/default_image_01-1024x1024.png?alt=media&token=971d33f8-ec32-4a01-91b4-136569d071ed',
+    loadingCoverPhoto: false,
+    showcase: this.props.showcase.data || [],
   } 
   setStep(step) {
     this.setState({
       step,
     })
   }
+  setActivityName(e) {
+    this.setState({
+      activity_name: e.target.value,
+    })
+  }
+  setDescription(e) {
+    this.setState({
+      activity_desc: e,
+    })
+  }
+  setCategory(e) {
+    this.setState({
+      category: e.target.value,
+    })
+  }
+  setLocation(location) {    
+    console.log(location)
+    this.setState({
+      city: location.description,
+      lat: location.location.lat,
+      lng: location.location.lng,
+    })
+  }
+  async uploadShowcase(file) {
+     const data = file[0]
+     const url = await UploadShowcase(data)
+     const update = await Api.post({
+      url: '/showcases',
+      data: {
+        path: url,
+        activityId: this.state.id,
+      },
+      authType: 'Bearer',
+      authToken: this.props.token.token,
+    })
+    const showcase = await Api.get({
+      url: '/showcases',
+      params: {
+        activityId: this.state.id,
+      },
+    })
+    this.setState({
+      showcase: showcase.data,
+    }) 
+  }
+  async uploadCoverPhoto(file) {
+    this.setState({
+      loadingCoverPhoto: true,
+    })
+    const data = file[0]
+    const url = await UploadCoverPhoto(data)
+    const update = await Api.patch({
+      url: '/activities/'+this.state.id,
+      data: {
+        cover_photo: url,
+      },
+      authType: 'Bearer',
+      authToken: this.props.token.token,
+    })
+    await this.setState({
+      cover_photo: url,
+      loadingCoverPhoto: false,
+    })
+  }
+  async updateExperienceDetail() {
+    console.log(this.props.token)
+    const {
+      activity_name,
+      activity_desc,
+      category,
+      city,
+      lat,
+      lng,
+    } = this.state
+    try {
+      const updateDetail = await Api.patch({
+        url: '/activities/'+this.state.id,
+        data: {
+          activity_name,
+          activity_desc,
+          category,
+          city,
+          lat,
+          lng,
+        },
+        authType: 'Bearer',
+        authToken: this.props.token.token
+      }) 
+      location.reload()
+    } catch (error) {
+      console.log(error)
+    }
+  }
   render() {
-    console.log(this.state.exp)
+    console.log(this.state.showcase)
     return (
       <div>
-        <Header />
-        <Navbar token={this.props.token} />
+        <Header
+         css={['/asset/css/wysiwyg.css']} 
+         script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
+        />
         <div id="content">
+          <div className="toolbar-right">
+            Last update {moment(this.props.myExp.data[0].updatedAt).fromNow()} | <a href="/">Done</a>
+          </div>
           <div className="wrapper">
             {
               this.state.step === 2 && (
-                <ExperienceDetail 
+                <ExperienceDetail
+                 categories={this.state.categories} 
                  token={this.props.token}
                  id={this.state.id}
                  activity_name={this.state.activity_name}
@@ -55,6 +171,22 @@ class create extends Component {
                  city={this.state.city} 
                  lat={this.state.lat} 
                  lng={this.state.lng} 
+                 setActivityName={this.setActivityName.bind(this)}
+                 setDescription={this.setDescription.bind(this)}
+                 setCategory={this.setCategory.bind(this)}
+                 setLocation={this.setLocation.bind(this)}
+                 city={this.state.city}
+                 updateExperienceDetail={this.updateExperienceDetail.bind(this)}
+                />
+              )
+            }
+            {
+              this.state.step === 3 && (
+                <CoverAndShowcase 
+                showcase={this.state.showcase}
+                cover_photo={this.state.cover_photo}
+                uploadShowcase={this.uploadShowcase.bind(this)}
+                uploadCoverPhoto={this.uploadCoverPhoto.bind(this)}
                 />
               )
             }
@@ -93,6 +225,19 @@ class create extends Component {
         </div>
         <style>
           {`
+            .toolbar-right a:hover {
+              color: #E6326E !important;
+              text-decoration: none;
+            }
+            .toolbar-right a {
+              color: black !important;
+            }
+            .toolbar-right {
+              position: absolute;
+              top: 12px;
+              right: 30px;
+              font-size: 16px;
+            }
             .wrapper {
               padding-left: 350px;
             }
@@ -137,7 +282,7 @@ class create extends Component {
               font-weight: 200;
               position: fixed;
               top: 0;
-              width: 300px;
+              width: 250px;
               height: 100%;
               color: #e1ffff;
             }

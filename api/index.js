@@ -28,6 +28,15 @@ export async function put({ url, data, authType, authToken }) {
   }
 }
 
+export async function patch({ url, data, authType, authToken }) {
+  const method = 'patch'
+  const res = await axiosRequest({ baseURL, url, method, data, authToken, authType })
+  return {
+    axiosData: res.data,
+    data: res.data.data,
+  }
+}
+
 export async function del({ url, params, authType, authToken }) {
   const method = 'delete'
   const res = await axiosRequest({ url, method, params, authType, authToken })
@@ -38,7 +47,6 @@ export async function del({ url, params, authType, authToken }) {
 }
 
 function axiosRequest({ url, method, params, data, authType = 'Basic', authToken = '' }) {
-    console.log(baseURL, url)
     return axios.request({
       baseURL,
       url,
