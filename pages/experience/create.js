@@ -6,6 +6,7 @@ import Navbar from '../../components/Nav/Navbar'
 import * as Api from '../../api'
 import ExperienceDetail from '../../components/Step/ExperienceDetail'
 import CoverAndShowcase from '../../components/Step/CoverAndShowcase'
+import Ticket from '../../components/Step/Ticket'
 import { UploadCoverPhoto, UploadShowcase }  from '../../helpers/uploadToFirebase'
 
 class create extends Component {
@@ -25,11 +26,17 @@ class create extends Component {
         activityId: myExp.data[0].id,
       },
     })
+    const tickets = await Api.get({
+      url: '/tickets',
+      params: {
+        activityId: myExp.data[0].id,
+      }
+    })
     const categories = await Api.get({
         url: '/categories',
     })
    
-    return { token, uuid, myExp, categories, showcase }
+    return { token, uuid, myExp, categories, showcase, tickets }
   }
 
   state = {
@@ -47,6 +54,7 @@ class create extends Component {
     cover_photo: this.props.myExp.data[0].cover_photo || 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/default_image_01-1024x1024.png?alt=media&token=971d33f8-ec32-4a01-91b4-136569d071ed',
     loadingCoverPhoto: false,
     showcase: this.props.showcase.data || [],
+    tickets: this.props.tickets.data || [],
   } 
   setStep(step) {
     this.setState({
@@ -69,7 +77,6 @@ class create extends Component {
     })
   }
   setLocation(location) {    
-    console.log(location)
     this.setState({
       city: location.description,
       lat: location.location.lat,
@@ -117,8 +124,21 @@ class create extends Component {
       loadingCoverPhoto: false,
     })
   }
+  async deleteShowcase(showcase_id) {
+    const del = await Api.del({
+      url: '/showcases/'+showcase_id,
+      params: {
+        activityId: this.state.id
+      },
+      authType: 'Bearer',
+      authToken: this.props.token.token,
+    })
+    const showcase = this.state.showcase.filter(value => value.id !== showcase_id)
+    this.setState({
+      showcase,
+    })
+  }
   async updateExperienceDetail() {
-    console.log(this.props.token)
     const {
       activity_name,
       activity_desc,
@@ -147,7 +167,6 @@ class create extends Component {
     }
   }
   render() {
-    console.log(this.state.showcase)
     return (
       <div>
         <Header
@@ -182,11 +201,20 @@ class create extends Component {
             }
             {
               this.state.step === 3 && (
-                <CoverAndShowcase 
+                <CoverAndShowcase
+                loadingCoverPhoto={this.state.loadingCoverPhoto}
                 showcase={this.state.showcase}
                 cover_photo={this.state.cover_photo}
                 uploadShowcase={this.uploadShowcase.bind(this)}
                 uploadCoverPhoto={this.uploadCoverPhoto.bind(this)}
+                deleteShowcase={this.deleteShowcase.bind(this)}
+                />
+              )
+            }
+            {
+              this.state.step === 4 && (
+                <Ticket 
+                
                 />
               )
             }
