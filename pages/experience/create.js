@@ -55,6 +55,9 @@ class create extends Component {
     loadingCoverPhoto: false,
     showcase: this.props.showcase.data || [],
     tickets: this.props.tickets.data || [],
+    ticket_name: '',
+    ticket_desc: '',
+    price: 0,
   } 
   setStep(step) {
     this.setState({
@@ -166,6 +169,34 @@ class create extends Component {
       console.log(error)
     }
   }
+  setTicketName(e) {
+    this.setState({
+      ticket_name: e.target.value,
+    })
+  }
+  setTicketDesc(e) {
+    this.setState({
+      ticket_desc: e,
+    })
+  }
+  setPrice(e) {
+    this.setState({
+      price: e.target.value,
+    })
+  }
+  async addTicket(e) {
+    e.preventDefault()
+    const add = await Api.post({
+      url: '/tickets',
+      data: {
+        title: this.state.ticket_name.trim(),
+        desc: this.state.ticket_desc.trim(),
+        price: this.state.price,
+      },
+      authType: 'Bearer',
+      authToken: this.props.token.token,
+    })
+  }
   render() {
     return (
       <div>
@@ -202,19 +233,25 @@ class create extends Component {
             {
               this.state.step === 3 && (
                 <CoverAndShowcase
-                loadingCoverPhoto={this.state.loadingCoverPhoto}
-                showcase={this.state.showcase}
-                cover_photo={this.state.cover_photo}
-                uploadShowcase={this.uploadShowcase.bind(this)}
-                uploadCoverPhoto={this.uploadCoverPhoto.bind(this)}
-                deleteShowcase={this.deleteShowcase.bind(this)}
+                  loadingCoverPhoto={this.state.loadingCoverPhoto}
+                  showcase={this.state.showcase}
+                  cover_photo={this.state.cover_photo}
+                  uploadShowcase={this.uploadShowcase.bind(this)}
+                  uploadCoverPhoto={this.uploadCoverPhoto.bind(this)}
+                  deleteShowcase={this.deleteShowcase.bind(this)}
                 />
               )
             }
             {
               this.state.step === 4 && (
                 <Ticket 
-                
+                  ticket_name={this.state.ticket_name}
+                  ticket_desc={this.state.ticket_desc}
+                  price={this.state.price}
+                  setTicketName={this.setTicketName.bind(this)}
+                  setTicketDesc={this.setTicketDesc.bind(this)}
+                  setPrice={this.setPrice.bind(this)}
+                  tickets={this.state.tickets}
                 />
               )
             }
