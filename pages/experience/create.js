@@ -154,6 +154,7 @@ class create extends Component {
       const updateDetail = await Api.patch({
         url: '/activities/'+this.state.id,
         data: {
+  
           activity_name,
           activity_desc,
           category,
@@ -184,8 +185,7 @@ class create extends Component {
       price: e.target.value,
     })
   }
-  async addTicket(e) {
-    e.preventDefault()
+  async addTicket() {
     const add = await Api.post({
       url: '/tickets',
       data: {
@@ -195,6 +195,11 @@ class create extends Component {
       },
       authType: 'Bearer',
       authToken: this.props.token.token,
+    })
+    this.setState({
+      ticket_name: '',
+      ticket_desc: '',
+      price: 0,
     })
   }
   render() {
@@ -252,6 +257,7 @@ class create extends Component {
                   setTicketDesc={this.setTicketDesc.bind(this)}
                   setPrice={this.setPrice.bind(this)}
                   tickets={this.state.tickets}
+                  addTicket={this.addTicket.bind(this)}
                 />
               )
             }
@@ -261,27 +267,27 @@ class create extends Component {
               <div className="menu-content">
                 <li onClick={this.setStep.bind(this, 1)}>
                   <a className={ this.state.step === 1 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-dashboard fa-lg"></i> Preview
+                    <i className="fa fa-desktop fa-lg"></i> Preview
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 2)}>
                   <a className={ this.state.step === 2 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-dashboard fa-lg"></i> Experience Detail
+                    <i className="fa fa-info-circle fa-lg"></i> Experience Detail
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 3)}>
                   <a className={ this.state.step === 3 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-dashboard fa-lg"></i> Cover and Showcase
+                    <i className="fa fa-camera fa-lg"></i> Cover and Showcase
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 4)}>
                   <a className={ this.state.step === 4 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-dashboard fa-lg"></i> Tickets
+                    <i className="fa fa-ticket fa-lg"></i> Tickets
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 5)} >
                   <a className={ this.state.step === 5 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-dashboard fa-lg"></i> Operation Day
+                    <i className="fa fa-calendar fa-lg"></i> Operation Day
                   </a>
                 </li>
               </div>

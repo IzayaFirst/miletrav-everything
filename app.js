@@ -12,7 +12,7 @@ app.prepare()
     server.use('/asset', express.static('asset'))
     server.use(cookieParser('secret'))
     require('./routes')(app, server, handle) // eslint-disable-line global-require
-    const port = process.env.PORT || 3000
+    const port = process.env.PORT || 5000
     server.listen(port, (err) => {
       if (err) throw err
       console.log(`> Ready on port ${port}...`) // eslint-disable-line no-console

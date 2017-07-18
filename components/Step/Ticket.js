@@ -92,6 +92,11 @@ class Ticket extends Component {
                 <div className="col-xs-6 ">
                   <input type="number" className="form-control form-miletrav" onChange={this.props.setPrice.bind(this)} value={this.props.price} />
                 </div>
+                <div className="col-xs-6">
+                  <div className="suggest-text">
+                    Let price 0 if your experience is free
+                  </div>
+                </div>
               </div>
             </div>
             <div className="form-group">
@@ -101,6 +106,11 @@ class Ticket extends Component {
         </div>  
         <style jsx>
           {`
+          .suggest-text {
+            padding-top: 15px;
+            font-size: 12px;
+            font-weight: 600;
+          }
           .card-ticket {
             background: #E8E8E8;
             color: #676767;
