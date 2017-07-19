@@ -7,6 +7,7 @@ import * as Api from '../../api'
 import ExperienceDetail from '../../components/Step/ExperienceDetail'
 import CoverAndShowcase from '../../components/Step/CoverAndShowcase'
 import Ticket from '../../components/Step/Ticket'
+import OperatingDay from '../../components/Step/OperatingDay'
 import { UploadCoverPhoto, UploadShowcase }  from '../../helpers/uploadToFirebase'
 
 class create extends Component {
@@ -196,24 +197,14 @@ class create extends Component {
   handleDateChange = ({ start, end }) => {
     start = start || this.state.start
     end = end || this.state.end
-
     if (start.isAfter(end)) {
       let temp = start
       start = end
       end = temp
     }
-
     this.setState({ start, end })
   }
   async addTicket() {
-    console.log({
-        title: this.state.ticket_name.trim(),
-        desc: this.state.ticket_desc.trim(),
-        price: this.state.price,
-        activityId: this.state.id,
-        start: this.state.start,
-        end: this.state.end,
-      })
     const add = await Api.post({
       url: '/tickets',
       data: {
@@ -323,6 +314,11 @@ class create extends Component {
                   addTicket={this.addTicket.bind(this)}
                   deleteTicket={this.deleteTicket.bind(this)}
                 />
+              )
+            }
+            {
+              this.state.step === 5 && (
+                <OperatingDay></OperatingDay>
               )
             }
           </div>
