@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
 import { isRequired } from '../../helpers/validation'
+import TicketCard from '../TicketCard'
 
 class Ticket extends Component {
   constructor(props) {
@@ -22,7 +25,7 @@ class Ticket extends Component {
   addTicket(e) {
     e.preventDefault()
     const validate_name = isRequired(this.props.ticket_name)
-    const validate_price = this.props.price > 0
+    const validate_price = this.props.price >= 0
     this.setState({
       validate_name,
       validate_price,
@@ -100,10 +103,47 @@ class Ticket extends Component {
               </div>
             </div>
             <div className="form-group">
+              <div className="row">
+                <div className="col-xs-12">
+                  <label>Ticket available since</label>
+                </div>
+                <div className="col-xs-6">
+                  <DatePicker
+                    disabledKeyboardNavigation
+                    className="form-control form-miletrav"
+                    selected={this.props.start}
+                    selectsStart
+                    startDate={this.props.start}
+                    endDate={this.props.end}
+                    onChange={this.props.setStart.bind(this)}
+                  />
+                </div>
+                <div className="col-xs-6">
+                  <DatePicker
+                    disabledKeyboardNavigation
+                    className="form-control form-miletrav"
+                    selected={this.props.end}
+                    selectsEnd
+                    startDate={this.props.start}
+                    endDate={this.props.end}
+                    onChange={this.props.setEnd.bind(this)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="form-group">
               <button className="btn btn-primary" onClick={this.addTicket.bind(this)}>Add Tickets</button>
             </div>
           </div>
-        </div>  
+        </div>
+        {
+          this.props.tickets && this.props.tickets.map(ticket => (
+            <div className="col-xs-12 col-sm-6" key={ticket.id}>
+              <TicketCard {...ticket} deleteTicket={this.props.deleteTicket.bind(this)}/>
+            </div>
+            )
+          )
+        }
         <style jsx>
           {`
           .suggest-text {
@@ -120,6 +160,7 @@ class Ticket extends Component {
             -webkit-border-radius: 4px;
             -ms-border-radius: 4px;
             -o-border-radius: 4px;
+            margin-bottom: 10px;
           }
           .error-status {
             color: #e62117;

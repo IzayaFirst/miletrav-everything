@@ -197,3 +197,73 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 .txt-mt-blue-midnight {
     color: #231946;
 }
+
+.skill-card {
+  display: table;
+  width: 100%;
+  margin-bottom: 10px;
+  border: 1px solid #E6326E;
+}
+.skill-no {
+  width: 30px;
+  padding: 10px 0;
+  text-align: center;
+  height: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  display: table-cell;
+  vertical-align: top;
+  background: #E6326E;
+  color: #FFFFFF;
+}
+.skill-detail {
+  padding: 10px 15px 10px 15px;;
+  width: calc(100% - 30px);
+  display: table-cell;
+  vertical-align: top;
+}
+.skill-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #5c6670;
+  padding-bottom: 5px;
+}
+.card-space {
+  margin: 3px 0;
+}
+.form-exp {
+    font-size: 10px;
+    margin-top: 4px;
+    padding: 2px 4px;
+    height: auto;
+    webkit-box-shadow: none;
+    box-shadow: none;
+    width: 80px;
+    background: #ffffff;
+    color: #5c6670;
+    border: solid 0.75px #b7c4cd;
+}
+.skill-delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.skill-delete  a {
+  color: #616161;
+  padding: 5px 22px 10px 20px;
+  display: inline-block;
+  cursor: pointer;
+}
+.skill-delete a:hover {
+  color: #E6326E !important;
+}
+.padding-desc {
+  padding-bottom: 5px;
+}
+.ticket-available {
+  padding-bottom: 5px;
+}
+.ticket-available > i {
+  margin-right: 5px;
+}

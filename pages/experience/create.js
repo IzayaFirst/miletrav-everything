@@ -58,7 +58,9 @@ class create extends Component {
     ticket_name: '',
     ticket_desc: '',
     price: 0,
-  } 
+    start: moment(),
+    end: moment(),
+  }
   setStep(step) {
     this.setState({
       step,
@@ -185,28 +187,85 @@ class create extends Component {
       price: e.target.value,
     })
   }
+  setStart(start) {
+     this.handleDateChange({ start })
+  }
+  setEnd(end){
+    this.handleDateChange({ end })
+  }
+  handleDateChange = ({ start, end }) => {
+    start = start || this.state.start
+    end = end || this.state.end
+
+    if (start.isAfter(end)) {
+      let temp = start
+      start = end
+      end = temp
+    }
+
+    this.setState({ start, end })
+  }
   async addTicket() {
+    console.log({
+        title: this.state.ticket_name.trim(),
+        desc: this.state.ticket_desc.trim(),
+        price: this.state.price,
+        activityId: this.state.id,
+        start: this.state.start,
+        end: this.state.end,
+      })
     const add = await Api.post({
       url: '/tickets',
       data: {
         title: this.state.ticket_name.trim(),
         desc: this.state.ticket_desc.trim(),
         price: this.state.price,
+        activityId: this.state.id,
+        begin: this.state.start.format("YYYY-MM-DD"),
+        end: this.state.end.format("YYYY-MM-DD"),
       },
       authType: 'Bearer',
       authToken: this.props.token.token,
+    })
+    const tickets = await Api.get({
+      url: '/tickets',
+      params: {
+        activityId: this.state.id,
+      }
     })
     this.setState({
       ticket_name: '',
       ticket_desc: '',
       price: 0,
+      start: moment(),
+      end: moment(),
+      tickets: tickets.data,
+    })
+  }
+  async deleteTicket(ticket_id) {
+    const del = await Api.del({
+      url: '/tickets/'+ticket_id,
+      params: {
+        activityId: this.state.id,
+      },
+      authType: 'Bearer',
+      authToken: this.props.token.token,
+    })
+    const tickets = await Api.get({
+      url: '/tickets',
+      params: {
+        activityId: this.state.id,
+      }
+    })
+    this.setState({
+      tickets: tickets.data,
     })
   }
   render() {
     return (
       <div>
         <Header
-         css={['/asset/css/wysiwyg.css']} 
+         css={['/asset/css/wysiwyg.css', '/asset/css/datepicker.css']} 
          script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
         />
         <div id="content">
@@ -253,11 +312,16 @@ class create extends Component {
                   ticket_name={this.state.ticket_name}
                   ticket_desc={this.state.ticket_desc}
                   price={this.state.price}
+                  start={this.state.start}
+                  end={this.state.end}
+                  setStart={this.setStart.bind(this)}
+                  setEnd={this.setEnd.bind(this)}
                   setTicketName={this.setTicketName.bind(this)}
                   setTicketDesc={this.setTicketDesc.bind(this)}
                   setPrice={this.setPrice.bind(this)}
                   tickets={this.state.tickets}
                   addTicket={this.addTicket.bind(this)}
+                  deleteTicket={this.deleteTicket.bind(this)}
                 />
               )
             }

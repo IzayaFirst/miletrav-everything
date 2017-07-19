@@ -40,7 +40,7 @@ class CoverAndShowcase extends Component {
         <div className="form-group">
           <div className="row">
             <div className="col-xs-12">
-              <label clasName="txt-mt-midnight-blue">Cover Photo</label>
+              <label className="txt-mt-midnight-blue">Cover Photo</label>
             </div>
             <div className="col-xs-12 col-sm-6">
               <div className="img-cover-photo">
@@ -76,7 +76,7 @@ class CoverAndShowcase extends Component {
         <div className="form-group">
           <div className="row">
             <div className="col-xs-12">
-              <label clasName="txt-mt-midnight-blue">Your Showcase</label>
+              <label className="txt-mt-midnight-blue">Your Showcase</label>
             </div>
           </div>
         </div>
