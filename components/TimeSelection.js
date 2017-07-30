@@ -13,7 +13,6 @@ class TimeSelection extends Component {
         activityId: this.props.aid,
       }
     })
-    console.log('day', day)
     this.setState({
       startTime: day.data.length > 0 ? day.data[0].start_time : '08.00',
       endTime: day.data.length > 0 ? day.data[0].end_time : '17.00',
@@ -43,12 +42,6 @@ class TimeSelection extends Component {
   }
   async open() {
     const opened = !this.state.opened
-    console.log({
-      day: this.state.day,
-      start_time: this.state.startTime,
-      end_time: this.state.endTime,
-      activityId: this.props.aid,
-    })
     if (opened) {
       const open = await Api.post({
         url: '/operation_days',
@@ -71,7 +64,6 @@ class TimeSelection extends Component {
         authType: 'Bearer',
         authToken: this.props.token.token,
       })
-      console.log(del)
     }
     this.setState({
       opened,

@@ -65,7 +65,7 @@ class ExperienceDetail extends Component {
             <div className="col-xs-12">
               <label>Experience Name</label>
             </div>
-            <div className="col-xs-6">
+            <div className="col-xs-12 col-sm-6">
               <input type="text" onChange={this.props.setActivityName.bind(null)} value={this.props.activity_name === 'New Experience' ? '' : this.props.activity_name} placeholder="Think of it as a movie title for your experience" className="form-control form-miletrav"/>
               {
                 !this.state.validate_title && (
@@ -82,7 +82,7 @@ class ExperienceDetail extends Component {
             <div className="col-xs-12">
               <label>Description</label>
             </div>
-            <div className="col-xs-6">
+            <div className="col-xs-12 col-sm-6">
               {
                 typeof window !== 'undefined' && ReactQuill && this.state.initialEditor && (
                     <ReactQuill
@@ -108,7 +108,7 @@ class ExperienceDetail extends Component {
             <div className="col-xs-12">
               <label>Category</label>
             </div>
-            <div className="col-xs-6">
+            <div className="col-xs-12 col-sm-6">
               <select value={this.props.category} onChange={this.props.setCategory.bind(this)} className="form-control form-miletrav">
                 <option value=""></option>
                 {
@@ -132,7 +132,7 @@ class ExperienceDetail extends Component {
             <div className="col-xs-12">
               <label>Location</label>
             </div>
-            <div className="col-xs-6">
+            <div className="col-xs-12 col-sm-6">
               {
                 !this.state.edit && (
                   <div className="candidate-div-location">

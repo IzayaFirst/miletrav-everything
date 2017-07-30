@@ -8,6 +8,7 @@ import ExperienceDetail from '../../components/Step/ExperienceDetail'
 import CoverAndShowcase from '../../components/Step/CoverAndShowcase'
 import Ticket from '../../components/Step/Ticket'
 import OperatingDay from '../../components/Step/OperatingDay'
+import Preview from '../../components/Step/Preview'
 import { UploadCoverPhoto, UploadShowcase }  from '../../helpers/uploadToFirebase'
 
 class create extends Component {
@@ -36,7 +37,13 @@ class create extends Component {
     const categories = await Api.get({
         url: '/categories',
     })
-    return { token, uuid, myExp, categories, showcase, tickets }
+    const operation = await Api.get({
+      url: '/operation_days',
+      params: {
+        activityId: myExp.data[0].id,
+      },
+    })
+    return { token, uuid, myExp, categories, showcase, tickets, operation }
   }
 
   state = {
@@ -60,6 +67,7 @@ class create extends Component {
     price: 0,
     start: moment(),
     end: moment(),
+    operation: this.props.operation.data || [],
   }
   setStep(step) {
     this.setState({
@@ -156,7 +164,6 @@ class create extends Component {
       const updateDetail = await Api.patch({
         url: '/activities/'+this.state.id,
         data: {
-  
           activity_name,
           activity_desc,
           category,
@@ -251,9 +258,6 @@ class create extends Component {
       tickets: tickets.data,
     })
   }
-  async addOperatingDay() {
-
-  }
   render() {
     return (
       <div>
@@ -266,6 +270,17 @@ class create extends Component {
             Last update {moment(this.props.myExp.data[0].updatedAt).fromNow()} | <a href="/">Done</a>
           </div>
           <div className="wrapper">
+            {
+              this.state.step === 1 && (
+                <Preview 
+                  exp={this.state.exp}
+                  showcase={this.state.showcase}
+                  tickets={this.state.tickets}
+                  operation={this.state.operation}
+                  id={this.state.id}
+                />   
+              )
+            }
             {
               this.state.step === 2 && (
                 <ExperienceDetail
@@ -327,6 +342,35 @@ class create extends Component {
               )
             }
           </div>
+          <div className="nav-bottom mt-blue-midnight mobile-only">
+            <div className="box-menu">
+              <div className="box">
+                <a onClick={this.setStep.bind(this, 1)} className={ this.state.step === 1 ? "active" : "txt-mt-pink"}>
+                  <i className="fa fa-desktop fa-lg"></i>
+                </a>
+              </div>
+              <div className="box">
+                 <a onClick={this.setStep.bind(this, 2)} className={ this.state.step === 2 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-info-circle fa-lg"></i>
+                  </a>
+              </div>
+              <div className="box">
+                 <a onClick={this.setStep.bind(this, 3)} className={ this.state.step === 3 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-camera fa-lg"></i>
+                  </a>
+              </div>
+               <div className="box">
+                 <a onClick={this.setStep.bind(this, 4)} className={ this.state.step === 4 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-ticket fa-lg"></i>
+                  </a>
+              </div>
+               <div className="box">
+                 <a onClick={this.setStep.bind(this, 5)} className={ this.state.step === 5 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-calendar fa-lg"></i>
+                  </a>
+              </div>
+            </div>
+          </div>
           <div className="nav-side-menu mt-blue-midnight is-not-mobile">
             <div className="menu-list">
               <div className="menu-content">
@@ -361,6 +405,44 @@ class create extends Component {
         </div>
         <style>
           {`
+            .box > a.active {
+              color: white
+            }
+            .box {
+              isplay: block;
+              padding: 20px 0;
+              margin: 0 1%;
+              text-align: center;
+              font-weight: normal;
+              color: #fff;
+              font-size: 14px;
+              font-weight: 600;
+              cursor: pointer;
+              position: relative;
+              -moz-transition: all 0.2s ease-in-out;
+              -o-transition: all 0.2s ease-in-out;
+              -webkit-transition: all 0.2s ease-in-out;
+              transition: all 0.2s ease-in-out;    
+              float: left;
+              width: 18%;
+            }
+            .box-menu {
+              width: 100%;
+              display: inline-block;
+            }
+            .nav-bottom {
+              position: fixed;
+              height: 60px;
+              left:0;
+              bottom:0;
+              width:100%;
+              text-align:center;
+              font-size:22px;
+              box-shadow: 6px 9px 20px rgb(0, 0, 0, 0.2);
+              transition:bottom .3s;
+              z-index: 999;
+              padding-left: 30px;
+            }
             .toolbar-right a:hover {
               color: #E6326E !important;
               text-decoration: none;
@@ -432,7 +514,7 @@ class create extends Component {
             }
              @media only screen and (max-width: 769px) {
               .wrapper {
-                padding-left: 50px;
+                padding: 0 40px;
               }
             }
             .wrapper {

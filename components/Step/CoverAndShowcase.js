@@ -51,7 +51,7 @@ class CoverAndShowcase extends Component {
         </div>
         <div className="form-group">
           <div className="row">
-            <div className="col-xs-6 col-sm-2">
+            <div className="col-xs-8 col-sm-2">
                <Dropzone
                 accept="image/jpeg, image/png"
                 onDrop={this.props.uploadCoverPhoto.bind(this)}
@@ -86,7 +86,7 @@ class CoverAndShowcase extends Component {
               <div className="row">
                 {
                   this.props.showcase.map(value => (
-                    <div className="col-xs-4 col-sm-2" key={value.id}>
+                    <div className="col-xs-6 col-sm-2" key={value.id}>
                       <a href={value.path} target="_blank"><div className="img-showcase-photo">
                         <img src={value.path} alt=""/>
                       </div></a>
@@ -100,7 +100,7 @@ class CoverAndShowcase extends Component {
         }
         <div className="form-group">
           <div className="row">
-            <div className="col-xs-6 col-sm-2">
+            <div className="col-xs-10 col-sm-2">
                <Dropzone
                 accept="image/jpeg, image/png"
                 onDrop={this.props.uploadShowcase.bind(this)}
