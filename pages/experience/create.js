@@ -36,7 +36,6 @@ class create extends Component {
     const categories = await Api.get({
         url: '/categories',
     })
-   
     return { token, uuid, myExp, categories, showcase, tickets }
   }
 
@@ -252,6 +251,9 @@ class create extends Component {
       tickets: tickets.data,
     })
   }
+  async addOperatingDay() {
+
+  }
   render() {
     return (
       <div>
@@ -318,7 +320,10 @@ class create extends Component {
             }
             {
               this.state.step === 5 && (
-                <OperatingDay></OperatingDay>
+                <OperatingDay 
+                  aid={this.state.id}
+                  token={this.props.token}
+                />
               )
             }
           </div>

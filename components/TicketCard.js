@@ -23,7 +23,6 @@ class TicketCard extends Component {
    this.props.deleteTicket(this.props.id)
  }
   render() {
-    console.log(this.props)
     return (
       <div className="skill-card">
         <div className="skill-delete">

@@ -6,8 +6,8 @@ class LoadingAnimation extends Component {
       <div>
         
       </div>
-    );
+    )
   }
 }
 
-export default LoadingAnimation;
+export default LoadingAnimation

@@ -100,6 +100,10 @@ class CompanyRegisterSection extends Component {
             this.setState({
               errorMsg: 'Username has already been used'
             })
+          } else if (err.request.status === 500) {
+            this.setState({
+              errorMsg: 'Username has already been used'
+            })
           }
       }
     }
@@ -258,7 +262,7 @@ class CompanyRegisterSection extends Component {
       <style jsx>
         {`
           .error-code {
-            text-align: center
+            text-align: center;
             color: #e62117;
             font-size: 12px;
             font-weight: 400;
