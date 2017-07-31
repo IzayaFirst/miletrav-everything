@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
 import { getIcon } from '../../helpers/master'
+import * as Api from '../../api'
+
 class Home extends Component {
-  componentDidMount() {
-    console.log(this.props)
+  state = {
+    lastest: [],
+  }
+
+  async componentDidMount() {
+    const lastestActivity = await Api.get({
+      url: '/activities',
+      params: {
+        $limit: 10,
+      }
+    })
+    console.log(lastestActivity.data)
+    this.setState({
+      lastest: lastestActivity.data || [],
+    })
   }
 
   render() {
@@ -22,14 +37,14 @@ class Home extends Component {
               </div>
               <div className="col-xs-12 col-sm-6">
                 <div className="header-category txt-mt-blue-midnight">
-                MileTrav | Activity platform to finding yourself
+                  MileTrav | Activity platform to finding yourself
                 </div>
               </div>
             </div>
             <div className="row">
               {
                 this.props.category.map(val => (
-                  <div className="col-xs-12 col-sm-3 col-md-3" key={val.id}>
+                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
                     <div className="category-card">
                       <img width="40" height="40" src={getIcon(val.id)} />
                       <div className="category-title">
@@ -42,8 +57,100 @@ class Home extends Component {
             </div>
           </div>
         </div>
+        <div className="section-activity">
+          <div className="section-title txt-mt-blue-midnight">
+            Lastest Activity
+          </div>
+          <div>
+            <div className="row">
+              {
+                this.state.lastest.map(val => (
+                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
+                    <a href="#">
+                      <div className="activity-card">
+                        <div className="card-img-container">
+                          <img src={val.cover_photo} alt="" className="cover" />
+                        </div>
+                        <div className="desc txt-mt-blue-midnight">
+                          <div className="card-title">
+                            {val.activity_name}
+                          </div>
+                          <div className="detail">
+                            {val.city} {val.category}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
         <style>
           {`
+          a:hover {
+            text-decoration: none
+          }
+          .detail {
+            font-size: 14px;
+            font-weight: 500px; 
+            overflow: hidden;
+            display: -webkit-box;
+            color: #4a4a4a;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            max-height: 40px;
+            -webkit-line-clamp: 1;
+          }
+          .card-title {
+            font-weight: 600;
+            font-size: 16px;
+            overflow: hidden;
+            display: -webkit-box;
+            color: #4a4a4a;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            max-height: 40px;
+            -webkit-line-clamp: 1;
+          }
+          .desc {
+            padding: 15px;
+          }
+          .cover {
+            display: block;
+            height: auto;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+          }
+          .card-img-container {
+            width: 100%;
+            padding-bottom: 75%;
+            position: relative;
+            background-color: #4a4a4a;
+            overflow: hidden;
+          }
+          .activity-card {
+            background: #fff;
+            width: 100%;
+            box-shadow: 0 1px 8px rgba(0,0,0,.2);
+            border-radius: 4px;
+            margin: 10px 0;
+          }
+          .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            padding: 25px 15px; 
+            margin-bottom: 20px;
+          }
+          .section-activity {
+            margin: 20px 15px;
+          }
           .header-category {
             padding: 38px 0;
             font-size: 18px;

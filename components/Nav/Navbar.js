@@ -19,6 +19,7 @@ class Navbar extends Component {
     window.location = '/register'
   }
   logout() {
+    console.log('logout')
     cookie.removeCookies({ cookieName: 'mttk' })
     window.location = '/'
   }
@@ -88,7 +89,7 @@ const Menu = ({ token, logout }) => (
             <MenuItem eventKey={1.1}>Company Profile</MenuItem>
             <MenuItem eventKey={1.2}>Dashboard</MenuItem>
             <div className="divider" />
-            <MenuItem eventKey={1.3}>Logout</MenuItem>
+            <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
           </DropdownButton>
         </Nav>
          <Bar.Collapse>
