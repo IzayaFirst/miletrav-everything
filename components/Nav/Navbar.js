@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Navbar as Bar, Nav, NavItem, ButtonToolbar, Button, DropdownButton, MenuItem} from 'react-bootstrap'
 import Headroom from 'react-headroom'
+import * as cookie from '../../helpers/cookies'
 
 class Navbar extends Component {
   constructor(props) {
@@ -17,6 +18,10 @@ class Navbar extends Component {
     e.preventDefault()
     window.location = '/register'
   }
+  logout() {
+    cookie.removeCookies({ cookieName: 'mttk' })
+    window.location = '/'
+  }
   render() {
     return (
       <Headroom>
@@ -29,7 +34,7 @@ class Navbar extends Component {
           </Bar.Header>
           {
             this.state.token ? 
-            <Menu token={this.state.token} /> : 
+            <Menu token={this.state.token} logout={this.logout.bind(this)} /> : 
             <Bar.Collapse>
              <Nav pullRight>
                 <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>Host with Miletrav</NavItem>
@@ -73,7 +78,7 @@ const ImgTitle = ({ token }) => (
   </div>
 )
 
-const Menu = ({ token }) => (
+const Menu = ({ token, logout }) => (
   <div>
     {
       token.data.is_company && (
@@ -91,7 +96,7 @@ const Menu = ({ token }) => (
               <NavItem eventKey={1}>Company Profile</NavItem>
               <NavItem eventKey={2}>Dashboard</NavItem>
               <div className="divider" />
-              <NavItem eventKey={3}>Logout</NavItem>
+              <NavItem onClick={logout} eventKey={3}>Logout</NavItem>
             </Nav>
         </Bar.Collapse>
       </div>

@@ -315,6 +315,15 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
   background: -ms-linear-gradient(left, rgba(145, 15, 210, 1) 0%, rgba(45, 50, 190, 1) 100%);
   background: linear-gradient(to right, rgba(145, 15, 210, 1) 0%, rgba(45, 50, 190, 1) 100%);
 }
+.mt-gradient-4 {
+  background: #1B6FB1;
+  background: -moz-linear-gradient(left, #1B6FB1 0%, #59BD9F 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, #1B6FB1), color-stop(100%, #59BD9F));
+  background: -webkit-linear-gradient(left, #1B6FB1 0%, #59BD9F 100%);
+  background: -o-linear-gradient(left, #1B6FB1 0%, #59BD9F 100%);
+  background: -ms-linear-gradient(left, #1B6FB1 0%, #59BD9F 100%);
+  background: linear-gradient(to right, #1B6FB1 0%, #59BD9F 100%);
+}
 
 .mt-purple-light {
     background: #910FD2;
