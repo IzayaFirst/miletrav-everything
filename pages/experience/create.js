@@ -167,7 +167,7 @@ class create extends Component {
           activity_name,
           activity_desc,
           category,
-          city,
+          city: city.toLowerCase(),
           lat,
           lng,
         },

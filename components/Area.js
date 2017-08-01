@@ -4,8 +4,7 @@ class Area extends Component {
   render() {
     return (
       <div style={{ width: 30, height: 30 }}>
-        <div className="area-map"></div> 
-        
+        <div className="area-map" /> 
         <style jsx>
           {`
           .area-map {

@@ -23,6 +23,7 @@ class TicketCard extends Component {
     this.props.deleteTicket(this.props.id)
   }
   render() {
+    console.log(this.props)
     return (
       <div className="skill-card">
         {
@@ -48,6 +49,15 @@ class TicketCard extends Component {
             <div className="ticket-available">
               <i className="fa fa-calendar-check-o" />{moment(this.props.begin).format('LL')} - {moment(this.props.end).format('LL')}
             </div>
+             {
+              this.props.buy && (
+                <div className="">
+                  <a className="btn btn-primary buy-btn">
+                    <i className="fa fa-shopping-cart" /> Buy
+                  </a>
+                </div>
+              )
+            }
           </div>
         </div>
         {
@@ -68,6 +78,9 @@ class TicketCard extends Component {
                 </button>
               </div>
               <style jsx>{`
+                  .buy-btn {
+                    padding: 10px 5px;
+                  }
                   .delete-showcase {
                     color: black;
                     font-weight: 600;

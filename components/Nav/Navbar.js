@@ -49,6 +49,16 @@ class Navbar extends Component {
             </Bar.Collapse>
           }
         </Bar>
+        <div className={this.props.children ? 'search-container' : ''}>
+          {this.props.children}
+        </div>
+        <style>
+          {`
+            .search-container {
+              margin-top: -20px;
+            }
+          `}
+        </style>
       </Headroom>
     )
   }

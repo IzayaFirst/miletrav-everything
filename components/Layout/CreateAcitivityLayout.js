@@ -36,7 +36,7 @@ class CreateAcitivityLayout extends Component {
           uuid: btoa(new Date().getTime()),
           activity_name: "New Experience",
           userId: token.data.id,
-          status: false,
+          status: 0,
         },
         authType: 'Bearer',
         authToken: token.token

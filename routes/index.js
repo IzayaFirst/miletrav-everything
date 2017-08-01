@@ -1,6 +1,7 @@
 module.exports = function (app, server, handle) {
   require('./organize')(app, server, middlewareFunction)
   require('./auth')(app, server, middlewareFunction)
+  require('./view')(app, server, middlewareFunction)
   server.get('*', (req, res) => handle(req, res))
 }
 

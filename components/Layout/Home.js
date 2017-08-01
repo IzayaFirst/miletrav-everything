@@ -5,6 +5,8 @@ import * as Api from '../../api'
 class Home extends Component {
   state = {
     lastest: [],
+    lastestSport: [],
+    lastestHistorical: [],
   }
 
   async componentDidMount() {
@@ -12,11 +14,29 @@ class Home extends Component {
       url: '/activities',
       params: {
         $limit: 10,
+        status: 1,
       }
     })
-    console.log(lastestActivity.data)
+    const lastestSport = await Api.get({
+      url: '/activities',
+      params: {
+        $limit: 10,
+        category: 'Sport',
+        status: 1,
+      }
+    })
+    const lastestHistorical = await Api.get({
+      url: '/activities',
+      params: {
+        $limit: 10,
+        category: 'Historical',
+        status: 1,
+      }
+    })
     this.setState({
       lastest: lastestActivity.data || [],
+      lastestSport: lastestSport.data || [],
+      lastestHistorical: lastestHistorical.data || [],
     })
   }
 
@@ -45,12 +65,14 @@ class Home extends Component {
               {
                 this.props.category.map(val => (
                   <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
-                    <div className="category-card">
-                      <img width="40" height="40" src={getIcon(val.id)} />
-                      <div className="category-title">
-                        {val.category_name}
+                    <a href={`/experience/category/${val.id}`}>
+                      <div className="category-card">
+                        <img width="40" height="40" src={getIcon(val.id)} />
+                        <div className="category-title">
+                          {val.category_name}
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </div>
                 ))
               }
@@ -58,7 +80,7 @@ class Home extends Component {
           </div>
         </div>
         <div className="section-activity">
-          <div className="section-title txt-mt-blue-midnight">
+          <div className="section-title txt-mt-pink">
             Lastest Activity
           </div>
           <div>
@@ -66,7 +88,67 @@ class Home extends Component {
               {
                 this.state.lastest.map(val => (
                   <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
-                    <a href="#">
+                    <a href={`/experience/${val.uuid}`}>
+                      <div className="activity-card">
+                        <div className="card-img-container">
+                          <img src={val.cover_photo} alt="" className="cover" />
+                        </div>
+                        <div className="desc txt-mt-blue-midnight">
+                          <div className="card-title">
+                            {val.activity_name}
+                          </div>
+                          <div className="detail">
+                            {val.city} {val.category}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+        <div className="section-activity">
+          <div className="section-title txt-mt-pink">
+            Sport
+          </div>
+          <div>
+            <div className="row">
+              {
+                this.state.lastestSport.map(val => (
+                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
+                    <a href={`/experience/${val.uuid}`}>
+                      <div className="activity-card">
+                        <div className="card-img-container">
+                          <img src={val.cover_photo} alt="" className="cover" />
+                        </div>
+                        <div className="desc txt-mt-blue-midnight">
+                          <div className="card-title">
+                            {val.activity_name}
+                          </div>
+                          <div className="detail">
+                            {val.city} {val.category}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+        <div className="section-activity">
+          <div className="section-title txt-mt-pink">
+            Historical
+          </div>
+          <div>
+            <div className="row">
+              {
+                this.state.lastestHistorical.map(val => (
+                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
+                    <a href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
                           <img src={val.cover_photo} alt="" className="cover" />
@@ -119,7 +201,7 @@ class Home extends Component {
           }
           .cover {
             display: block;
-            height: auto;
+            height: 100%;
             width: 100%;
             position: absolute;
             top: 0;
@@ -143,10 +225,8 @@ class Home extends Component {
             margin: 10px 0;
           }
           .section-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
-            padding: 25px 15px; 
-            margin-bottom: 20px;
           }
           .section-activity {
             margin: 20px 15px;
@@ -167,7 +247,6 @@ class Home extends Component {
             border-color: #003 transparent;
             display: block;
             width: 0;
-            z-index: 1;
             bottom: 8px;
             left: 50%;
             -webkit-transform: translate(-50%);
