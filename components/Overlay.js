@@ -10,12 +10,15 @@ class Overlay extends Component {
           </div>
         </div>
         <style>{`
+          body {
+            overflow: hidden !important;
+          }
           .overlay-background {
             position: fixed;
             left: 0;
             top: 0;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             background: rgba(35, 25, 70, .7);
             z-index: 999;
           }

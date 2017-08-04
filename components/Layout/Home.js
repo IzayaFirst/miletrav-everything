@@ -40,6 +40,10 @@ class Home extends Component {
     })
   }
 
+  chooseCategory(e) {
+    window.location = `/experience/category/${e.target.value}`
+  }
+
   render() {
     return (
       <div className="content">
@@ -47,37 +51,46 @@ class Home extends Component {
           Where ever you go is a part of you somehow
         </div>
         <div className="province">
-          <div className="container">
-            <div className="row">
-              <div className="col-xs-12 col-sm-3">
-                <div className="title-category">
-                  <i className="fa fa-smile-o"></i> What are you looking for ?
-                </div>
-                <div className="title-category-pin" />
-              </div>
-              <div className="col-xs-12 col-sm-6">
-                <div className="header-category txt-mt-blue-midnight">
-                  MileTrav | Activity platform to finding yourself
-                </div>
-              </div>
+          <div>
+            <div className="header-category txt-mt-blue-midnight">
+              MileTrav | Activity platform to finding yourself
             </div>
-            <div className="row">
-              {
-                this.props.category.map(val => (
-                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
-                    <a href={`/experience/category/${val.id}`}>
-                      <div className="category-card">
-                        <img width="40" height="40" src={getIcon(val.id)} />
-                        <div className="category-title">
-                          {val.category_name}
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                ))
-              }
+            <div className="title-category">
+              <i className="fa fa-smile-o"></i> What are you looking for ?
+            </div>
+            <div className="category-filter">
+              <select onChange={this.chooseCategory.bind(this)} className="form-control-form-miletrav form-category">
+                {
+                  this.props.category.map(val => (
+                    <option value={val.id} key={val.id} >
+                      {val.category_name}    
+                    </option>
+                  ))
+                }
+              </select>
             </div>
           </div>
+          {
+            /*
+            
+            <div className="row">
+            {
+              this.props.category.map(val => (
+                <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
+                  <a href={`/experience/category/${val.id}`}>
+                    <div className="category-card">
+                      <img width="40" height="40" src={getIcon(val.id)} />
+                      <div className="category-title">
+                        {val.category_name}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              ))
+            }
+          </div>
+            */
+          }
         </div>
         <div className="section-activity">
           <div className="section-title txt-mt-pink">
@@ -87,7 +100,7 @@ class Home extends Component {
             <div className="row">
               {
                 this.state.lastest.map(val => (
-                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
+                  <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
                     <a href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
@@ -98,7 +111,7 @@ class Home extends Component {
                             {val.activity_name}
                           </div>
                           <div className="detail">
-                            {val.city} {val.category}
+                            {val.city.toUpperCase()} · {val.category}
                           </div>
                         </div>
                       </div>
@@ -117,7 +130,7 @@ class Home extends Component {
             <div className="row">
               {
                 this.state.lastestSport.map(val => (
-                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
+                  <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
                     <a href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
@@ -128,7 +141,7 @@ class Home extends Component {
                             {val.activity_name}
                           </div>
                           <div className="detail">
-                            {val.city} {val.category}
+                            {val.city.toUpperCase()} · {val.category}
                           </div>
                         </div>
                       </div>
@@ -147,7 +160,7 @@ class Home extends Component {
             <div className="row">
               {
                 this.state.lastestHistorical.map(val => (
-                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
+                  <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
                     <a href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
@@ -158,7 +171,7 @@ class Home extends Component {
                             {val.activity_name}
                           </div>
                           <div className="detail">
-                            {val.city} {val.category}
+                            {val.city.toUpperCase()} · {val.category}
                           </div>
                         </div>
                       </div>
@@ -173,6 +186,26 @@ class Home extends Component {
           {`
           a:hover {
             text-decoration: none
+          }
+          .category-filter {
+            width: 20%;
+            margin: 0 auto; 
+          }
+          .form-category {
+            padding: 6px 0;
+            height: 100%;
+            font-size: 20px;
+            width: 100%;
+            border: 3px solid #003;
+            padding-left: 20px;
+            border-radius
+          }
+          option {
+            font-weight: normal;
+            display: block;
+            white-space: pre;
+            min-height: 1.2em;
+            padding: 0px 2px 1px;
           }
           .detail {
             font-size: 14px;
@@ -228,12 +261,26 @@ class Home extends Component {
             font-size: 20px;
             font-weight: 600;
           }
-          .section-activity {
-            margin: 20px 15px;
+          @media only screen and (max-width: 768px) {
+            .section-activity {
+              margin: 20px 15px;
+            }
+            .category-filter {
+              width: 70%;
+              margin: 0 auto; 
+            }
           }
+          @media only screen and (min-width: 768px) {
+            .section-activity {
+              width: 60%;
+              margin: 0 auto;
+            }
+          }
+          
           .header-category {
-            padding: 38px 0;
-            font-size: 18px;
+            padding: 8px 0;
+            font-size: 28px;
+            color: white;
             font-weight: 600;
           }
           .category-title {
@@ -247,18 +294,17 @@ class Home extends Component {
             border-color: #003 transparent;
             display: block;
             width: 0;
-            bottom: 8px;
+            bottom: 2px;
             left: 50%;
             -webkit-transform: translate(-50%);
             transform: translate(-50%);
           }
           .title-category {
-            padding: 15px 0;
+            padding: 15px 15px;
             text-align: center;
             font-size: 18px;
             font-weight: 600;
             border-radius: 5px;
-            width: 100%;
             margin: 20px 0;
             display: inline-block;
             background: #fff;
@@ -288,11 +334,6 @@ class Home extends Component {
             padding: 20px 0;
             font-size: 18px;
             font-weight: 500;
-          }
-          .province {
-            background: url(/asset/img/colorful.png);
-            min-height: 30vh;
-            padding: 30px 0;
           }
           .content {
             margin-top: 0 auto;

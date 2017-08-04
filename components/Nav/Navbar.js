@@ -1,14 +1,35 @@
 import React, { Component } from 'react'
-import { Navbar as Bar, Nav, NavItem, ButtonToolbar, Button, DropdownButton, MenuItem} from 'react-bootstrap'
+import { Navbar as Bar, Nav, NavItem, ButtonToolbar, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import Headroom from 'react-headroom'
 import * as cookie from '../../helpers/cookies'
+import Overlay from '../Overlay'
 
 class Navbar extends Component {
   constructor(props) {
     super(props)
     this.state = {
       token: props.token,
+      overlay: false,
+      username: '',
+      password: '',
+      validate_username: '',
+      validate_password: '',
     }
+  }
+  login(e) {
+    e.preventDefault()
+  }
+  toggleOn(e) {
+    e.preventDefault()
+    this.setState({
+      overlay: true,
+    })
+  }
+  toggleOff(e) {
+    e.preventDefault()
+    this.setState({
+      overlay: false,
+    })
   }
   goToRegisterCompany(e) {
     e.preventDefault()
@@ -34,24 +55,94 @@ class Navbar extends Component {
             <Bar.Toggle />
           </Bar.Header>
           {
-            this.state.token ? 
-            <Menu token={this.state.token} logout={this.logout.bind(this)} /> : 
-            <Bar.Collapse>
-             <Nav pullRight>
-                <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>Host with Miletrav</NavItem>
-                <NavItem eventKey={2} style={{ paddingTop: 8 }}>Login</NavItem>
-                <NavItem eventKey={3}>
-                  <ButtonToolbar>
-                    <Button onClick={this.goToRegister.bind(this)}  bsStyle="primary">Register</Button>
-                  </ButtonToolbar>
-                </NavItem>
-              </Nav>
-            </Bar.Collapse>
+            this.state.token ?
+              <Menu token={this.state.token} logout={this.logout.bind(this)} /> :
+              <Bar.Collapse>
+                <Nav pullRight>
+                  <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>Host with Miletrav</NavItem>
+                  <NavItem onClick={this.toggleOn.bind(this)} eventKey={2} style={{ paddingTop: 8 }}>Login</NavItem>
+                  <NavItem eventKey={3}>
+                    <ButtonToolbar>
+                      <Button onClick={this.goToRegister.bind(this)} bsStyle="primary">Register</Button>
+                    </ButtonToolbar>
+                  </NavItem>
+                </Nav>
+              </Bar.Collapse>
           }
         </Bar>
         <div className={this.props.children ? 'search-container' : ''}>
           {this.props.children}
         </div>
+        {
+          this.state.overlay && (
+            <Overlay>
+              <div className="title-overlay">
+                <span className="header txt-mt-pink">
+                  Login to MileTrav
+                  </span>
+                <span onClick={this.toggleOff.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
+              </div>
+              <div className="body">
+                <div className="form-group">
+                  <label className="form-title txt-mt-pink">Username</label>
+                  <input type="text" className="form-control form-miletrav" />
+                </div>
+                <div className="form-group">
+                  <label className="form-title txt-mt-pink">Password</label>
+                  <input type="password" className="form-control form-miletrav" />
+                </div>
+                <div className="center">
+                  <button onClick={this.login.bind(this)} className="btn btn-primary btn-confirm">
+                    Login
+                  </button>
+                </div>
+              </div>
+              <style jsx>{`
+                  .center {
+                    text-align: center;
+                  }
+                  .form-title {
+                    font-size: 18px;
+                  }
+                  .buy-btn {
+                    padding: 10px 5px;
+                  }
+                  .delete-showcase {
+                    color: black;
+                    font-weight: 600;
+                    cursor: pointer;
+                  }
+                  .delete-showcase:hover {
+                    color: #E6326E !important;
+                  }
+                  .btn-confirm {
+                    width: 100%;
+                  }
+                  .body {
+                    padding: 15px 0;
+                  }
+                  .title-overlay {
+                    padding-bottom: 10px;
+                    border-bottom: 1px solid #E6326E;
+                  }
+                  .header {
+                    font-size: 22px;
+                    font-wright: 600;
+                  }
+                  .confirm {
+                    float: right;
+                    font-size: 22px;
+                    font-wright: 600;
+                    cursor: pointer
+                  }
+                  .confirm:hover {
+                    color: #E6326E;
+                  }
+                `}
+              </style>
+            </Overlay>
+          )
+        }
         <style>
           {`
             .search-container {
@@ -69,7 +160,7 @@ export default Navbar
 
 const ImgTitle = ({ token }) => (
   <div className="img-container">
-    <img className="avatar" src={token.cover_photo || 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/avatar.png?alt=media&token=ed25f05a-3eda-48cf-b8d7-05775119d1b3'} alt="" className="avatar"/>
+    <img className="avatar" src={token.cover_photo || 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/avatar.png?alt=media&token=ed25f05a-3eda-48cf-b8d7-05775119d1b3'} alt="" className="avatar" />
     <style jsx>{`
       .avatar {
         background-color: #F2F2F2 !important;
@@ -93,38 +184,38 @@ const Menu = ({ token, logout }) => (
   <div>
     {
       token.data.is_company && (
-      <div>
-        <Nav pullRight className="is-not-mobile">
-          <DropdownButton eventKey={1} title={<ImgTitle token={token} />} style={{ paddingTop: 8 }}>
-            <MenuItem eventKey={1.1}>Company Profile</MenuItem>
-            <MenuItem eventKey={1.2}>Dashboard</MenuItem>
-            <div className="divider" />
-            <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
-          </DropdownButton>
-        </Nav>
-         <Bar.Collapse>
+        <div>
+          <Nav pullRight className="is-not-mobile">
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} />} style={{ paddingTop: 8 }}>
+              <MenuItem eventKey={1.1}>Company Profile</MenuItem>
+              <MenuItem eventKey={1.2}>Dashboard</MenuItem>
+              <div className="divider" />
+              <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
+            </DropdownButton>
+          </Nav>
+          <Bar.Collapse>
             <Nav pullRight className="mobile-only">
               <NavItem eventKey={1}>Company Profile</NavItem>
               <NavItem eventKey={2}>Dashboard</NavItem>
               <div className="divider" />
               <NavItem onClick={logout} eventKey={3}>Logout</NavItem>
             </Nav>
-        </Bar.Collapse>
-      </div>
+          </Bar.Collapse>
+        </div>
       )
     }
     {
       !token.data.is_company && (
-      <Bar.Collapse>
-        <Nav pullRight>
-          <DropdownButton eventKey={1} title={<ImgTitle token={this.props.token} />} style={{ marginTop: 15 }}>
-            <MenuItem eventKey={1.1}>Profile</MenuItem>
-            <MenuItem eventKey={1.2}>Guide Book</MenuItem>
-            <div className="divider" />
-            <MenuItem eventKey={1.3}>Logout</MenuItem>
-          </DropdownButton>
-        </Nav>
-      </Bar.Collapse>
+        <Bar.Collapse>
+          <Nav pullRight>
+            <DropdownButton eventKey={1} title={<ImgTitle token={this.props.token} />} style={{ marginTop: 15 }}>
+              <MenuItem eventKey={1.1}>Profile</MenuItem>
+              <MenuItem eventKey={1.2}>Guide Book</MenuItem>
+              <div className="divider" />
+              <MenuItem eventKey={1.3}>Logout</MenuItem>
+            </DropdownButton>
+          </Nav>
+        </Bar.Collapse>
       )
     }
   </div>
