@@ -12,6 +12,7 @@ class index extends Component {
     const category = await Api.get({
       url: '/categories',
     })
+   
     return { token, category: category.data }
   }
   render() {
@@ -20,12 +21,17 @@ class index extends Component {
         <Header />
         <Navbar token={this.props.token ? this.props.token : false} />
         {
-          this.props.token && (
+          this.props.token && this.props.token.data.is_company && (
             <CreateAcitivityLayout /> 
           )
         }
         {
           !this.props.token && (
+            <Home category={this.props.category || []}/>   
+          )
+        }
+        {
+          this.props.token && !this.props.token.data.is_company && (
             <Home category={this.props.category || []}/>   
           )
         }

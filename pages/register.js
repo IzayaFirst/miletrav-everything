@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
+import { getCookiesFromReq }from '../helpers/cookies'
 
 class register extends Component {
   static async getInitialProps({ req = {}, res = {}}) {

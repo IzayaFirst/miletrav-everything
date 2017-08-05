@@ -3,6 +3,7 @@ import { Navbar as Bar, Nav, NavItem, ButtonToolbar, Button, DropdownButton, Men
 import Headroom from 'react-headroom'
 import * as cookie from '../../helpers/cookies'
 import Overlay from '../Overlay'
+import * as Api from '../../api'
 
 class Navbar extends Component {
   constructor(props) {
@@ -12,12 +13,61 @@ class Navbar extends Component {
       overlay: false,
       username: '',
       password: '',
-      validate_username: '',
-      validate_password: '',
+      validate_username: true,
+      validate_password: true,
+      errorMsg: '',
     }
   }
-  login(e) {
+  setUsername(e) {
+    this.setState({
+      username: e.target.value,
+    })
+  }
+  setPassword(e) {
+    this.setState({
+      password: e.target.value,
+    })
+  }
+  async login(e) {
+    this.setState({
+      validate_username: true,
+      validate_password: true,
+    })
     e.preventDefault()
+    const { username, password } = this.state
+    const validate_username = username.trim().length > 0
+    const validate_password = password.trim().length > 0
+    this.setState({
+      validate_username,
+      validate_password,
+    })
+    if (!validate_username && !validate_password) {
+      return
+    }
+    try {
+      const auth = await Api.post({
+        url: '/auth/local',
+        data: {
+          username,
+          password,
+        }
+      })
+      cookie.savingCookies({ data: auth.axiosData })
+      window.location = '/'
+    } catch (error) {
+      const err = Object.assign({}, error);
+      console.log(error)
+      if (err && err.request.status === 400) {
+        this.setState({
+          errorMsg: 'Username has already been used'
+        })
+      } else if (err && err.request.status === 500) {
+        this.setState({
+          errorMsg: 'Username has already been used'
+        })
+      }
+    }
+
   }
   toggleOn(e) {
     e.preventDefault()
@@ -85,11 +135,25 @@ class Navbar extends Component {
               <div className="body">
                 <div className="form-group">
                   <label className="form-title txt-mt-pink">Username</label>
-                  <input type="text" className="form-control form-miletrav" />
+                  <input type="text" onChange={this.setUsername.bind(this)} className="form-control form-miletrav" />
+                  {
+                    !this.state.validate_username && (
+                      <div className="error-status">
+                        Please fill in your username
+                      </div>
+                    )
+                  }
                 </div>
                 <div className="form-group">
                   <label className="form-title txt-mt-pink">Password</label>
-                  <input type="password" className="form-control form-miletrav" />
+                  <input type="password" onChange={this.setPassword.bind(this)} className="form-control form-miletrav" />
+                  {
+                    !this.state.validate_password && (
+                      <div className="error-status">
+                        Please fill in your password
+                      </div>
+                    )
+                  }
                 </div>
                 <div className="center">
                   <button onClick={this.login.bind(this)} className="btn btn-primary btn-confirm">
@@ -98,6 +162,12 @@ class Navbar extends Component {
                 </div>
               </div>
               <style jsx>{`
+                   .error-status {
+                    color: #e62117;
+                    font-size: 12px;
+                    font-weight: 400;
+                    padding-left: 20px;
+                  }
                   .center {
                     text-align: center;
                   }
@@ -187,7 +257,7 @@ const Menu = ({ token, logout }) => (
         <div>
           <Nav pullRight className="is-not-mobile">
             <DropdownButton eventKey={1} title={<ImgTitle token={token} />} style={{ paddingTop: 8 }}>
-              <MenuItem eventKey={1.1}>Company Profile</MenuItem>
+              <MenuItem onClick={ () => window.location = '/company/profile' }eventKey={1.1}>Company Profile</MenuItem>
               <MenuItem eventKey={1.2}>Dashboard</MenuItem>
               <div className="divider" />
               <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
@@ -208,11 +278,11 @@ const Menu = ({ token, logout }) => (
       !token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
-            <DropdownButton eventKey={1} title={<ImgTitle token={this.props.token} />} style={{ marginTop: 15 }}>
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} />} style={{ marginTop: 15 }}>
               <MenuItem eventKey={1.1}>Profile</MenuItem>
               <MenuItem eventKey={1.2}>Guide Book</MenuItem>
               <div className="divider" />
-              <MenuItem eventKey={1.3}>Logout</MenuItem>
+              <MenuItem  onClick={logout} eventKey={1.3}>Logout</MenuItem>
             </DropdownButton>
           </Nav>
         </Bar.Collapse>

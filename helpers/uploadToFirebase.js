@@ -19,6 +19,26 @@ export const UploadCoverPhoto = async (data) => {
   const url = await upload.downloadURL
   return url
 }
+export const UploadProfile = async (data) => {
+  const fileName = btoa(new Date().getTime())
+  const upload = await firebase.storage().ref('profile/'+fileName).put(data)
+  const url = await upload.downloadURL
+  return url
+}
+
+export const UploadCitizen = async (data) => {
+  const fileName = btoa(new Date().getTime())
+  const upload = await firebase.storage().ref('citizen_photo/'+fileName).put(data)
+  const url = await upload.downloadURL
+  return url
+}
+
+export const UploadBankAccount = async (data) => {
+  const fileName = btoa(new Date().getTime())
+  const upload = await firebase.storage().ref('bank_account_photo/'+fileName).put(data)
+  const url = await upload.downloadURL
+  return url
+}
 
 export const UploadShowcase = async (data) => {
   const fileName = btoa(new Date().getTime())
