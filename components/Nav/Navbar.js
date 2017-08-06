@@ -276,7 +276,7 @@ const Menu = ({ token, logout, cover_photo }) => (
         <div>
           <Nav pullRight className="is-not-mobile">
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo}/>} style={{ paddingTop: 8 }}>
-              <MenuItem onClick={ () => window.location = '/company/profile' }eventKey={1.1}>Company Profile</MenuItem>
+              <MenuItem onClick={ () => window.location = '/company/profile' } eventKey={1.1}>Company Profile</MenuItem>
               <MenuItem eventKey={1.2}>Dashboard</MenuItem>
               <div className="divider" />
               <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
@@ -297,8 +297,8 @@ const Menu = ({ token, logout, cover_photo }) => (
       !token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
-            <DropdownButton eventKey={1} title={<ImgTitle token={token} />} style={{ marginTop: 15 }}>
-              <MenuItem eventKey={1.1}>Profile</MenuItem>
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo}/>} style={{ marginTop: 15 }}>
+              <MenuItem onClick={ () => window.location = '/user/profile' } eventKey={1.1}>Profile</MenuItem>
               <MenuItem eventKey={1.2}>Guide Book</MenuItem>
               <div className="divider" />
               <MenuItem  onClick={logout} eventKey={1.3}>Logout</MenuItem>

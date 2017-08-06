@@ -10,7 +10,8 @@ import { UploadProfile, UploadCitizen, UploadBankAccount } from '../../helpers/u
 class profile extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
     const token = getCookiesFromReq(req)
-    if (!token.data.is_company) {
+    console.log(token.data.is_company)
+    if (token.data.is_company) {
       res.redirect('/')
     }
     const category = await Api.get({
@@ -32,11 +33,9 @@ class profile extends Component {
     bank_account: this.props.user.bank_account || '',
     citizen: this.props.user.citizen || '',
     email: this.props.user.email || '',
-    organize_name: this.props.user.organize_name || '',
     tel_no: this.props.user.tel_no || '',
-    lat: this.props.user.lat || 0,
-    lng: this.props.user.lng || 0,
-    location: this.props.user.location || '',
+    firstname: this.props.user.firstname || '',
+    lastname: this.props.user.lastname || '',
     country_code: this.props.user.country_code || '',
     validate_organize_name: true,
   }
@@ -75,7 +74,6 @@ class profile extends Component {
       this.setState({
         citizen
       })
-      console.log(update)
     } catch (err) {
       const e = Object.assign({}, err)
       console.log(e)
@@ -96,11 +94,20 @@ class profile extends Component {
       this.setState({
         bank_account
       })
-      console.log(update)
     } catch (err) {
       const e = Object.assign({}, err)
       console.log(e)
     }
+  }
+  setFirstname(e) {
+    this.setState({
+      firstname: e.target.value,
+    })
+  }
+  setLastname(e) {
+    this.setState({
+      lastname: e.target.value,
+    })
   }
   setOrganize(e) {
     this.setState({
@@ -129,14 +136,11 @@ class profile extends Component {
   async edit() {
     const {
       email,
-      organize_name,
       tel_no,
-      lat,
-      lng,
-      location,
-      country_code,
+      firstname,
+      lastname
     } = this.state
-    const validate_organize_name = organize_name.trim().length > 0
+    const validate_organize_name = firstname.trim().length > 0
     this.setState({
       validate_organize_name,
     })
@@ -147,12 +151,9 @@ class profile extends Component {
       url: `/users/${this.props.token.data.id}`,
       data: {
         email,
-        organize_name,
+        firstname,
+        lastname,
         tel_no,
-        lat,
-        lng,
-        location,
-        country_code,
       },
       authType: 'Bearer',
       authToken: this.props.token.token,
@@ -168,7 +169,7 @@ class profile extends Component {
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="header">
           <div className="header-page txt-mt-pink">
-            <i className="fa fa-address-card" style={{ marginRight: 10 }} />Company Profile
+            <i className="fa fa-address-card" style={{ marginRight: 10 }} />Profile
           </div>
         </div>
         <div className="content">
@@ -186,10 +187,10 @@ class profile extends Component {
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-12">
-                  <label>Organize Name</label>
+                  <label>Firstname</label>
                 </div>
                 <div className="col-xs-12">
-                  <input type="text" placeholder="Enter your organize name" onChange={this.setOrganize.bind(this)} value={this.state.organize_name} className="form-control form-miletrav" />
+                  <input type="text" placeholder="Enter your firstname" onChange={this.setFirstname.bind(this)} value={this.state.firstname} className="form-control form-miletrav" />
                   {
                       !this.state.validate_organize_name && (
                         <div className="error-status">
@@ -197,6 +198,16 @@ class profile extends Component {
                         </div>
                       )
                   }
+                </div>
+              </div>
+            </div>
+            <div className="form-group">
+              <div className="row">
+                <div className="col-xs-12">
+                  <label>Lastname</label>
+                </div>
+                <div className="col-xs-12">
+                  <input type="text" placeholder="Enter your lastname" onChange={this.setLastname.bind(this)} value={this.state.lastname} className="form-control form-miletrav" />
                 </div>
               </div>
             </div>
@@ -217,20 +228,6 @@ class profile extends Component {
                 </div>
                 <div className="col-xs-12">
                   <input type="text" placeholder="Enter your phone number" onChange={this.setPhone.bind(this)} value={this.state.tel_no} className="form-control form-miletrav" />
-                </div>
-              </div>
-            </div>
-            <div className="form-group">
-              <div className="row">
-                <div className="col-xs-12">
-                  <label>Location</label>
-                </div>
-                <div className="col-xs-12">
-                  <Geosuggest
-                    onSuggestSelect={this.setLocation.bind(this)}
-                    placeholder="Select your organize location from the suggestion"
-                    initialValue={this.state.location}
-                  />
                 </div>
               </div>
             </div>
