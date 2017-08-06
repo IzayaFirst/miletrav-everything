@@ -16,8 +16,27 @@ class Navbar extends Component {
       validate_username: true,
       validate_password: true,
       errorMsg: '',
+      cover_photo: '',
     }
   }
+  async componentDidMount() {
+    const id = this.state.token.data.id
+    const token = this.state.token.token
+    const me = await Api.get({
+      url: '/users',
+      params: {
+        id,
+      },
+      authToken: token,
+      authType: 'Bearer',
+    })
+    const { cover_photo } = me.data[0]
+    console.log(cover_photo)
+    this.setState({
+      cover_photo,
+    })
+   }
+  
   setUsername(e) {
     this.setState({
       username: e.target.value,
@@ -106,7 +125,7 @@ class Navbar extends Component {
           </Bar.Header>
           {
             this.state.token ?
-              <Menu token={this.state.token} logout={this.logout.bind(this)} /> :
+              <Menu token={this.state.token} cover_photo={this.state.cover_photo} logout={this.logout.bind(this)} /> :
               <Bar.Collapse>
                 <Nav pullRight>
                   <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>Host with Miletrav</NavItem>
@@ -228,9 +247,9 @@ class Navbar extends Component {
 export default Navbar
 
 
-const ImgTitle = ({ token }) => (
+const ImgTitle = ({ token, cover_photo }) => (
   <div className="img-container">
-    <img className="avatar" src={token.cover_photo || 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/avatar.png?alt=media&token=ed25f05a-3eda-48cf-b8d7-05775119d1b3'} alt="" className="avatar" />
+    <img className="avatar" src={cover_photo || 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/avatar.png?alt=media&token=ed25f05a-3eda-48cf-b8d7-05775119d1b3'} alt="" className="avatar" />
     <style jsx>{`
       .avatar {
         background-color: #F2F2F2 !important;
@@ -250,13 +269,13 @@ const ImgTitle = ({ token }) => (
   </div>
 )
 
-const Menu = ({ token, logout }) => (
+const Menu = ({ token, logout, cover_photo }) => (
   <div>
     {
       token.data.is_company && (
         <div>
           <Nav pullRight className="is-not-mobile">
-            <DropdownButton eventKey={1} title={<ImgTitle token={token} />} style={{ paddingTop: 8 }}>
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo}/>} style={{ paddingTop: 8 }}>
               <MenuItem onClick={ () => window.location = '/company/profile' }eventKey={1.1}>Company Profile</MenuItem>
               <MenuItem eventKey={1.2}>Dashboard</MenuItem>
               <div className="divider" />
