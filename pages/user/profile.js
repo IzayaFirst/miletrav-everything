@@ -169,7 +169,7 @@ class profile extends Component {
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="header">
           <div className="header-page txt-mt-pink">
-            <i className="fa fa-address-card" style={{ marginRight: 10 }} />Profile
+            <i className="fa fa-user" style={{ marginRight: 10 }} />Profile
           </div>
         </div>
         <div className="content">

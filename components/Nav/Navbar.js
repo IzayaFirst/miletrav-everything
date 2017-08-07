@@ -20,23 +20,24 @@ class Navbar extends Component {
     }
   }
   async componentDidMount() {
-    const id = this.state.token.data.id
-    const token = this.state.token.token
-    const me = await Api.get({
-      url: '/users',
-      params: {
-        id,
-      },
-      authToken: token,
-      authType: 'Bearer',
-    })
-    const { cover_photo } = me.data[0]
-    console.log(cover_photo)
-    this.setState({
-      cover_photo,
-    })
-   }
-  
+    if (this.state.token) {
+      const id = this.state.token.data.id
+      const token = this.state.token.token
+      const me = await Api.get({
+        url: '/users',
+        params: {
+          id,
+        },
+        authToken: token,
+        authType: 'Bearer',
+      })
+      const { cover_photo } = me.data[0]
+      this.setState({
+        cover_photo,
+      })
+    }
+  }
+
   setUsername(e) {
     this.setState({
       username: e.target.value,
@@ -119,7 +120,9 @@ class Navbar extends Component {
         <Bar collapseOnSelect>
           <Bar.Header>
             <Bar.Brand>
-              <a>Miletrav</a>
+              <a href="/">
+                MileTrav
+              </a>
             </Bar.Brand>
             <Bar.Toggle />
           </Bar.Header>
@@ -235,7 +238,7 @@ class Navbar extends Component {
         <style>
           {`
             .search-container {
-              margin-top: -20px;
+              margin-top: 0;
             }
           `}
         </style>
@@ -275,8 +278,8 @@ const Menu = ({ token, logout, cover_photo }) => (
       token.data.is_company && (
         <div>
           <Nav pullRight className="is-not-mobile">
-            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo}/>} style={{ paddingTop: 8 }}>
-              <MenuItem onClick={ () => window.location = '/company/profile' } eventKey={1.1}>Company Profile</MenuItem>
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ paddingTop: 8 }}>
+              <MenuItem onClick={() => window.location = '/company/profile'} eventKey={1.1}>Company Profile</MenuItem>
               <MenuItem eventKey={1.2}>Dashboard</MenuItem>
               <div className="divider" />
               <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
@@ -297,11 +300,11 @@ const Menu = ({ token, logout, cover_photo }) => (
       !token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
-            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo}/>} style={{ marginTop: 15 }}>
-              <MenuItem onClick={ () => window.location = '/user/profile' } eventKey={1.1}>Profile</MenuItem>
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
+              <MenuItem onClick={() => window.location = '/user/profile'} eventKey={1.1}>Profile</MenuItem>
               <MenuItem eventKey={1.2}>Guide Book</MenuItem>
               <div className="divider" />
-              <MenuItem  onClick={logout} eventKey={1.3}>Logout</MenuItem>
+              <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
             </DropdownButton>
           </Nav>
         </Bar.Collapse>

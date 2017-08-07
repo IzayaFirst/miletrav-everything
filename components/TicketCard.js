@@ -52,7 +52,7 @@ class TicketCard extends Component {
              {
               this.props.buy && (
                 <div className="">
-                  <a className="btn btn-primary buy-btn">
+                  <a href={`/booking/${this.props.id}`} className="btn btn-primary buy-btn">
                     <i className="fa fa-shopping-cart" /> Buy
                   </a>
                 </div>

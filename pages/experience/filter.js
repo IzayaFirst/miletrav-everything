@@ -63,31 +63,37 @@ class filter extends Component {
           <div className="search-bar">
             <div className="form-group">
               <div className="row">
-                <div className="col-xs-12 col-sm-3 col-md-3 center">
-                  <i className="fa fa-search" style={{ marginRight: 10 }} /><span className="search-title txt-mt-blue-midnight">Find your lovely activity</span>
-                </div>
-                <div className="col-xs-12 col-sm-3 col-md-3 center">
-                  <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
-                    {
-                      this.state.categories.map(val => (
-                        <option key={val.id} value={val.id}>{val.category_name}</option>
-                      ))
-                    }
-                  </select>
-                </div>
-                <div className="col-xs-12 col-sm-3 col-md-3 center">
-                  <Geosuggest
-                    onSuggestSelect={this.setLocation.bind(this)}
-                    placeholder="Select city from suggestion"
-                  />
+                <div className="col-xs-12 col-sm-offset-3 col-sm-6">
+                  <div className="row">
+                    <div className="col-xs-12 col-sm-4 col-md-4 center">
+                      <div className="search-title-container">
+                        <i className="fa fa-search" style={{ marginRight: 10 }} /><span className="search-title txt-mt-blue-midnight">Quick Filter Search</span>
+                      </div>
+                    </div>
+                    <div className="col-xs-12 col-sm-4 col-md-4 center">
+                      <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
+                        {
+                          this.state.categories.map(val => (
+                            <option key={val.id} value={val.id}>{val.category_name}</option>
+                          ))
+                        }
+                      </select>
+                    </div>
+                    <div className="col-xs-12 col-sm-4 col-md-4 center">
+                      <Geosuggest
+                        onSuggestSelect={this.setLocation.bind(this)}
+                        placeholder="Select city from suggestion"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </Navbar>
         <div className="category-section-title txt-mt-pink" style={{
-            background: `url('${getCover(parseInt(this.state.id))}') center center no-repeat`,
-            backgroundSize: 'cover'
+          background: `url('${getCover(parseInt(this.state.id))}') center center no-repeat`,
+          backgroundSize: 'cover'
         }}>
           {this.props.category_name}
         </div>
@@ -114,6 +120,9 @@ class filter extends Component {
         </div>
         <style jsx>
           {`
+            .search-title-container {
+              padding: 7px 0;
+            }
             .category-section-title {
               height: 300px;
               width: 100%;
