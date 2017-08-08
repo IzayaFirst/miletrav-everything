@@ -14,7 +14,6 @@ class booking extends Component {
     if (!token) {
       res.redirect('/register')
     }
-    let tickets
     return { token, ticket: id }
   }
   state = {
@@ -22,12 +21,7 @@ class booking extends Component {
     step: 1,
     ticket: {},
     date: moment(),
-    number: '',
-    name: '',
-    exp: '',
-    cvc: '',
-    focused: '',
-    amount: 0,
+    amount: 1,
   }
   async componentDidMount() {
     const ticket = await Api.get({
@@ -57,7 +51,7 @@ class booking extends Component {
   render() {
     return (
       <div>
-        <Header css={['/asset/css/datepicker.css', '/asset/css/credit-card.css']} />
+        <Header css={['/asset/css/datepicker.css', '/asset/css/credit-card.css']} omise={true}/>
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="content">
           <div className="step-container">
@@ -112,7 +106,11 @@ class booking extends Component {
                       </div>
                       <div className="col-xs-12 col-sm-3">
                         <label htmlFor="" className="txt-mt-pink">Amount</label>
-                        <input type="number" onChange={this.setAmount.bind(this)} className="form-control form-miletrav"/>
+                        <select className="form-control form-miletrav" onChange={this.setAmount.bind(this)}>
+                          <option value="1">1</option>\
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -135,8 +133,12 @@ class booking extends Component {
                     Credit Card Information
                   </div>
                   <div className="credit-card-container">
-                   <CreditCardForm 
+                   <CreditCardForm
+                    ticket={this.state.ticket}
+                    token={this.state.token}
                     setStep={this.setStep.bind(this)}
+                    date={this.state.date}
+                    amount={this.state.amount}
                    />
                   </div>
                 </div>
