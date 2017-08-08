@@ -35,6 +35,7 @@ class filter extends Component {
     activity: this.props.activity || [],
     categories: this.props.categories || [],
     id: this.props.category,
+    title: '',
   }
 
   setCategory(e) {
@@ -47,6 +48,25 @@ class filter extends Component {
       url: `/activities?city[$like]=%${city.replace(/ /g, "%")}%`,
       params: {
         category: this.props.category_name,
+        status: 1,
+      }
+    })
+    this.setState({
+      activity: activity.data,
+    })
+  }
+  setTitle(e) {
+    this.setState({
+      title: e.target.value,
+    })
+  }
+  async searchByTitle() {
+    const { title } = this.state
+    const activity = await Api.get({
+      url: `/activities?activity_name[$like]=%${city.replace(/ /g, "%")}%`,
+      params: {
+        category: this.props.category_name,
+        status: 1,
       }
     })
     this.setState({
@@ -59,43 +79,37 @@ class filter extends Component {
         <Header
           script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
         />
-        <Navbar token={this.props.token ? this.props.token : false} >
-          <div className="search-bar">
-            <div className="form-group">
-              <div className="row">
-                <div className="col-xs-12 col-sm-offset-3 col-sm-6">
-                  <div className="row">
-                    <div className="col-xs-12 col-sm-4 col-md-4 center">
-                      <div className="search-title-container">
-                        <i className="fa fa-search" style={{ marginRight: 10 }} /><span className="search-title txt-mt-blue-midnight">Quick Filter Search</span>
-                      </div>
-                    </div>
-                    <div className="col-xs-12 col-sm-4 col-md-4 center">
-                      <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
-                        {
-                          this.state.categories.map(val => (
-                            <option key={val.id} value={val.id}>{val.category_name}</option>
-                          ))
-                        }
-                      </select>
-                    </div>
-                    <div className="col-xs-12 col-sm-4 col-md-4 center">
-                      <Geosuggest
-                        onSuggestSelect={this.setLocation.bind(this)}
-                        placeholder="Select city from suggestion"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Navbar>
+        <Navbar token={this.props.token ? this.props.token : false} />
         <div className="category-section-title txt-mt-pink" style={{
           background: `url('${getCover(parseInt(this.state.id))}') center center no-repeat`,
           backgroundSize: 'cover'
         }}>
-          {this.props.category_name}
+          <div className="gradient" />
+          <div style={{ zIndex: 5, position: 'absolute', textAlign: 'center', width: '100%' }}>
+            {this.props.category_name}
+          </div>
+        </div>
+        <div className="filter">
+          <div className="form-group">
+            <label style={{ fontSize: 22, fontWeight: 600 }}>Filter</label>
+            <div className="row">
+              <div className="col-xs-6 col-sm-2">
+                <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
+                  {
+                    this.state.categories.map(val => (
+                      <option key={val.id} value={val.id}>{val.category_name}</option>
+                    ))
+                  }
+                </select>
+              </div>
+              <div className="col-xs-6 col-sm-2">
+                <Geosuggest
+                  onSuggestSelect={this.setLocation.bind(this)}
+                  placeholder="Select city from suggestion"
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <div className="content">
           <div className="section-activity">
@@ -120,15 +134,29 @@ class filter extends Component {
         </div>
         <style jsx>
           {`
+            .gradient {
+              position: absolute;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              top: 0;
+              background-color: #000;
+              opacity: 0.5;
+              margin-top: 59px;
+              height: 400px;
+            }
+            .filter {
+              margin: 10px 15px;
+            }
             .search-title-container {
               padding: 7px 0;
             }
             .category-section-title {
-              height: 300px;
+              height: 400px;
               width: 100%;
               font-size: 30px;
               font-weight: 600;
-              padding-top: 15vh;
+              padding-top: 22vh;
               text-align: center;
             }
             .section-activity {

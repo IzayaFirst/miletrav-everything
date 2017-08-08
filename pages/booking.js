@@ -5,6 +5,7 @@ import { getCookiesFromReq } from '../helpers/cookies'
 import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
 import * as Api from '../api'
+import CreditCardForm from '../components/CreditCardForm'
 
 class booking extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -21,6 +22,12 @@ class booking extends Component {
     step: 1,
     ticket: {},
     date: moment(),
+    number: '',
+    name: '',
+    exp: '',
+    cvc: '',
+    focused: '',
+    amount: 0,
   }
   async componentDidMount() {
     const ticket = await Api.get({
@@ -29,6 +36,7 @@ class booking extends Component {
     this.setState({
       ticket: ticket.axiosData,
     })
+    
   }
   setBookingDate(date) {
     this.setState({
@@ -40,11 +48,16 @@ class booking extends Component {
       step,
     })
   }
+  setAmount(e) {
+    this.setState({
+      amount: e.target.value,
+    })
+  }
 
   render() {
     return (
       <div>
-        <Header css={['/asset/css/datepicker.css']} />
+        <Header css={['/asset/css/datepicker.css', '/asset/css/credit-card.css']} />
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="content">
           <div className="step-container">
@@ -86,7 +99,7 @@ class booking extends Component {
                   </div>
                   <div className="form-group" style={{ margin: '20px 0' }}>
                     <div className="row">
-                      <div className="col-xs-12 col-sm-6">
+                      <div className="col-xs-12 col-sm-4">
                         <label className="txt-mt-pink">Booking Date</label>
                         <DatePicker
                           dateFormat="DD/MM/YYYY"
@@ -96,6 +109,10 @@ class booking extends Component {
                           onChange={this.setBookingDate.bind(this)}
                           className="form-control form-miletrav"
                         />
+                      </div>
+                      <div className="col-xs-12 col-sm-3">
+                        <label htmlFor="" className="txt-mt-pink">Amount</label>
+                        <input type="number" onChange={this.setAmount.bind(this)} className="form-control form-miletrav"/>
                       </div>
                     </div>
                   </div>
@@ -117,12 +134,20 @@ class booking extends Component {
                   <div className="information-title txt-mt-blue-midnight">
                     Credit Card Information
                   </div>
+                  <div className="credit-card-container">
+                   <CreditCardForm 
+                    setStep={this.setStep.bind(this)}
+                   />
+                  </div>
                 </div>
               )
             }
           </div>
         </div>
         <style jsx>{`
+          .credit-card-container {
+            padding: 25px 0;
+          }
           .none {
             pointer-events: none;
             opacity: .8;
