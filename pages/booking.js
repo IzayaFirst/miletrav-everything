@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
+import domtoimage from 'dom-to-image'
 import { getCookiesFromReq } from '../helpers/cookies'
 import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
@@ -22,22 +23,57 @@ class booking extends Component {
     ticket: {},
     date: moment(),
     amount: 1,
+    transaction: '',
+    activity: {},
   }
   async componentDidMount() {
     const ticket = await Api.get({
       url: `/tickets/${this.props.ticket}`,
     })
+    if (ticket.axiosData) {
+      const activity = await Api.get({
+        url: `/activities/${ticket.axiosData.activityId}`,
+      })
+      this.setState({
+        activity: activity.axiosData,
+      })
+    }
     this.setState({
       ticket: ticket.axiosData,
     })
-    
+
+  }
+  setTransaction(transaction) {
+    this.setState({
+      transaction,
+    })
   }
   setBookingDate(date) {
     this.setState({
       date,
     })
   }
-  setStep(step) {
+  async setStep(step) {
+    if (this.state.ticket.price === 0) {
+      const transaction = await Api.post({
+        url: '/bookings',
+        data: {
+          transaction: btoa(new Date().getTime()),
+          date: this.state.date,
+          amount: this.state.amount,
+          userId: this.state.token.data.id,
+          ticketId: this.state.ticket.id,
+        },
+        authToken: this.state.token.token,
+        authType: 'Bearer'
+      })
+      console.log(transaction)
+      this.setState({
+        transaction: transaction.axiosData.transaction,
+        step: 3,
+      })
+      return
+    }
     this.setState({
       step,
     })
@@ -47,11 +83,19 @@ class booking extends Component {
       amount: e.target.value,
     })
   }
-
+  async savePdf() {
+    let doc = new jsPDF()
+    const node = document.getElementById('ticket')
+    const uri = await domtoimage.toPng(node)
+    let img = new Image();
+    img.src = uri
+    doc.addImage(img, 'png', 25, 15, 110, 30);
+    doc.save('a4.pdf')
+  }
   render() {
     return (
       <div>
-        <Header css={['/asset/css/datepicker.css', '/asset/css/credit-card.css']} omise={true}/>
+        <Header css={['/asset/css/datepicker.css', '/asset/css/credit-card.css']} omise={true} pdf={true} />
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="content">
           <div className="step-container">
@@ -107,7 +151,7 @@ class booking extends Component {
                       <div className="col-xs-12 col-sm-3">
                         <label htmlFor="" className="txt-mt-pink">Amount</label>
                         <select className="form-control form-miletrav" onChange={this.setAmount.bind(this)}>
-                          <option value="1">1</option>\
+                          <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>
                         </select>
@@ -133,13 +177,59 @@ class booking extends Component {
                     Credit Card Information
                   </div>
                   <div className="credit-card-container">
-                   <CreditCardForm
-                    ticket={this.state.ticket}
-                    token={this.state.token}
-                    setStep={this.setStep.bind(this)}
-                    date={this.state.date}
-                    amount={this.state.amount}
-                   />
+                    <CreditCardForm
+                      ticket={this.state.ticket}
+                      token={this.state.token}
+                      setStep={this.setStep.bind(this)}
+                      date={this.state.date}
+                      amount={this.state.amount}
+                      setTransaction={this.setTransaction.bind(this)}
+                    />
+                  </div>
+                </div>
+              )
+            }
+            {
+              this.state.step === 3 && (
+                <div className="booking-card">
+                  <div className="information-title txt-mt-blue-midnight">
+                    Thank you for your purchase
+                  </div>
+                  <div id="ticket">
+                    <div className="ticket-demo">
+                      <div className="ticket-demo-card">
+                        <div className="row">
+                          <div className="col-xs-8 col-sm-9">
+                            <div className="ticket-demo-title">
+                              {this.state.activity.activity_name}
+                            </div>
+                            <div>
+                              {this.state.amount + ' Person(s)'}
+                            </div>
+                            <div>
+                              {moment(this.state.date).format('LL')}
+                            </div>
+                            <div className="ticket-demo-location">
+                              {this.state.activity.city.toUpperCase()}
+                            </div>
+                          </div>
+                          <div className="col-xs-4 col-sm-3">
+                            <div className="ticket-demo-ticket-title">
+                              <div>{this.state.ticket.title} Ticket</div>
+                              <div className="ticket-demo-price">
+                                {this.state.ticket.price === 0 ? 'Free' : this.state.ticket.price + ' Baht'}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <span className="ticket-transaction">
+                        ref. {this.state.transaction}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="pdf-generate-container">
+                    <a onClick={this.savePdf.bind(this)} className="btn btn-primary">Save your tickets</a>
                   </div>
                 </div>
               )
@@ -147,6 +237,43 @@ class booking extends Component {
           </div>
         </div>
         <style jsx>{`
+          .ticket-transaction {
+            padding: 3px 5px;
+            font-size: 10px;
+            color: #fff;
+            background: #000;
+            display: inline;
+
+          }
+          .ticket-demo-location {
+            font-size: 14px;
+            padding: 5px 0;
+          }
+          .ticket-demo-price {
+            float: right;
+            font-size: 12px;
+            font-weight: 600;
+          }
+          .ticket-demo-ticket-title {
+            float: right;
+            font-size: 14px;
+            font-weight: 600;
+          }
+          .ticket-demo-title {
+            font-size: 18px;
+            font-weight: 600;
+          }
+          .ticket-demo-card {
+            padding: 15px;
+          }
+          .ticket-demo {
+            background: #fff;
+            border: 1px solid #000;
+          }
+          .pdf-generate-container {
+            padding: 45px 0;
+            text-align: center;
+          }
           .credit-card-container {
             padding: 25px 0;
           }

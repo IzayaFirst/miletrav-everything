@@ -109,6 +109,7 @@ class CreditCardForm extends Component {
         } = check.axiosData
         if (miletrav_transaction) {
           const { id } = check.axiosData
+          this.props.setTransaction(id)
           const transaction = await Api.post({
             url: '/bookings',
             data: {
@@ -121,7 +122,7 @@ class CreditCardForm extends Component {
             authToken: this.props.token.token,
             authType: 'Bearer'
           })
-          this.props.setStep(this ,3)
+          this.props.setStep(3)
           this.setState({
             loading: false,
           })

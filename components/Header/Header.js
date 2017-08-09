@@ -13,7 +13,7 @@ export default class Header extends Component {
                 <link rel="stylesheet" href="/asset/css/bootstrap.css" />
                 <link rel="stylesheet" href="/asset/css/miletrav.css" />
                 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-                <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kanit" />
+                <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kanit|Indie+Flower|" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 {
                     this.props.css.map((css, index) => {
@@ -41,6 +41,11 @@ export default class Header extends Component {
                         </script>
                     )
                 }
+                {
+                    this.props.pdf && (
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js" />
+                    )
+                }
             </Head>
         )
     }
@@ -49,6 +54,7 @@ Header.defaultProps = {
     script: [],
     css: [],
     omise: false,
+    pdf: false,
 }
 
 Header.PropTypes = {
