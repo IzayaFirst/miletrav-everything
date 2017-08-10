@@ -42,6 +42,7 @@ class dashboard extends Component {
         <div className="content">
 
         </div>
+        
         <style jsx>{`
           .content {
             padding: 50px 0; 

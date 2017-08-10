@@ -19,6 +19,13 @@ export const UploadCoverPhoto = async (data) => {
   const url = await upload.downloadURL
   return url
 }
+
+export const UploadGuideBook = async (data) => {
+  const fileName = btoa(new Date().getTime())
+  const upload = await firebase.storage().ref('guidebook/'+fileName).put(data)
+  const url = await upload.downloadURL
+  return url
+}
 export const UploadProfile = async (data) => {
   const fileName = btoa(new Date().getTime())
   const upload = await firebase.storage().ref('profile/'+fileName).put(data)
