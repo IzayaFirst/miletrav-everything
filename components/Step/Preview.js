@@ -20,7 +20,40 @@ class Preview extends Component {
   state = {
     operation: this.props.operation || []
   }
+
+  async closed() {
+    try {
+      const publish = await Api.patch({
+        url: '/activities/' + this.props.id,
+        data: {
+          status: 0,
+        },
+        authToken: this.props.token.token,
+        authType: 'Bearer',
+      })
+      location.reload()
+    } catch (err) {
+      console.log(Object.assign({}, err))
+    }
+  }
+  async publish() {
+    try {
+      const publish = await Api.patch({
+        url: '/activities/' + this.props.id,
+        data: {
+          status: 1,
+        },
+        authToken: this.props.token.token,
+        authType: 'Bearer',
+      })
+      location.reload()
+    } catch (err) {
+      console.log(Object.assign({}, err))
+    }
+
+  }
   render() {
+    console.log(this.props.exp.status)
     return (
       <div className="row">
         <div className="title txt-mt-pink">
@@ -31,14 +64,14 @@ class Preview extends Component {
             <div>
               {
                 this.props.exp.status && (
-                  <a className="btn btn-primary right">
+                  <a onClick={this.closed.bind(this)} className="btn btn-primary right">
                     Closed
                   </a>
                 )
               }
               {
                 !this.props.exp.status && (
-                  <a className="btn btn-primary right">
+                  <a onClick={this.publish.bind(this)} className="btn btn-primary right">
                     Publish
                   </a>
                 )
@@ -92,18 +125,18 @@ class Preview extends Component {
               }
             </div>
             <div className="ticket">
-            {
-              this.props.tickets.map(val => (
-                <TicketCard
-                  title={val.title}
-                  desc={val.desc}
-                  price={val.price}
-                  begin={val.begin}
-                  end={val.end}
-                  isEdit={true}
-                />
-              ))
-            }
+              {
+                this.props.tickets.map(val => (
+                  <TicketCard
+                    title={val.title}
+                    desc={val.desc}
+                    price={val.price}
+                    begin={val.begin}
+                    end={val.end}
+                    isEdit={true}
+                  />
+                ))
+              }
             </div>
           </div>
         </div>

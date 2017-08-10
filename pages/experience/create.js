@@ -278,6 +278,7 @@ class create extends Component {
                   tickets={this.state.tickets}
                   operation={this.state.operation}
                   id={this.state.id}
+                  token={this.props.token}
                 />   
               )
             }

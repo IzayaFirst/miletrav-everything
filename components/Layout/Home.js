@@ -93,7 +93,7 @@ class Home extends Component {
           }
         </div>
         <div className="section-activity">
-          <div className="section-title txt-mt-pink">
+          <div className="section-title">
             Lastest Activity
           </div>
           <div>
@@ -123,7 +123,7 @@ class Home extends Component {
           </div>
         </div>
         <div className="section-activity">
-          <div className="section-title txt-mt-pink">
+          <div className="section-title">
             Sport
           </div>
           <div>
@@ -153,7 +153,7 @@ class Home extends Component {
           </div>
         </div>
         <div className="section-activity">
-          <div className="section-title txt-mt-pink">
+          <div className="section-title">
             Historical
           </div>
           <div>
@@ -230,7 +230,7 @@ class Home extends Component {
             -webkit-line-clamp: 1;
           }
           .desc {
-            padding: 15px;
+            padding: 10px 0;
           }
           .cover {
             display: block;
@@ -253,12 +253,10 @@ class Home extends Component {
           .activity-card {
             background: #fff;
             width: 100%;
-            box-shadow: 0 1px 8px rgba(0,0,0,.2);
-            border-radius: 4px;
             margin: 10px 0;
           }
           .section-title {
-            font-size: 20px;
+            font-size: 28px;
             font-weight: 600;
           }
           @media only screen and (max-width: 768px) {
@@ -272,7 +270,7 @@ class Home extends Component {
           }
           @media only screen and (min-width: 768px) {
             .section-activity {
-              width: 60%;
+              width: 65%;
               margin: 0 auto;
             }
           }

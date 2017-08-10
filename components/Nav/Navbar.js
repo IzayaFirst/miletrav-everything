@@ -302,7 +302,7 @@ const Menu = ({ token, logout, cover_photo }) => (
           <Nav pullRight>
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
               <MenuItem onClick={() => window.location = '/user/profile'} eventKey={1.1}>Profile</MenuItem>
-              <MenuItem eventKey={1.2}>Guide Book</MenuItem>
+              <MenuItem onClick={() => window.location = '/guidebook/me'} eventKey={1.2}>Guide Book</MenuItem>
               <div className="divider" />
               <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
             </DropdownButton>

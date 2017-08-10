@@ -65,7 +65,7 @@ class CoverAndShowcase extends Component {
             <div className="col-xs-2 col-sm-2">
               {
                 this.props.loadingCoverPhoto && (
-                  <span style={{ fontSize: 26}}>
+                  <span style={{ fontSize: 26 }}>
                     <i className="fa fa-cog fa-spin"/>
                   </span>
                 )
