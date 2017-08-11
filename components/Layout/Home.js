@@ -7,6 +7,7 @@ class Home extends Component {
     lastest: [],
     lastestSport: [],
     lastestHistorical: [],
+    lastestGuideBook: [],
   }
 
   async componentDidMount() {
@@ -33,7 +34,15 @@ class Home extends Component {
         status: 1,
       }
     })
+    const lastestGuideBook = await Api.get({
+      url: '/guidebooks',
+      params: {
+        $limit: 10,
+        status: 1,
+      }
+    })
     this.setState({
+      lastestGuideBook: lastestGuideBook.data || [],
       lastest: lastestActivity.data || [],
       lastestSport: lastestSport.data || [],
       lastestHistorical: lastestHistorical.data || [],
@@ -63,7 +72,7 @@ class Home extends Component {
                 {
                   this.props.category.map(val => (
                     <option value={val.id} key={val.id} >
-                      {val.category_name}    
+                      {val.category_name}
                     </option>
                   ))
                 }
@@ -72,7 +81,6 @@ class Home extends Component {
           </div>
           {
             /*
-            
             <div className="row">
             {
               this.props.category.map(val => (
@@ -120,6 +128,36 @@ class Home extends Component {
                 ))
               }
             </div>
+          </div>
+        </div>
+        <div className="section-activity">
+          <div className="section-title">
+            Guide for you
+          </div>
+          <div className="row">
+            {
+              this.state.lastestGuideBook.map(val => (
+                <div className="col-xs-6 col-sm-3 col-md-3" key={val.id}>
+                  <a href={`/guidebook/${val.uuid}`}>
+                    <div className="guidebook-background"
+                      style={{
+                        background: `url('${val.cover_photo}') center center no-repeat`,
+                        backgroundColor: '#404040',
+                        backgroundSize: 'cover',
+                      }}>
+                      <span className="guide-tag">
+                        Guide
+                      </span>
+                      </div>
+                    <div className="desc txt-mt-blue-midnight">
+                      <div className="card-title">
+                        {val.title}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              ))
+            }
           </div>
         </div>
         <div className="section-activity">
@@ -184,6 +222,23 @@ class Home extends Component {
         </div>
         <style>
           {`
+          .guide-tag {
+            position: relative !important;
+            bottom: -110px !important;
+            left: 10px !important;
+            right: 0px !important;
+            color:  #404040;
+            padding: 2px 6px;
+            background: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 3px;
+          }
+          .guidebook-background {
+            background-color: #404040;
+            width: 100%;
+            height: 150px;
+          }
           a:hover {
             text-decoration: none
           }
@@ -260,7 +315,7 @@ class Home extends Component {
             font-weight: 600;
           }
           @media only screen and (max-width: 768px) {
-            .section-activity {
+            .section-activity, guidebook-section {
               margin: 20px 15px;
             }
             .category-filter {

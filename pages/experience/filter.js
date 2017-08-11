@@ -85,7 +85,7 @@ class filter extends Component {
           backgroundSize: 'cover'
         }}>
           <div className="gradient" />
-          <div style={{ zIndex: 5, position: 'absolute', textAlign: 'center', width: '100%' }}>
+          <div style={{  position: 'absolute', textAlign: 'center', width: '100%', color: '#fff' }}>
             {this.props.category_name}
           </div>
         </div>

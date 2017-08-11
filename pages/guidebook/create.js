@@ -6,6 +6,7 @@ import * as Api from '../../api'
 import { getCookiesFromReq } from '../../helpers/cookies'
 import Overlay from '../../components/Overlay'
 import { UploadGuideBook } from '../../helpers/uploadToFirebase'
+import LoadingAnimation from '../../components/LoadingAnimation'
 
 class create extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -33,7 +34,29 @@ class create extends Component {
     validate_title: true,
     validate_category: true,
     categories: this.props.categories || [],
+    places: [],
+    loading: false,
+    delete_overlay: false,
+    delete_id: 0,
+    upload_loading: false,
   }
+  async componentDidMount() {
+    this.setState({
+      loading: true,
+    })
+    const places = await Api.get({
+      url: '/places',
+      params: {
+        guidebookId: this.props.guidebook.id,
+        userId: this.props.token.data.id,
+      }
+    })
+    this.setState({
+      places: places.data,
+      loading: false,
+    })
+  }
+
   setEditTitle() {
     const editTitle = !this.state.editTitle
     this.setState({
@@ -73,6 +96,9 @@ class create extends Component {
     location.reload()
   }
   async UploadGuideBookPhoto(accept, reject) {
+    this.setState({
+      upload_loading: true,
+    })
     const file = accept[0]
     const cover_photo = await UploadGuideBook(file)
     const update = await Api.patch({
@@ -85,8 +111,71 @@ class create extends Component {
     })
     console.log(update)
     this.setState({
+      upload_loading: false,
       cover_photo,
     })
+  }
+  async addPlace() {
+    // {`/guidebook/create/${this.state.uuid}/place`} 
+    try {
+      const create = await Api.post({
+        url: '/places',
+        data: {
+          uuid: btoa(new Date().getTime()),
+          title: "New Places",
+          userId: this.props.token.data.id,
+          guidebookId: this.props.guidebook.id,
+        },
+        authToken: this.props.token.token,
+        authType: 'Bearer',
+      })
+      window.location = `/guidebook/create/${create.axiosData.uuid}/place`
+    } catch (err) {
+      const error = Object.assign({}, err)
+      console.log(err)
+    }
+  }
+  async deletePlace() {
+    const del = await Api.del({
+      url: `/places/${this.state.delete_id}`,
+      authToken: this.props.token.token,
+      authType: 'Bearer',
+    })
+    window.location.reload()
+  }
+  setDelete(id) {
+    this.setState({
+      delete_overlay: true,
+      delete_id: id,
+    })
+  }
+  closeDelete() {
+    this.setState({
+      delete_overlay: false,
+      delete_id: 0,
+    })
+  }
+  async publish() {
+    const publish = await Api.patch({
+      url: '/guidebooks/' + this.props.guidebook.id,
+      data: {
+        status: 1,
+      },
+      authToken: this.props.token.token,
+      authType: 'Bearer',
+    })
+    window.location.reload()
+  }
+ async closed() {
+    const publish = await Api.patch({
+      url: '/guidebooks/' + this.props.guidebook.id,
+      data: {
+        status: 0,
+      },
+      authToken: this.props.token.token,
+      authType: 'Bearer',
+    })
+    window.location.reload()
   }
   render() {
     return (
@@ -96,8 +185,18 @@ class create extends Component {
         <div className="header">
           <div className="header-page txt-mt-pink">
             <div className="title-section">
-              {this.props.guidebook.title} <i onClick={this.setEditTitle.bind(this)} className="fa fa-edit" style={{ paddingLeft: 5, cursor: 'pointer' }} />
-              <a className="btn btn-primary right-btn">Publish</a>
+              {this.props.guidebook.title}
+              {
+                !this.props.guidebook.status && (
+                  <a onClick={this.publish.bind(this)} className="btn btn-primary right-btn">Publish</a>
+                )
+              }
+              {
+                this.props.guidebook.status && (
+                  <a onClick={this.closed.bind(this)} className="btn btn-primary right-btn">Closed</a>
+                )
+              }
+              <a onClick={this.setEditTitle.bind(this)} className="btn btn-primary right-btn" style={{ marginRight: 15 }} ><i className="fa fa-edit" style={{ paddingRight: 5 }} />Edit</a>
             </div>
             <div className="detail-section txt-mt-pink">
               Category: <span className="txt-mt-white">{this.props.guidebook.category ? this.props.guidebook.category : ' -'}</span>
@@ -107,18 +206,85 @@ class create extends Component {
                 accept="image/jpeg, image/png"
                 onDrop={this.UploadGuideBookPhoto.bind(this)}
                 style={{ width: '100%', fontSize: 15, cursor: 'pointer', display: 'inline' }}
-              ><i className="fa fa-upload" style={{ marginRight: 5 }} /> Upload</Dropzone> : 
+              ><i className="fa fa-upload" style={{ marginRight: 5 }} /> Upload</Dropzone> :
               {
-                this.state.cover_photo != ''  && (
+                !this.state.upload_loading && this.state.cover_photo != '' && (
                   <a target="_blank" style={{ marginLeft: 10 }} className="txt-mt-pink" href={this.state.cover_photo}>See your cover</a>
+                )
+              }
+              {
+                this.state.upload_loading && (
+                  <span>
+                    <i className="fa fa-circle-o-notch fa-spin fa-fw" />
+                    <span className="sr-only">Loading...</span>
+                  </span>
                 )
               }
             </div>
           </div>
         </div>
         <div className="content">
+          <div className="place-title">
+            Your place to recommend <a onClick={this.addPlace.bind(this)} className="btn btn-primary right-btn">Add Places</a>
+          </div>
+          {
+            this.state.loading && (
+              <div >
+                <LoadingAnimation />
+              </div>
+            )
+          }
+          {
+            !this.state.loading && this.state.places.length > 0 && (
+              <div className="place-container">
+                <div className="row">
+                  {
+                    this.state.places.map(place => (
+                      <div className="col-xs-6 col-sm-3" key={place.id}>
+                        <div className="place-card">
+                          <div className="delete-btn">
+                            <i onClick={this.setDelete.bind(this, place.id)} className="delete fa fa-times-circle" />
+                          </div>
+                          <a href={`/guidebook/create/${place.uuid}/place`} className="no-underline">
+                            <div className="place-card-title txt-mt-blue-midnight">
+                              {place.title}
+                            </div>
+                            <div className="place-card-location txt-mt-blue-midnight">
+                              {place.location}
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            )
+          }
 
         </div>
+        {
+          this.state.delete_overlay && (
+            <Overlay>
+              <div className="title-overlay">
+                <span className="header-overlay  txt-mt-pink">
+                  Delete this place ?
+                </span>
+                <span onClick={this.closeDelete.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
+              </div>
+              <div className="body">
+                <div className="center">
+                  <button onClick={this.deletePlace.bind(this)} className="btn btn-primary" style={{ marginRight: 10 }}>
+                    Delete
+                  </button>
+                  <button onClick={this.closeDelete.bind(this)} className="btn btn-primary">
+                    cancel
+                  </button>
+                </div>
+              </div>
+            </Overlay>
+          )
+        }
         {
           this.state.editTitle && (
             <Overlay>
@@ -167,6 +333,54 @@ class create extends Component {
           )
         }
         <style jsx>{`
+          .delete:hover {
+            color: #E6326E;
+          }
+          .delete{
+            cursor: pointer;
+          }
+          .delete-btn {
+            text-align: right;
+          }
+          .no-underline:hover {
+            text-decoration: none;
+          }
+          .place-card-location {
+            font-size: 18px;
+            font-weight: 400;
+            overflow: hidden;
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            max-height: 60px;
+            -webkit-line-clamp: 2;
+          }
+          .place-card-title {
+            font-weight: 600;
+            font-size: 22px;
+            overflow: hidden;
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            max-height: 40px;
+            -webkit-line-clamp: 1;
+          }
+          .place-card {
+            min-height: 200px;
+            width: 100%;
+            background: #fff;
+            border-radius: 4px;
+            padding: 15px;
+            
+          }
+          .place-container {
+            width: 80%;
+            margin: 30px auto;
+          }
+          .place-title {
+            font-size: 22px;
+            font-weight: 600;
+          } 
           .error-status {
             color: #e62117;
             font-size: 12px;
@@ -225,10 +439,10 @@ class create extends Component {
             display: inline-block;
           }
           .title-section {
-            padding: 15px 0;
+            padding: 0;
           }
           .content {
-            padding: 50px 0; 
+            padding: 25px;
             background: #F5F5FF;
             min-height: 70vh;
           }
