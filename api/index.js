@@ -3,7 +3,6 @@ const baseURL  = 'http://localhost:3030'
 
 export async function get({ url, params, authType, authToken }) {
   const method = 'get'
-  console.log(url)
   const res = await axiosRequest({ baseURL, url, method, params, authType, authToken })
   return {
     axiosData: res.data,

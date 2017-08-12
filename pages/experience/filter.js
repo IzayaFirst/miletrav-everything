@@ -4,9 +4,12 @@ import { getCookiesFromReq } from '../../helpers/cookies'
 import Header from '../../components/Header/Header'
 import Navbar from '../../components/Nav/Navbar'
 import ActivityCard from '../../components/ActivityCard'
+import GuideBookCard from '../../components/GuideBookCard'
 import * as Api from '../../api'
 import { getCover } from '../../helpers/master'
+import LoadingAnimation from '../../components/LoadingAnimation'
 
+let id = 0
 class filter extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
     const token = getCookiesFromReq(req)
@@ -28,14 +31,24 @@ class filter extends Component {
         status: 1,
       }
     })
-    return { token, activity: activity.data, categories: categories.data, category, category_name }
+    const guidebook = await Api.get({
+      url: '/guidebooks',
+      params: {
+        category: category_name,
+        status: 1,
+      }
+    })
+    return { token, activity: activity.data, categories: categories.data, category, category_name, guidebook: guidebook.data }
   }
 
   state = {
     activity: this.props.activity || [],
     categories: this.props.categories || [],
+    guidebook: this.props.guidebook || [],
     id: this.props.category,
     title: '',
+    city: '',
+    filter: 0,
   }
 
   setCategory(e) {
@@ -43,6 +56,11 @@ class filter extends Component {
     window.location = `/experience/category/${id}`
   }
   async setLocation(location) {
+    this.setState({
+      title: '',
+      city: location.description,
+      querying: true,
+    })
     const city = location.description.toLowerCase().trim()
     const activity = await Api.get({
       url: `/activities?city[$like]=%${city.replace(/ /g, "%")}%`,
@@ -53,25 +71,53 @@ class filter extends Component {
     })
     this.setState({
       activity: activity.data,
+      querying: false,
     })
   }
   setTitle(e) {
+    const title = e.target.value
+    clearTimeout(id)
     this.setState({
-      title: e.target.value,
+      title,
+    })
+    id = setTimeout(async () => {
+      this.setState({
+        querying: true,
+      })
+      const activity = await Api.get({
+        url: `/searching`,
+        params: {
+          category: this.props.category_name,
+          title,
+          status: 1,
+          location: this.state.city
+        }
+      })
+      this.setState({
+        activity: activity.axiosData,
+        querying: false,
+      })
+    }, 2000)
+
+  }
+  setFilter(e) {
+    const filter = parseInt(e.target.value)
+    this.setState({
+      filter,
     })
   }
   async searchByTitle() {
     const { title } = this.state
     const activity = await Api.get({
-      url: `/activities?activity_name[$like]=%${city.replace(/ /g, "%")}%`,
+      url: `/searching`,
       params: {
         category: this.props.category_name,
+        title,
         status: 1,
       }
     })
-    this.setState({
-      activity: activity.data,
-    })
+    console.log(activity)
+
   }
   render() {
     return (
@@ -85,7 +131,7 @@ class filter extends Component {
           backgroundSize: 'cover'
         }}>
           <div className="gradient" />
-          <div style={{  position: 'absolute', textAlign: 'center', width: '100%', color: '#fff' }}>
+          <div style={{ position: 'absolute', textAlign: 'center', width: '100%', color: '#fff' }}>
             {this.props.category_name}
           </div>
         </div>
@@ -93,7 +139,7 @@ class filter extends Component {
           <div className="form-group">
             <label style={{ fontSize: 22, fontWeight: 600 }}>Filter</label>
             <div className="row">
-              <div className="col-xs-6 col-sm-2">
+              <div className="col-xs-4 col-sm-2">
                 <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
                   {
                     this.state.categories.map(val => (
@@ -102,11 +148,28 @@ class filter extends Component {
                   }
                 </select>
               </div>
-              <div className="col-xs-6 col-sm-2">
-                <Geosuggest
-                  onSuggestSelect={this.setLocation.bind(this)}
-                  placeholder="Select city from suggestion"
-                />
+              {
+                this.state.filter === 0 && (
+                  <div className="col-xs-4 col-sm-2">
+                    <Geosuggest
+                      onSuggestSelect={this.setLocation.bind(this)}
+                      placeholder="Select city from suggestion"
+                    />
+                  </div>
+                )
+              }
+              {
+                this.state.filter === 0 && (
+                  <div className="col-xs-4 col-sm-2">
+                    <input onChange={this.setTitle.bind(this)} type="text" placeholder="" value={this.state.title} className="form-control form-miletrav" />
+                  </div>
+                )
+              }
+              <div className="col-xs-4 col-sm-2">
+                <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-control form-miletrav">
+                  <option value={0}>Experience</option>
+                  <option value={1}>GuideBook</option>
+                </select>
               </div>
             </div>
           </div>
@@ -115,7 +178,14 @@ class filter extends Component {
           <div className="section-activity">
             <div className="row">
               {
-                this.state.activity.map(val => (
+                this.state.querying && (
+                  <div>
+                    <LoadingAnimation />
+                  </div>
+                )
+              }
+              {
+                !this.state.querying && this.state.filter === 0 && this.state.activity.map(val => (
                   <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
                     <a href={`/experience/${val.uuid}`}>
                       <ActivityCard
@@ -123,6 +193,19 @@ class filter extends Component {
                         activity_name={val.activity_name}
                         city={val.city}
                         category={val.category}
+                      />
+                    </a>
+                  </div>
+                ))
+              }
+              {
+                this.state.filter === 1 && this.state.guidebook.map(val => (
+                  <div className="col-xs-6 col-sm-2 col-md-2" key={val.id}>
+                    <a href={`/experience/${val.uuid}`}>
+                      <GuideBookCard
+                        uuid={val.uuid}
+                        cover_photo={val.cover_photo}
+                        title={val.title}
                       />
                     </a>
                   </div>
