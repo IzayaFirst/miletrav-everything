@@ -109,7 +109,7 @@ class Home extends Component {
               {
                 this.state.lastest.map(val => (
                   <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
-                    <a href={`/experience/${val.uuid}`}>
+                    <a target="_blank" href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
                           <img src={val.cover_photo} alt="" className="cover" />
@@ -138,7 +138,7 @@ class Home extends Component {
             {
               this.state.lastestGuideBook.map(val => (
                 <div className="col-xs-6 col-sm-3 col-md-3" key={val.id}>
-                  <a href={`/guidebook/${val.uuid}`}>
+                  <a target="_blank" href={`/guidebook/${val.uuid}`}>
                     <div className="guidebook-background"
                       style={{
                         background: `url('${val.cover_photo}') center center no-repeat`,
@@ -169,7 +169,7 @@ class Home extends Component {
               {
                 this.state.lastestSport.map(val => (
                   <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
-                    <a href={`/experience/${val.uuid}`}>
+                    <a target="_blank" href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
                           <img src={val.cover_photo} alt="" className="cover" />
@@ -199,7 +199,7 @@ class Home extends Component {
               {
                 this.state.lastestHistorical.map(val => (
                   <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
-                    <a href={`/experience/${val.uuid}`}>
+                    <a target="_blank" href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
                           <img src={val.cover_photo} alt="" className="cover" />

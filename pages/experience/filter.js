@@ -139,7 +139,7 @@ class filter extends Component {
           <div className="form-group">
             <label style={{ fontSize: 22, fontWeight: 600 }}>Filter</label>
             <div className="row">
-              <div className="col-xs-4 col-sm-2">
+              <div className="col-xs-6 col-sm-2">
                 <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
                   {
                     this.state.categories.map(val => (
@@ -150,7 +150,7 @@ class filter extends Component {
               </div>
               {
                 this.state.filter === 0 && (
-                  <div className="col-xs-4 col-sm-2">
+                  <div className="col-xs-6 col-sm-2">
                     <Geosuggest
                       onSuggestSelect={this.setLocation.bind(this)}
                       placeholder="Select city from suggestion"
@@ -160,12 +160,12 @@ class filter extends Component {
               }
               {
                 this.state.filter === 0 && (
-                  <div className="col-xs-4 col-sm-2">
-                    <input onChange={this.setTitle.bind(this)} type="text" placeholder="" value={this.state.title} className="form-control form-miletrav" />
+                  <div className="col-xs-6 col-sm-2">
+                    <input onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-control form-miletrav" />
                   </div>
                 )
               }
-              <div className="col-xs-4 col-sm-2">
+              <div className="col-xs-6 col-sm-2">
                 <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-control form-miletrav">
                   <option value={0}>Experience</option>
                   <option value={1}>GuideBook</option>
@@ -187,7 +187,7 @@ class filter extends Component {
               {
                 !this.state.querying && this.state.filter === 0 && this.state.activity.map(val => (
                   <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
-                    <a href={`/experience/${val.uuid}`}>
+                    <a target="_blank" href={`/experience/${val.uuid}`}>
                       <ActivityCard
                         cover_photo={val.cover_photo}
                         activity_name={val.activity_name}
@@ -201,7 +201,7 @@ class filter extends Component {
               {
                 this.state.filter === 1 && this.state.guidebook.map(val => (
                   <div className="col-xs-6 col-sm-2 col-md-2" key={val.id}>
-                    <a href={`/experience/${val.uuid}`}>
+                    <a target="_blank" href={`/experience/${val.uuid}`}>
                       <GuideBookCard
                         uuid={val.uuid}
                         cover_photo={val.cover_photo}

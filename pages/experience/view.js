@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
+import StarRating from 'react-star-rating'
 import { getCookiesFromReq } from '../../helpers/cookies'
 import Header from '../../components/Header/Header'
 import Navbar from '../../components/Nav/Navbar'
@@ -12,7 +13,7 @@ class view extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
     const token = getCookiesFromReq(req)
     const { experience } = req.params
-    if(!experience) {
+    if (!experience) {
       res.redirect('/')
     }
     const activity = await Api.get({
@@ -22,7 +23,7 @@ class view extends Component {
         status: 1,
       }
     })
-    if(activity.data.length == 0) {
+    if (activity.data.length == 0) {
       res.redirect('/')
     }
     const hostId = activity.data[0].userId
@@ -51,7 +52,13 @@ class view extends Component {
         id: hostId,
       }
     })
-    return { token, activity: activity.data[0], activityId, showcase: showcase.data, tickets: tickets.data, operation: operation.data, host: host.data[0] }
+    const rating = await Api.get({
+      url: '/ratings',
+      params: {
+        activityId,
+      }
+    })
+    return { token, activity: activity.data[0], activityId, showcase: showcase.data, tickets: tickets.data, operation: operation.data, host: host.data[0], rating: rating[0] }
   }
   state = {
     host: this.props.host || {},
@@ -59,15 +66,58 @@ class view extends Component {
     showcase: this.props.showcase || [],
     ticket: this.props.tickets || [],
     operation: this.props.operation || [],
+    rating: this.props.rating || [],
+    bookmarks: {},
+    bookmark: false,
   }
-  componentDidMount() {
-    console.log(this.state)
+  async componentDidMount() {
+    const bookmark = await Api.get({
+      url: '/bookmarks',
+      params: {
+        activityId: this.props.activityId,
+        userId: this.props.token.data.id,
+      }
+    })
+    if (bookmark.data.length > 0) {
+      this.setState({
+        bookmarks: bookmark.data[0],
+        bookmark: true,
+      })
+    }
+  }
+  async setBookmark() {
+    if (this.state.bookmark) {
+      const del = await Api.del({
+        url: '/bookmarks/' + this.state.bookmarks.id,
+        authToken: this.props.token.token,
+        authType: 'Bearer',
+      })
+      this.setState({
+        bookmark: false,
+        bookmarks: {},
+      })
+    } else {
+      const add = await Api.post({
+        url: '/bookmarks',
+        data: {
+          activityId: this.props.activityId,
+          userId: this.props.token.data.id,
+        },
+        authToken: this.props.token.token,
+        authType: 'Bearer',
+      })
+      this.setState({
+        bookmark: true,
+        bookmarks: add.axiosData,
+      })
+    }
   }
   render() {
     return (
       <div>
         <Header
           script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
+          css={['/asset/css/react-star-rating.min.css']}
         />
         <Navbar token={this.props.token ? this.props.token : false} />
         <div>
@@ -80,7 +130,13 @@ class view extends Component {
                 {this.state.activity.activity_name}
               </div>
               <div className="host-by">
-                Host By {this.state.host.first_name}
+                Host By {this.state.host.organize_name}
+                {
+                  this.props.token && (
+                    <a onClick={this.setBookmark.bind(this)} className="rating-section"><i className={this.state.bookmark ? 'fa fa-star txt-mt-pink' : 'fa fa-star'} style={{ margin: 5 }} />{this.state.bookmark ? 'Remove from wishlist' : 'Add to wishlist'}</a>
+                  )
+                }
+
               </div>
               <div className="location">
                 <i className="fa fa-map-marker" style={{ marginRight: 15 }} />
@@ -144,6 +200,18 @@ class view extends Component {
         </div>
         <style jsx>
           {` 
+            .rating-section:hover {
+              text-decoration: none;
+              color: #4a4a4a;
+            }
+            .rating-section {
+              padding: 5px;
+              border-radius: 2px;
+              border: 1px solid #000;
+              cursor: pointer;
+              color: #4a4a4a;
+              float: right;
+            }
             .ticket-container {
               margin: 15px 0;
             }
@@ -210,7 +278,7 @@ class view extends Component {
               padding: 10px 0;
             }
             .name {
-              font-size: 25px;
+              font-size: 30px;
               font-weight: 600;
             }
             .activity-title {

@@ -33,6 +33,7 @@
     "react-geosuggest": "^2.3.0",
     "react-headroom": "^2.1.5",
     "react-quill": "^1.0.0",
+    "react-star-rating": "^1.4.2",
     "react-toggle": "^4.0.1",
     "universal-cookie": "^2.0.8"
   },
