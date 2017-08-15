@@ -6,6 +6,7 @@ import Navbar from '../../components/Nav/Navbar'
 import { getCookiesFromReq } from '../../helpers/cookies'
 import * as Api from '../../api'
 import { UploadProfile, UploadCitizen, UploadBankAccount } from '../../helpers/uploadToFirebase'
+import Footer from '../../components/Footer'
 
 class profile extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -374,6 +375,7 @@ class profile extends Component {
             }
           
           `}</style>
+          <Footer />
       </div>
     )
   }

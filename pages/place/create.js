@@ -7,6 +7,7 @@ import * as Api from '../../api'
 import { getCookiesFromReq } from '../../helpers/cookies'
 import Overlay from '../../components/Overlay'
 import { UploadGuideBook } from '../../helpers/uploadToFirebase'
+import Footer from '../../components/Footer'
 
 class create extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -266,6 +267,7 @@ class create extends Component {
           }
           `}
         </style>
+        <Footer />
       </div>
     )
   }

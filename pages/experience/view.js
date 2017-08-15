@@ -8,6 +8,7 @@ import * as Api from '../../api'
 import Area from '../../components/Area'
 import { getDay } from '../../helpers/master'
 import TicketCard from '../../components/TicketCard'
+import Footer from '../../components/Footer'
 
 class view extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -189,9 +190,9 @@ class view extends Component {
                 <i className="fa fa-clock-o" style={{ marginRight: 10 }} /> Selected your tickets
               </div>
               {
-                this.state.ticket.map(val => (
+                this.state.ticket.map((val,index) => (
                   <div className="ticket-container" key={val.id}>
-                    <TicketCard {...val} buy={true} />
+                    <TicketCard {...val} no={index} buy={true} />
                   </div>
                 ))
               }
@@ -333,6 +334,7 @@ class view extends Component {
             }
           `}
         </style>
+        <Footer />
       </div>
     )
   }

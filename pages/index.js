@@ -5,6 +5,7 @@ import { getCookiesFromReq }from '../helpers/cookies'
 import CreateAcitivityLayout from '../components/Layout/CreateAcitivityLayout'
 import Home from '../components/Layout/Home'
 import * as Api from '../api'
+import Footer from '../components/Footer'
 
 class index extends Component {
   static async getInitialProps({ req = {}, res = {}}) {
@@ -35,6 +36,7 @@ class index extends Component {
             <Home category={this.props.category || []}/>   
           )
         }
+        <Footer />
       </div>
     );
   }

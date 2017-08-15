@@ -14,14 +14,14 @@ class Home extends Component {
     const lastestActivity = await Api.get({
       url: '/activities',
       params: {
-        $limit: 10,
+        $limit: 9,
         status: 1,
       }
     })
     const lastestSport = await Api.get({
       url: '/activities',
       params: {
-        $limit: 10,
+        $limit: 9,
         category: 'Sport',
         status: 1,
       }
@@ -29,7 +29,7 @@ class Home extends Component {
     const lastestHistorical = await Api.get({
       url: '/activities',
       params: {
-        $limit: 10,
+        $limit: 9,
         category: 'Historical',
         status: 1,
       }
@@ -37,7 +37,7 @@ class Home extends Component {
     const lastestGuideBook = await Api.get({
       url: '/guidebooks',
       params: {
-        $limit: 10,
+        $limit: 9,
         status: 1,
       }
     })
@@ -62,7 +62,7 @@ class Home extends Component {
         <div className="province">
           <div>
             <div className="header-category txt-mt-blue-midnight">
-              MileTrav | Activity platform to finding yourself
+              MileTrav | Activity platform to passionate yourself
             </div>
             <div className="title-category">
               <i className="fa fa-smile-o"></i> What are you looking for ?

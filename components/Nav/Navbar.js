@@ -99,6 +99,8 @@ class Navbar extends Component {
     e.preventDefault()
     this.setState({
       overlay: false,
+      validate_username: true,
+      validate_password: true,
     })
   }
   goToRegisterCompany(e) {
@@ -119,11 +121,11 @@ class Navbar extends Component {
       <Headroom>
         <Bar collapseOnSelect>
           <Bar.Header>
-            <Bar.Brand>
-              <a href="/">
-                MileTrav
-              </a>
-            </Bar.Brand>
+            <a href="/">
+              <div className="header-logo">
+                <img src="/asset/img/mt-logo.png" alt="logo" className="full-width" />
+              </div>
+            </a>
             <Bar.Toggle />
           </Bar.Header>
           {
@@ -155,36 +157,40 @@ class Navbar extends Component {
                 <span onClick={this.toggleOff.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
               </div>
               <div className="body">
-                <div className="form-group">
-                  <label className="form-title txt-mt-pink">Username</label>
-                  <input type="text" onChange={this.setUsername.bind(this)} className="form-control form-miletrav" />
-                  {
-                    !this.state.validate_username && (
-                      <div className="error-status">
-                        Please fill in your username
+                <form onSubmit={this.login.bind(this)}>
+                  <div className="form-group">
+                    <label className="form-title txt-mt-pink">Username</label>
+                    <input type="text" onChange={this.setUsername.bind(this)} className="form-control form-miletrav" />
+                    {
+                      !this.state.validate_username && (
+                        <div className="error-status">
+                          Please fill in your username
                       </div>
-                    )
-                  }
-                </div>
-                <div className="form-group">
-                  <label className="form-title txt-mt-pink">Password</label>
-                  <input type="password" onChange={this.setPassword.bind(this)} className="form-control form-miletrav" />
-                  {
-                    !this.state.validate_password && (
-                      <div className="error-status">
-                        Please fill in your password
+                      )
+                    }
+                  </div>
+                  <div className="form-group">
+                    <label className="form-title txt-mt-pink">Password</label>
+                    <input type="password" onChange={this.setPassword.bind(this)} className="form-control form-miletrav" />
+                    {
+                      !this.state.validate_password && (
+                        <div className="error-status">
+                          Please fill in your password
                       </div>
-                    )
-                  }
-                </div>
-                <div className="center">
-                  <button onClick={this.login.bind(this)} className="btn btn-primary btn-confirm">
-                    Login
-                  </button>
-                </div>
+                      )
+                    }
+                  </div>
+                  <div className="center">
+                    <button onClick={this.login.bind(this)} className="btn btn-primary btn-confirm">
+                      Login
+                    </button>
+                  </div>
+                </form>
+
               </div>
               <style jsx>{`
-                   .error-status {
+               
+                  .error-status {
                     color: #e62117;
                     font-size: 12px;
                     font-weight: 400;
@@ -237,8 +243,22 @@ class Navbar extends Component {
         }
         <style>
           {`
+            .full-width {
+              width: 100%;
+            }
             .search-container {
               margin-top: 0;
+            }
+            .header-logo {
+              display: inline-block;
+              margin: 15px 0;
+              width: 120px;
+            }
+            @media only screen and (max-width: 768px) {
+              .header-logo {
+                margin: 0;
+                width: 100px;
+              }
             }
           `}
         </style>
@@ -280,15 +300,15 @@ const Menu = ({ token, logout, cover_photo }) => (
           <Nav pullRight className="is-not-mobile">
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ paddingTop: 8 }}>
               <MenuItem onClick={() => window.location = '/company/profile'} eventKey={1.1}>Company Profile</MenuItem>
-              <MenuItem eventKey={1.2}>Dashboard</MenuItem>
+              <MenuItem onClick={() => window.location = '/dashboard/booking'} eventKey={1.2}>Dashboard</MenuItem>
               <div className="divider" />
               <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
             </DropdownButton>
           </Nav>
           <Bar.Collapse>
             <Nav pullRight className="mobile-only">
-              <NavItem eventKey={1}>Company Profile</NavItem>
-              <NavItem eventKey={2}>Dashboard</NavItem>
+              <NavItem onClick={() => window.location = '/company/profile'} eventKey={1}>Company Profile</NavItem>
+              <NavItem onClick={() => window.location = '/dashboard/booking'} eventKey={2}>Dashboard</NavItem>
               <div className="divider" />
               <NavItem onClick={logout} eventKey={3}>Logout</NavItem>
             </Nav>
@@ -302,6 +322,7 @@ const Menu = ({ token, logout, cover_photo }) => (
           <Nav pullRight>
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
               <MenuItem onClick={() => window.location = '/user/profile'} eventKey={1.1}>Profile</MenuItem>
+              <MenuItem onClick={() => window.location = '/booking/detail/me'} eventKey={1.2}>History</MenuItem>
               <MenuItem onClick={() => window.location = '/guidebook/me'} eventKey={1.2}>Guide Book</MenuItem>
               <MenuItem onClick={() => window.location = '/wishlist'} eventKey={1.2}>Wishlist</MenuItem>
               <div className="divider" />

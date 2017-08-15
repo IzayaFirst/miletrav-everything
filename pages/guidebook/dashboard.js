@@ -4,6 +4,7 @@ import Navbar from '../../components/Nav/Navbar'
 import * as Api from '../../api'
 import { getCookiesFromReq } from '../../helpers/cookies'
 import LoadingAnimation from '../../components/LoadingAnimation'
+import Footer from '../../components/Footer'
 
 class dashboard extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -136,6 +137,7 @@ class dashboard extends Component {
           }
           `}
         </style>
+        <Footer />
       </div>
     );
   }

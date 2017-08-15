@@ -7,6 +7,7 @@ import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
 import * as Api from '../api'
 import CreditCardForm from '../components/CreditCardForm'
+import Footer from '../components/Footer'
 
 class booking extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -388,6 +389,7 @@ class booking extends Component {
             }
           }
         `}</style>
+        <Footer />
       </div>
     );
   }

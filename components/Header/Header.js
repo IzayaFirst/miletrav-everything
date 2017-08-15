@@ -9,12 +9,29 @@ export default class Header extends Component {
     render() {
         return (
             <Head>
-                <title>MileTrav Everything</title>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+
+                <meta name="application-name" content="Miletrav" />
+                <meta name="title" content={this.props.title} />
+                <meta name="description" content={this.props.metaDesc} />
+                <meta name="keywords" content={this.props.metaKeywords.join(',')} />
+
+                <title>{this.props.title}</title>
+                
+                <link rel="shortcut icon" href="/asset/favicon.ico" type="image/x-icon" />
+                <link rel="icon" href="/asset/favicon.ico" type="image/x-icon" />
+
+                <meta property="og:site_name" content="Miletrav" />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content={this.props.ogTitle} />
+                <meta property="og:description" content={this.props.ogDesc} />
+                <meta property="og:image" content={this.props.ogImage} />
+                <meta property="og:image:secure_url" content={this.props.ogImage} />
                 <link rel="stylesheet" href="/asset/css/bootstrap.css" />
                 <link rel="stylesheet" href="/asset/css/miletrav.css" />
                 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
                 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kanit|Indie+Flower|" />
-                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 {
                     this.props.css.map((css, index) => {
                         return (
@@ -55,6 +72,12 @@ Header.defaultProps = {
     css: [],
     omise: false,
     pdf: false,
+    title: 'Miletrav - Purely you',
+    metaDesc: 'Unforgettable day begins with Miletrav. Find adventures nearby or in faraway places and access unique experiences that will passionate your life.',
+    metaKeywords: ['recruitment', 'hired', 'hiring', 'team', 'integration'],
+    ogTitle: 'Miletrav - Purely you',
+    ogDesc: 'Unforgettable day begins with Miletrav. Find adventures nearby or in faraway places and access unique experiences that will passionate your life.',
+    ogImage: 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/OG.jpg?alt=media&token=506891bc-21d0-4430-b0c2-20bb065bbd68',
 }
 
 Header.PropTypes = {

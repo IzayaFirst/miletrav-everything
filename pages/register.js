@@ -3,6 +3,7 @@ import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
 import { getCookiesFromReq, savingCookies } from '../helpers/cookies'
 import * as Api from '../api'
+import Footer from '../components/Footer'
 
 class register extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -264,6 +265,7 @@ class register extends Component {
 
           `}
         </style>
+        <Footer />
       </div>
     );
   }

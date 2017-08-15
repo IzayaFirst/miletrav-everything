@@ -5,6 +5,7 @@ import Header from '../../components/Header/Header'
 import Navbar from '../../components/Nav/Navbar'
 import * as Api from '../../api'
 import Area from '../../components/Area'
+import Footer from '../../components/Footer'
 
 class view extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -16,7 +17,7 @@ class view extends Component {
         uuid,
       }
     })
-    return { token , place: place.data[0]}
+    return { token, place: place.data[0] }
   }
   state = {
     place: this.props.place || {},
@@ -47,7 +48,7 @@ class view extends Component {
             </div>
             <div className="section">
               <div className="section-title">
-                What to know 
+                What to know
               </div>
               <div className="section-desc">
                 {this.state.place.inside}
@@ -70,18 +71,18 @@ class view extends Component {
               </div>
             </div>
             <div className="map">
-               <GoogleMapReact
-                  center={
-                    [this.state.place.lat,
-                    this.state.place.lng]
-                  }
-                  zoom={12}
-                >
-                  <Area
-                    lat={this.state.place.lat}
-                    lng={this.state.place.lng}
-                  />
-                </GoogleMapReact>
+              <GoogleMapReact
+                center={
+                  [this.state.place.lat,
+                  this.state.place.lng]
+                }
+                zoom={12}
+              >
+                <Area
+                  lat={this.state.place.lat}
+                  lng={this.state.place.lng}
+                />
+              </GoogleMapReact>
             </div>
           </div>
         </div>
@@ -145,6 +146,7 @@ class view extends Component {
             }
           `}
         </style>
+        <Footer />
       </div>
     );
   }

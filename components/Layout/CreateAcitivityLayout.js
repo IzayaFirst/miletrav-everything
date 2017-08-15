@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as Api from '../../api'
 import * as cookie from '../../helpers/cookies'
 import LoadingAnimation from '../LoadingAnimation'
+import EmptyState from '../EmptyState'
 
 let id = 0
 class CreateAcitivityLayout extends Component {
@@ -18,7 +19,6 @@ class CreateAcitivityLayout extends Component {
         userId: token.data.id
       },
     })
-    console.log(myExp.data)
     id = setTimeout(() => {
       this.setState({
         activity: myExp.data || [],
@@ -88,6 +88,11 @@ class CreateAcitivityLayout extends Component {
                   />
                 </div>
               ))
+            }
+            {
+              this.state.loadingActivity && this.state.activity.length === 0 && (
+                <EmptyState title="You doesn't have any experience yet"/>
+              )
             }
           </div>
         </div>

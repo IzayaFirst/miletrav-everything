@@ -3,6 +3,7 @@ import Header from '../../components/Header/Header'
 import Navbar from '../../components/Nav/Navbar'
 import * as Api from '../../api'
 import { getCookiesFromReq } from '../../helpers/cookies'
+import Footer from '../../components/Footer'
 
 class view extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -143,6 +144,7 @@ class view extends Component {
            
         `}
         </style>
+        <Footer />
       </div>
     )
   }

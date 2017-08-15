@@ -36,7 +36,7 @@ class TicketCard extends Component {
           )
         }
         <div className="skill-no">
-          <div>1</div>
+          <div>{this.props.no + 1}</div>
           <div>::</div>
         </div>
         <div className="skill-detail">

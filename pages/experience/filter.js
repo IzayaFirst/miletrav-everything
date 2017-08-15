@@ -8,6 +8,8 @@ import GuideBookCard from '../../components/GuideBookCard'
 import * as Api from '../../api'
 import { getCover } from '../../helpers/master'
 import LoadingAnimation from '../../components/LoadingAnimation'
+import Footer from '../../components/Footer'
+import EmptyState from '../../components/EmptyState'
 
 let id = 0
 class filter extends Component {
@@ -49,6 +51,7 @@ class filter extends Component {
     title: '',
     city: '',
     filter: 0,
+    querying: false,
   }
 
   setCategory(e) {
@@ -211,6 +214,16 @@ class filter extends Component {
                   </div>
                 ))
               }
+              {
+                !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
+                  <EmptyState title="No any experience"/>
+                )
+              }
+              {
+                !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
+                  <EmptyState title="No any guidebook"/>
+                )
+              }
             </div>
           </div>
 
@@ -225,7 +238,7 @@ class filter extends Component {
               top: 0;
               background-color: #000;
               opacity: 0.5;
-              margin-top: 59px;
+              margin-top: 77px;
               height: 400px;
             }
             .filter {
@@ -254,7 +267,7 @@ class filter extends Component {
             }
             .content {
               padding: 45px 0;
-              min-height: 1060px;
+              min-height: 400px;
             }
             .search-bar {
               background-color: #fff;
@@ -270,6 +283,7 @@ class filter extends Component {
             }
           `}
         </style>
+        <Footer />
       </div>
     );
   }

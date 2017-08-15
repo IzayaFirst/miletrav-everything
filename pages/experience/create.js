@@ -10,6 +10,7 @@ import Ticket from '../../components/Step/Ticket'
 import OperatingDay from '../../components/Step/OperatingDay'
 import Preview from '../../components/Step/Preview'
 import { UploadCoverPhoto, UploadShowcase }  from '../../helpers/uploadToFirebase'
+import Footer from '../../components/Footer'
 
 class create extends Component {
   static async getInitialProps({ req = {}, res = {}}) {
@@ -542,6 +543,7 @@ class create extends Component {
             }
           `}
         </style>
+        <Footer />
       </div>
     );
   }
