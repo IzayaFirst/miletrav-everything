@@ -54,18 +54,19 @@ class Home extends Component {
   }
 
   render() {
+    const { _content } = this.props
     return (
       <div className="content">
         <div className="title-page mt-gradient-4">
-          Where ever you go is a part of you somehow
+          {_content.banner}
         </div>
         <div className="province">
           <div>
             <div className="header-category txt-mt-blue-midnight">
-              MileTrav | Activity platform to passionate yourself
+              {_content.title}
             </div>
             <div className="title-category">
-              <i className="fa fa-smile-o"></i> What are you looking for ?
+              <i className="fa fa-smile-o"></i>  {_content.title_box}
             </div>
             <div className="category-filter">
               <select onChange={this.chooseCategory.bind(this)} className="form-control-form-miletrav form-category">
@@ -102,7 +103,7 @@ class Home extends Component {
         </div>
         <div className="section-activity">
           <div className="section-title">
-            Lastest Activity
+            {_content.last_activity}
           </div>
           <div>
             <div className="row">
@@ -132,7 +133,7 @@ class Home extends Component {
         </div>
         <div className="section-activity">
           <div className="section-title">
-            Guide for you
+            {_content.guide_for_you}
           </div>
           <div className="row">
             {

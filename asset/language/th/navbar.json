@@ -1,0 +1,11 @@
+{
+  "register_company" : "แชร์ประสบการณ์",
+  "login" : "เข้าสู่ระบบ",
+  "register" : "ลงทะเบียน",
+  "modal_title": "เข้าสู่ระบบ กับ มายทราฟ",
+  "username": "ชื่อผู้ใช้",
+  "username_placeholder": "ใส่ขื่อผู้ใช้ของคุณ",
+  "password": "รหัสผ่าน",
+  "password_placeholder": "ใส่รหัสผ่านของคุณ",
+  "login": "เข้าสู่ระบบ"
+}

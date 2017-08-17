@@ -1,0 +1,12 @@
+{
+  "register_company" : "Host with Miletrav",
+  "login" : "Login",
+  "register" : "Register",
+  "modal_title": "Login to MileTrav",
+  "username": "Username",
+  "username_placeholder": "Please fill in username",
+  "password": "Password",
+  "password_placeholder": "Please fill in password",
+  "login": "Login"
+
+}

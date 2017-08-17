@@ -10,16 +10,13 @@ import Footer from '../../components/Footer'
 class bookingdetail extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
     const token = getCookiesFromReq(req)
-    const tickets = await Api.get({
-      url: '/tickets',
-      data: {
-        userId: token.data.id
-      },
+    const booking = await Api.get({
+      url: '/bookings',
     })
     const activity = await Api.get({
       url: '/activities',
     })
-    return { token, tickets: tickets.data, activity: activity.data }
+    return { token, booking: booking.data, activity: activity.data }
   }
   getActivityName(id) {
     const activities = this.props.activity || []
@@ -27,7 +24,7 @@ class bookingdetail extends Component {
     return activity[0]
   }
   render() {
-    console.log(this.props.tickets)
+    console.log(this.props.booking)
     return (
       <div>
         <Header
@@ -41,7 +38,7 @@ class bookingdetail extends Component {
         </div>
         <div className="content">
           {
-            this.props.tickets.map((val, index) => (
+            this.props.booking.map((val, index) => (
               <div className="booking-card txt-mt-blue-midnight" key={val.id}>
                 <div className="row" >
                   <div className="col-xs-6 col-sm-3" >

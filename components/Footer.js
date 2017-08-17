@@ -1,20 +1,31 @@
 import React, { Component } from 'react';
+import * as cookie from '../helpers/cookies'
 
 class Footer extends Component {
+  changeLanguage(language) {
+    this.setState({
+      language,
+    })
+    cookie.savingCookies({
+      cookieName: 'language',
+      data: language
+    })
+    window.location = window.location.href
+  }
   render() {
     return (
       <div className="footer">
         <div className="mt-table">
           <div className="mt-table-cell">
             <div className="footer-logo">
-              <img src="/asset/img/mt-logo.png" alt="" className="resize"/>
+              <img src="/asset/img/mt-logo.png" alt="" className="resize" />
             </div>
           </div>
           <div className="mt-table-cell copy-right">
             <div className="language">
-              <i className="fa fa-globe" /> 
-              <span className="language-title">ไทย</span>
-              <span className="language-title">English</span>
+              <i className="fa fa-globe" />
+              <span onClick={this.changeLanguage.bind(this, "th")} className="language-title">ไทย</span>
+              <span onClick={this.changeLanguage.bind(this, "en")}  className="language-title">English</span>
             </div>
             <div className="copy-right">
               Copyright © 2017 Miletrav. All Rights Reserved

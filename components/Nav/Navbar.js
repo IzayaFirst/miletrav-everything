@@ -4,6 +4,7 @@ import Headroom from 'react-headroom'
 import * as cookie from '../../helpers/cookies'
 import Overlay from '../Overlay'
 import * as Api from '../../api'
+import { getContent } from '../../helpers/translation'
 
 class Navbar extends Component {
   constructor(props) {
@@ -17,9 +18,17 @@ class Navbar extends Component {
       validate_password: true,
       errorMsg: '',
       cover_photo: '',
+      _content: {}
     }
   }
   async componentDidMount() {
+    const _content = await getContent({
+      language: cookie.getCookies({ cookieName: 'language' }),
+      path: 'navbar',
+    })
+    this.setState({
+      _content,
+    })
     if (this.state.token) {
       const id = this.state.token.data.id
       const token = this.state.token.token
@@ -134,11 +143,11 @@ class Navbar extends Component {
               <Menu token={this.state.token} cover_photo={this.state.cover_photo} logout={this.logout.bind(this)} /> :
               <Bar.Collapse>
                 <Nav pullRight>
-                  <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>Host with Miletrav</NavItem>
-                  <NavItem onClick={this.toggleOn.bind(this)} eventKey={2} style={{ paddingTop: 8 }}>Login</NavItem>
+                  <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>{this.state._content.register_company}</NavItem>
+                  <NavItem onClick={this.toggleOn.bind(this)} eventKey={2} style={{ paddingTop: 8 }}>{this.state._content.login}</NavItem>
                   <NavItem eventKey={3}>
                     <ButtonToolbar>
-                      <Button onClick={this.goToRegister.bind(this)} bsStyle="primary">Register</Button>
+                      <Button onClick={this.goToRegister.bind(this)} bsStyle="primary">{this.state._content.register}</Button>
                     </ButtonToolbar>
                   </NavItem>
                 </Nav>
@@ -153,15 +162,15 @@ class Navbar extends Component {
             <Overlay>
               <div className="title-overlay">
                 <span className="header txt-mt-pink">
-                  Login to MileTrav
+                  {this.state._content.modal_title}
                   </span>
                 <span onClick={this.toggleOff.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
               </div>
               <div className="body">
                 <form onSubmit={this.login.bind(this)}>
                   <div className="form-group">
-                    <label className="form-title txt-mt-pink">Username</label>
-                    <input type="text" onChange={this.setUsername.bind(this)} className="form-control form-miletrav" />
+                    <label className="form-title txt-mt-pink">{this.state._content.username}</label>
+                    <input type="text" onChange={this.setUsername.bind(this)} placeholder={this.state._content.username_placeholder} className="form-control form-miletrav" />
                     {
                       !this.state.validate_username && (
                         <div className="error-status">
@@ -171,8 +180,8 @@ class Navbar extends Component {
                     }
                   </div>
                   <div className="form-group">
-                    <label className="form-title txt-mt-pink">Password</label>
-                    <input type="password" onChange={this.setPassword.bind(this)} className="form-control form-miletrav" />
+                    <label className="form-title txt-mt-pink">{this.state._content.password}</label>
+                    <input type="password" placeholder={this.state._content.password_placeholder} onChange={this.setPassword.bind(this)} className="form-control form-miletrav" />
                     {
                       !this.state.validate_password && (
                         <div className="error-status">
@@ -190,7 +199,7 @@ class Navbar extends Component {
                       )
                     }
                     <button onClick={this.login.bind(this)} className="btn btn-primary btn-confirm">
-                      Login
+                      {this.state._content.login}
                     </button>
                   </div>
                 </form>
