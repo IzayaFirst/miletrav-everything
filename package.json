@@ -7,7 +7,7 @@
     "lint": "./node_modules/.bin/eslint *.js",
     "dev": " node app.js  ",
     "build": "next build",
-    "start": "set NODE_ENV=production node app.js"
+    "start": "NODE_ENV=production node app.js"
   },
   "author": "",
   "license": "ISC",
