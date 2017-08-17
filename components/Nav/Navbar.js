@@ -72,18 +72,19 @@ class Navbar extends Component {
           password,
         }
       })
+      console.log(auth)
       cookie.savingCookies({ data: auth.axiosData })
       window.location = '/'
     } catch (error) {
       const err = Object.assign({}, error);
-      console.log(error)
+      console.log('err' + err.request.status)
       if (err && err.request.status === 400) {
         this.setState({
           errorMsg: 'Username has already been used'
         })
       } else if (err && err.request.status === 500) {
         this.setState({
-          errorMsg: 'Username has already been used'
+          errorMsg: 'Username or password invalid'
         })
       }
     }
@@ -181,6 +182,13 @@ class Navbar extends Component {
                     }
                   </div>
                   <div className="center">
+                    {
+                      this.state.errorMsg !== '' && (
+                        <div className="error-status">
+                          {this.state.errorMsg}
+                      </div>
+                      )
+                    }
                     <button onClick={this.login.bind(this)} className="btn btn-primary btn-confirm">
                       Login
                     </button>

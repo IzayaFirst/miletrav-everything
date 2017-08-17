@@ -92,6 +92,7 @@ class CompanyRegisterSection extends Component {
             password,
           }
         })
+        console.log(auth)
         savingCookies({ data: auth.axiosData })
         window.location = '/'
       } catch (error) {
