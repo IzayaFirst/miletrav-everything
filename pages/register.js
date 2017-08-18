@@ -4,6 +4,7 @@ import Navbar from '../components/Nav/Navbar'
 import { getCookiesFromReq, savingCookies } from '../helpers/cookies'
 import * as Api from '../api'
 import Footer from '../components/Footer'
+import { getContent } from '../helpers/translation'
 
 class register extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -11,7 +12,14 @@ class register extends Component {
     if (token) {
       res.redirect('/')
     }
-    return { token }
+    
+    const _content = await getContent({
+      language: req.cookies.language,
+      path: 'register',
+      req,
+      res,
+    })
+    return { token, _content }
   }
   state = {
     username: '',
@@ -107,6 +115,7 @@ class register extends Component {
     }
   }
   render() {
+    const { _content } = this.props
     return (
       <div>
         <Header script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4']} />
@@ -114,26 +123,26 @@ class register extends Component {
         <div className="content">
           <div className="register-cover">
             <div className="register-text">
-              we are a world that inspires human passion
+              { _content.title }
            </div>
           </div>
           <div className="register-box">
             <div className="register-title">
-              Register to Miletrav
+              { _content.form_title }
             </div>
             <div className="form-register">
               <div className="form-group">
                 <div className="row">
                   <div className="col-xs-12">
-                    <label>Username</label>
+                    <label>{ _content.username }</label>
                   </div>
                   <div className="col-xs-12">
-                    <input type="text" placeholder="Enter your username" onChange={this.setUsername.bind(this)} className="form-control form-miletrav" />
+                    <input type="text" placeholder={ _content.placeholder_username } onChange={this.setUsername.bind(this)} className="form-control form-miletrav" />
                     {
                       !this.state.validate_username && (
                         <div className="error-status">
-                          Please fill in username
-                                </div>
+                          { _content.error_username }
+                        </div>
                       )
                     }
                   </div>
@@ -142,15 +151,15 @@ class register extends Component {
               <div className="form-group">
                 <div className="row">
                   <div className="col-xs-12">
-                    <label>Password</label>
+                    <label>{ _content.password }</label>
                   </div>
                   <div className="col-xs-12">
-                    <input type="password" placeholder="Enter your password at least 6 characters" onChange={this.setPassword.bind(this)} className="form-control form-miletrav" />
+                    <input type="password" placeholder={ _content.placeholder_password } onChange={this.setPassword.bind(this)} className="form-control form-miletrav" />
                     {
                       !this.state.validate_password && (
                         <div className="error-status">
-                          Please fill in password at least 6 characters
-                                </div>
+                          { _content.error_password }
+                        </div>
                       )
                     }
                   </div>
@@ -159,15 +168,15 @@ class register extends Component {
               <div className="form-group">
                 <div className="row">
                   <div className="col-xs-12">
-                    <label>Firstname</label>
+                    <label>{ _content.firstname }</label>
                   </div>
                   <div className="col-xs-12">
-                    <input type="text" placeholder="Enter your firstname" onChange={this.setFirstname.bind(this)} className="form-control form-miletrav" />
+                    <input type="text" placeholder={ _content.placeholder_firstname } onChange={this.setFirstname.bind(this)} className="form-control form-miletrav" />
                     {
                       !this.state.validate_firstname && (
                         <div className="error-status">
-                          Please fill in firstname
-                                </div>
+                          { _content.error_firstname }
+                        </div>
                       )
                     }
                   </div>
@@ -176,15 +185,15 @@ class register extends Component {
               <div className="form-group">
                 <div className="row">
                   <div className="col-xs-12">
-                    <label>Lastname</label>
+                    <label>{ _content.lastname }</label>
                   </div>
                   <div className="col-xs-12">
-                    <input type="text" placeholder="Enter your lastname" onChange={this.setLastname.bind(this)} className="form-control form-miletrav" />
+                    <input type="text" placeholder={ _content.placeholder_lastname } onChange={this.setLastname.bind(this)} className="form-control form-miletrav" />
                     {
                       !this.state.validate_lastname && (
                         <div className="error-status">
-                          Please fill in lastname
-                                </div>
+                          { _content.error_lastname }
+                        </div>
                       )
                     }
                   </div>
@@ -192,11 +201,11 @@ class register extends Component {
               </div>
               <div className="form-group">
                 <div className="submit-section">
-                  <a onClick={this.register.bind(this)} className="btn btn-primary">Register</a>
+                  <a onClick={this.register.bind(this)} className="btn btn-primary">{ _content.register }</a>
                   {
-                    !this.state.errorMsg !== '' && (
+                    this.state.errorMsg !== '' && (
                       <div className="error-status">
-                        {this.state.errorMsg}
+                        { _content.error_msg }
                       </div>
                     )
                   }

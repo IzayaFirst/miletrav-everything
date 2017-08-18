@@ -111,6 +111,7 @@ class Navbar extends Component {
       overlay: false,
       validate_username: true,
       validate_password: true,
+      errorMsg: '',
     })
   }
   goToRegisterCompany(e) {
@@ -174,7 +175,7 @@ class Navbar extends Component {
                     {
                       !this.state.validate_username && (
                         <div className="error-status">
-                          Please fill in your username
+                          {this.state._content.error_username}
                       </div>
                       )
                     }
@@ -185,7 +186,7 @@ class Navbar extends Component {
                     {
                       !this.state.validate_password && (
                         <div className="error-status">
-                          Please fill in your password
+                          {this.state._content.error_password}
                       </div>
                       )
                     }
@@ -194,7 +195,7 @@ class Navbar extends Component {
                     {
                       this.state.errorMsg !== '' && (
                         <div className="error-status">
-                          {this.state.errorMsg}
+                         {this.state._content.error_msg}
                       </div>
                       )
                     }

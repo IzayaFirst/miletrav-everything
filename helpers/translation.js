@@ -9,7 +9,7 @@ export async function getContent({ language, path, req, res }) {
       lang = country_code.toLowerCase()
     }
   }
-
+  console.log(lang)
   let host
   if (!req) {
     host = window.location.origin // eslint-disable-line
@@ -18,10 +18,11 @@ export async function getContent({ language, path, req, res }) {
   }
 
   const languageValue = matchLanguage(lang || getDefaultLanguage())
+  console.log(`${host}/asset/language/${languageValue}/${path}.json`)
   const response = await axios.request({
     url: `${host}/asset/language/${languageValue}/${path}.json`,
   })
-
+  console.log(response)
   if (res) {
     res.cookie('language', languageValue, {
       maxAge: 60*60*60*24,

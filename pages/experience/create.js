@@ -23,6 +23,7 @@ class create extends Component {
           userId: token.data.id,
         }
     })
+    /*
     const showcase = await Api.get({
       url: '/showcases',
       params: {
@@ -43,10 +44,39 @@ class create extends Component {
       params: {
         activityId: myExp.data[0].id,
       },
-    })
-    return { token, uuid, myExp, categories, showcase, tickets, operation }
+    })*/
+    return { token, uuid, myExp }/* categories, showcase, tickets, operation*/ 
   }
-
+  async componentDidMount() {
+    const showcase = await Api.get({
+      url: '/showcases',
+      params: {
+        activityId: this.props.myExp.data[0].id,
+      },
+    })
+    const tickets = await Api.get({
+      url: '/tickets',
+      params: {
+        activityId: this.props.myExp.data[0].id,
+      }
+    })
+    const categories = await Api.get({
+        url: '/categories',
+    })
+    const operation = await Api.get({
+      url: '/operation_days',
+      params: {
+        activityId: this.props.myExp.data[0].id,
+      },
+    })
+    this.setState({
+        showcase: showcase.data || [],
+        tickets: tickets.data || [],
+        categories: categories.data || [],
+        operation: operation.data || [],
+    })
+  }
+  
   state = {
     exp: this.props.myExp.data[0] || {},
     id: this.props.myExp.data[0].id,
@@ -57,18 +87,18 @@ class create extends Component {
     lat: this.props.myExp.data[0].lat || 0,
     lng: this.props.myExp.data[0].lng || 0,
     step: 1,
-    categories: this.props.categories.data || [],
+    categories: [],
     city: this.props.myExp.data[0].city || '',
     cover_photo: this.props.myExp.data[0].cover_photo || 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/default_image_01-1024x1024.png?alt=media&token=971d33f8-ec32-4a01-91b4-136569d071ed',
     loadingCoverPhoto: false,
-    showcase: this.props.showcase.data || [],
-    tickets: this.props.tickets.data || [],
+    showcase: [],
+    tickets: [],
     ticket_name: '',
     ticket_desc: '',
     price: 0,
     start: moment(),
     end: moment(),
-    operation: this.props.operation.data || [],
+    operation: [],
   }
   setStep(step) {
     this.setState({
@@ -177,7 +207,7 @@ class create extends Component {
       }) 
       location.reload()
     } catch (error) {
-      console.log(error)
+      console.log(Object.assign({}, error))
     }
   }
   setTicketName(e) {

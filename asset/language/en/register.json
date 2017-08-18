@@ -1,0 +1,18 @@
+{
+  "title": "we are a world that inspires human passion",
+  "form_title": "Register to Miletrav",
+  "username": "Username",
+  "password" : "Password",
+  "firstname": "Firstname",
+  "lastname": "Lastname",
+  "placeholder_firstname" : "Enter your firstname",
+  "placeholder_username" : "Enter your firstname",
+  "placeholder_password" : "Enter your password and must contains 6 characters",
+  "placeholder_lastname" : "Enter your firstname",
+  "error_firstname": "Please fill in firstname",
+  "error_username": "Please fill in username",
+  "error_password": "Can't be blank and must contains 6 characters",
+  "error_lastname": "Please fill in lastname",
+  "register": "Register",
+  "error_msg": "Your username has been used"
+}

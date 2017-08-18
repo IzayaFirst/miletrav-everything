@@ -7,6 +7,8 @@
   "username_placeholder": "Please fill in username",
   "password": "Password",
   "password_placeholder": "Please fill in password",
-  "login": "Login"
-
+  "login": "Login",
+  "error_username": " Please fill in username",
+  "error_password": "Please fill in password",
+  "error_msg": "Username or password invalid"
 }

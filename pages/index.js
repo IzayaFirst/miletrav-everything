@@ -20,7 +20,6 @@ class index extends Component {
       req,
       res,
     })
-    console.log(_content.title)
     return { token, category: category.data , _content}
   }
   render() {
