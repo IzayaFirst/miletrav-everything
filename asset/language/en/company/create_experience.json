@@ -3,5 +3,16 @@
   "exp_detail": "Experience Detail",
   "cover": "Cover and Showcase",
   "ticket": "Tickets",
-  "day": "Operation Day"
+  "day": "Operation Day",
+  "preview_title": "Preview your experience",
+  "exp_title": "Experience Title",
+  "exp_title_pl": "ชื่อกิจกรรมของคุณ",
+  "exp_desc": "Experience Detail",
+  "exp_desc_pl": "Category",
+  "exp_cate": "Category",
+  "exp_location": "Location",
+  "exp_location_pl": "ชื่อกิจกรรมของคุณ",
+  "exp_title_err": "ชื่อกิจกรรมของคุณ",
+  "exp_desc_err": "ชื่อกิจกรรมของคุณ",
+  "exp_location_err": "ชื่อกิจกรรมของคุณ"
 }

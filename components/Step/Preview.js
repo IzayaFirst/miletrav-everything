@@ -53,10 +53,11 @@ class Preview extends Component {
 
   }
   render() {
+    const { _content } = this.props
     return (
       <div className="row">
         <div className="title txt-mt-pink">
-          Preview your activty
+           { _content.preview_title }
         </div>
         <div className="col-xs-12 col-sm-12 col-md-8">
           <div className="card">

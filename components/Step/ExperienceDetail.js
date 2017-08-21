@@ -58,12 +58,13 @@ class ExperienceDetail extends Component {
       'list', 'bullet',
     ]
     const ReactQuill = this.ReactQuill
+    const { _content } = this.props
     return (
       <div>
         <div className="form-group">
           <div className="row">
             <div className="col-xs-12">
-              <label>Experience Name</label>
+              <label>{_content.exp_title}</label>
             </div>
             <div className="col-xs-12 col-sm-6">
               <input type="text" onChange={this.props.setActivityName.bind(null)} value={this.props.activity_name === 'New Experience' ? '' : this.props.activity_name} placeholder="Think of it as a movie title for your experience" className="form-control form-miletrav"/>
@@ -80,7 +81,7 @@ class ExperienceDetail extends Component {
         <div className="form-group">
           <div className="row">
             <div className="col-xs-12">
-              <label>Description</label>
+              <label>{_content.exp_desc}</label>
             </div>
             <div className="col-xs-12 col-sm-6">
               {
@@ -106,7 +107,7 @@ class ExperienceDetail extends Component {
         <div className="form-group">
           <div className="row">
             <div className="col-xs-12">
-              <label>Category</label>
+              <label>{ _content.exp_cate }</label>
             </div>
             <div className="col-xs-12 col-sm-6">
               <select value={this.props.category} onChange={this.props.setCategory.bind(this)} className="form-control form-miletrav">
@@ -130,7 +131,7 @@ class ExperienceDetail extends Component {
         <div className="form-group">
           <div className="row">
             <div className="col-xs-12">
-              <label>Location</label>
+              <label>{ _content.exp_location }</label>
             </div>
             <div className="col-xs-12 col-sm-6">
               {
