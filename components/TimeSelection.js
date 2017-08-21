@@ -71,6 +71,7 @@ class TimeSelection extends Component {
   }
 
   render() {
+    const {_content} = this.props
     return (
       <div className="form-group time-row">
         <div className="row">
@@ -85,7 +86,7 @@ class TimeSelection extends Component {
             <div className="row">
               <div className="col-xs-6 col-sm-3">
                 <div className="time">
-                  {this.state.startTime} to {this.state.endTime}
+                  {this.state.startTime} {_content.to} {this.state.endTime}
                 </div>
               </div>
               <div className="col-xs-6 col-sm-3">

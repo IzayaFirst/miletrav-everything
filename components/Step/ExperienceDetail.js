@@ -67,11 +67,11 @@ class ExperienceDetail extends Component {
               <label>{_content.exp_title}</label>
             </div>
             <div className="col-xs-12 col-sm-6">
-              <input type="text" onChange={this.props.setActivityName.bind(null)} value={this.props.activity_name === 'New Experience' ? '' : this.props.activity_name} placeholder="Think of it as a movie title for your experience" className="form-control form-miletrav"/>
+              <input type="text" onChange={this.props.setActivityName.bind(null)} value={this.props.activity_name === 'New Experience' ? '' : this.props.activity_name} placeholder= { _content.exp_title_pl } className="form-control form-miletrav"/>
               {
                 !this.state.validate_title && (
                   <div className="error-status">
-                    Please fill in your Experience Name
+                    { _content.exp_title_err }
                   </div>
                 )
               }
@@ -87,6 +87,7 @@ class ExperienceDetail extends Component {
               {
                 typeof window !== 'undefined' && ReactQuill && this.state.initialEditor && (
                     <ReactQuill
+                      placeholder={_content.exp_desc_pl}
                       onChange={this.props.setDescription.bind(this)} 
                       value={this.props.activity_desc}
                       modules={modules}
@@ -97,7 +98,7 @@ class ExperienceDetail extends Component {
               {
                 !this.state.validate_desc && (
                   <div className="error-status">
-                    Please fill in your Experience Description
+                   {_content.exp_desc_err}
                   </div>
                 )
               }
@@ -121,7 +122,7 @@ class ExperienceDetail extends Component {
               {
                 !this.state.validate_category && (
                   <div className="error-status">
-                    Please select your category type
+                    { _content.exp_cate_err }
                   </div>
                 )
               }
@@ -150,7 +151,7 @@ class ExperienceDetail extends Component {
                 this.state.edit && (
                 <Geosuggest
                   onSuggestSelect={this.props.setLocation.bind(this)} 
-                  placeholder="Select from suggestion"
+                  placeholder={ _content.exp_location_pl }
                 /> 
                 )
               }
@@ -158,7 +159,7 @@ class ExperienceDetail extends Component {
           </div>
         </div>
         <div className="form-group">
-          <button className="btn btn-primary" onClick={this.updateExp.bind(this)}>Save</button>
+          <button className="btn btn-primary" onClick={this.updateExp.bind(this)}>{_content.save}</button>
         </div>
         <style>
         {`

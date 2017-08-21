@@ -5,14 +5,16 @@ import TimeSelection from '../TimeSelection'
 class OperatingDay extends Component {
 
   render() {
+    const { _content } = this.props
     return (
       <div>
         <div className="title txt-mt-pink">
-          Describe your operation time
+         {_content.day_title}
         </div>
         {
           day.map(val => (
-            <TimeSelection 
+            <TimeSelection
+             _content={_content}
              key={val.day}
              day={val.day}
              dayName={val.dayName}

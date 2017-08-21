@@ -47,6 +47,7 @@ class Ticket extends Component {
       'list', 'bullet',
     ]
     const ReactQuill = this.ReactQuill
+    const { _content } = this.props
     return (
       <div className="row">
         <div className="col-xs-12 col-sm-6">
@@ -54,14 +55,14 @@ class Ticket extends Component {
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-12">
-                  <label>Ticket Name</label>
+                  <label>{_content.ticket_title}</label>
                 </div>
                 <div className="col-xs-12">
-                  <input type="text" value={this.props.ticket_name} onChange={this.props.setTicketName.bind(this)} className="form-control form-miletrav"/>
-                   {
+                  <input type="text" placeholder={_content.ticket_title_pl} value={this.props.ticket_name} onChange={this.props.setTicketName.bind(this)} className="form-control form-miletrav" />
+                  {
                     !this.state.validate_name && (
                       <div className="error-status">
-                        Please define your ticket title
+                        {_content.ticket_title_err}
                       </div>
                     )
                   }
@@ -71,77 +72,86 @@ class Ticket extends Component {
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-12">
-                    <label>Ticket Description</label>
+                  <label>{_content.ticket_desc}</label>
                 </div>
                 <div className="col-xs-12">
-                   {
-                      typeof window !== 'undefined' && ReactQuill && this.state.initialEditor && (
-                          <ReactQuill
-                            onChange={this.props.setTicketDesc.bind(this)} 
-                            value={this.props.ticket_desc}
-                            modules={modules}
-                            formats={formats}
-                          />
-                        )
-                    }
+                  {
+                    typeof window !== 'undefined' && ReactQuill && this.state.initialEditor && (
+                      <ReactQuill
+                        placeholder={_content.ticket_desc_pl}
+                        onChange={this.props.setTicketDesc.bind(this)}
+                        value={this.props.ticket_desc}
+                        modules={modules}
+                        formats={formats}
+                      />
+                    )
+                  }
                 </div>
               </div>
             </div>
             <div className="form-group">
               <div className="row">
                 <div className="col-xs-12">
-                  <label>Pricing / person</label>
+                  <label>{_content.ticket_available}</label>
+                </div>
+                <div className="col-xs-6">
+                  {
+                    typeof window !== 'undefined' && ReactQuill && this.state.initialEditor && (
+                      <DatePicker
+                        className="form-control form-miletrav above"
+                        selected={this.props.start}
+                        selectsStart
+                        startDate={this.props.start}
+                        endDate={this.props.end}
+                        onChange={this.props.setStart.bind(this)}
+                      />
+                    )
+                  }
+
+                </div>
+                <div className="col-xs-6">
+                  {
+                    typeof window !== 'undefined' && ReactQuill && this.state.initialEditor && (
+                      <DatePicker
+                        className="form-control form-miletrav above"
+                        selected={this.props.end}
+                        selectsEnd
+                        startDate={this.props.start}
+                        endDate={this.props.end}
+                        onChange={this.props.setEnd.bind(this)}
+                      />
+                    )
+                  }
+                </div>
+              </div>
+            </div>
+            <div className="form-group">
+              <div className="row">
+                <div className="col-xs-12">
+                  <label>{_content.price}</label>
                 </div>
                 <div className="col-xs-6 ">
                   <input type="number" className="form-control form-miletrav" onChange={this.props.setPrice.bind(this)} value={this.props.price} />
                 </div>
                 <div className="col-xs-6">
                   <div className="suggest-text">
-                    Let price 0 if your experience is free
+                    {_content.price_detail}
                   </div>
                 </div>
               </div>
             </div>
+            
             <div className="form-group">
-              <div className="row">
-                <div className="col-xs-12">
-                  <label>Ticket available since</label>
-                </div>
-                <div className="col-xs-6">
-                  <DatePicker
-                    disabledKeyboardNavigation
-                    className="form-control form-miletrav"
-                    selected={this.props.start}
-                    selectsStart
-                    startDate={this.props.start}
-                    endDate={this.props.end}
-                    onChange={this.props.setStart.bind(this)}
-                  />
-                </div>
-                <div className="col-xs-6">
-                  <DatePicker
-                    disabledKeyboardNavigation
-                    className="form-control form-miletrav"
-                    selected={this.props.end}
-                    selectsEnd
-                    startDate={this.props.start}
-                    endDate={this.props.end}
-                    onChange={this.props.setEnd.bind(this)}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="form-group">
-              <button className="btn btn-primary" onClick={this.addTicket.bind(this)}>Add Tickets</button>
+              <button className="btn btn-primary" onClick={this.addTicket.bind(this)}>{_content.add_ticket}</button>
             </div>
           </div>
         </div>
         {
           this.props.tickets && this.props.tickets.map((ticket, index) => (
             <div className="col-xs-12 col-sm-6" key={ticket.id}>
-              <TicketCard no={index} {...ticket} deleteTicket={this.props.deleteTicket.bind(this)}/>
+              <TicketCard _content={_content} no={index} {...ticket} deleteTicket={this.props.deleteTicket.bind(this)} />
             </div>
-            )
+          )
           )
         }
         <style jsx>

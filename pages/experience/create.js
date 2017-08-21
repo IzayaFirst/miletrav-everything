@@ -594,7 +594,6 @@ class create extends Component {
             }
           `}
         </style>
-        <Footer />
       </div>
     );
   }

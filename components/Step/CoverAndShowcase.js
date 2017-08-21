@@ -27,20 +27,21 @@ class CoverAndShowcase extends Component {
     })
   }
   render() {
+    const { _content } = this.props
     return (
       <div>
         <div className="title txt-mt-pink">
-          Choose your Cover Photo for your Experience
+          { _content.cover_title }
         </div>
         <div className="description txt-mt-blue-midnight">
-          <p>Choose a photo that captures the essence of your experience.</p>
-          <p>Make it high-resolution Try taking photos with a camera that takes high-resolution shots.</p> 
-          <p>Give guests a sense of what they’ll be doing. Take photos of the surroundings so they get a feel for the ambiance.</p>
+          <p>{ _content.cover_title_01 }</p>
+          <p>{ _content.cover_title_02 }</p> 
+          <p>{ _content.cover_title_03 }</p>
         </div>
         <div className="form-group">
           <div className="row">
             <div className="col-xs-12">
-              <label className="txt-mt-midnight-blue">Cover Photo</label>
+              <label className="txt-mt-midnight-blue">{_content.cover_title_04}</label>
             </div>
             <div className="col-xs-12 col-sm-6">
               <div className="img-cover-photo">
@@ -51,14 +52,14 @@ class CoverAndShowcase extends Component {
         </div>
         <div className="form-group">
           <div className="row">
-            <div className="col-xs-8 col-sm-2">
+            <div className="col-xs-8 col-sm-3">
                <Dropzone
                 accept="image/jpeg, image/png"
                 onDrop={this.props.uploadCoverPhoto.bind(this)}
                 style={{ width: '100%'}}
                 >
                 <button style={{ width: '100%'}} className="btn btn-primary">
-                    Upload Image
+                    { _content.cover_title_05 }
                 </button>
               </Dropzone>
             </div>
@@ -76,7 +77,7 @@ class CoverAndShowcase extends Component {
         <div className="form-group">
           <div className="row">
             <div className="col-xs-12">
-              <label className="txt-mt-midnight-blue">Your Showcase</label>
+              <label className="txt-mt-midnight-blue">{ _content.showcase_title }</label>
             </div>
           </div>
         </div>
@@ -90,7 +91,7 @@ class CoverAndShowcase extends Component {
                       <a href={value.path} target="_blank"><div className="img-showcase-photo">
                         <img src={value.path} alt=""/>
                       </div></a>
-                      <a onClick={this.setOverlay.bind(this, value.id)} className="delete-showcase">Delete</a>
+                      <a onClick={this.setOverlay.bind(this, value.id)} className="delete-showcase">{ _content.delete }</a>
                     </div>
                   ))
                 }
@@ -100,14 +101,14 @@ class CoverAndShowcase extends Component {
         }
         <div className="form-group">
           <div className="row">
-            <div className="col-xs-10 col-sm-2">
+            <div className="col-xs-10 col-sm-3">
                <Dropzone
                 accept="image/jpeg, image/png"
                 onDrop={this.props.uploadShowcase.bind(this)}
                 style={{ width: '100%'}}
                 >
                 <button style={{ width: '100%'}} className="btn btn-primary">
-                  Upload Showcase
+                  { _content.cover_title_06 }
                 </button>
               </Dropzone>
             </div>
@@ -126,16 +127,16 @@ class CoverAndShowcase extends Component {
               <Overlay>
                 <div className="title-overlay">
                   <span className="header txt-mt-pink">
-                    Confirm Delete
+                    { _content.confirm_delete }
                   </span>
                   <span onClick={this.close.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
                 </div>
                 <div className="body">
                   <button onClick={this.deleteShowcase.bind(this)} className="btn btn-primary btn-confirm">
-                    Delete
+                    { _content.confirm }
                   </button>
                   <button onClick={this.close.bind(this)} className="btn">
-                    Cancle
+                    { _content.cancel }
                   </button>
                 </div>
               </Overlay>

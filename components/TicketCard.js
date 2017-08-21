@@ -34,7 +34,7 @@ class TicketCard extends Component {
     })
   }
   render() {
-    console.log(this.props)
+    const { _content } =this.props
     return (
       <div className="skill-card">
         {
@@ -76,7 +76,7 @@ class TicketCard extends Component {
             <Overlay>
               <div className="title-overlay">
                 <span className="header txt-mt-pink">
-                  Confirm Delete
+                  { _content.confirm_delete }
                   </span>
                 <span onClick={this.close.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
               </div>
@@ -89,10 +89,10 @@ class TicketCard extends Component {
                   )
                 }
                 <button onClick={this.deleteTicket.bind(this)} className="btn btn-primary btn-confirm">
-                  Delete
+                  { _content.confirm }
                 </button>
                 <button onClick={this.close.bind(this)} className="btn">
-                  Cancle
+                  { _content.cancel }
                 </button>
               </div>
               <style jsx>{`
