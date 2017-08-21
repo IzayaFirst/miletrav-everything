@@ -177,7 +177,7 @@ class view extends Component {
                 <i className="fa fa-clock-o" style={{ marginRight: 10 }} />Available Time
               </div>
               {
-                this.state.operation.map(val => (
+                this.state.operation.sort((a, b) => a.day - b.day).map(val => (
                   <div className="time" key={val.id}>
                     <span className="day">{getDay(val.day)}</span>
                     <span className="start">{val.start_time} - {val.end_time} </span>

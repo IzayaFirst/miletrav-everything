@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import { getCookiesFromReq }from '../../helpers/cookies'
+import { getCookiesFromReq } from '../../helpers/cookies'
 import Header from '../../components/Header/Header'
 import Navbar from '../../components/Nav/Navbar'
 import * as Api from '../../api'
@@ -9,19 +9,27 @@ import CoverAndShowcase from '../../components/Step/CoverAndShowcase'
 import Ticket from '../../components/Step/Ticket'
 import OperatingDay from '../../components/Step/OperatingDay'
 import Preview from '../../components/Step/Preview'
-import { UploadCoverPhoto, UploadShowcase }  from '../../helpers/uploadToFirebase'
+import { UploadCoverPhoto, UploadShowcase } from '../../helpers/uploadToFirebase'
 import Footer from '../../components/Footer'
+import { getContent } from '../../helpers/translation'
 
 class create extends Component {
-  static async getInitialProps({ req = {}, res = {}}) {
+  static async getInitialProps({ req = {}, res = {} }) {
     const token = getCookiesFromReq(req)
     const uuid = req.params.experience
     const myExp = await Api.get({
-        url: '/activities',
-        params: {
-          uuid,
-          userId: token.data.id,
-        }
+      url: '/activities',
+      params: {
+        uuid,
+        userId: token.data.id,
+      }
+    })
+
+    const _content = await getContent({
+      language: req.cookies.language,
+      path: 'company/create_experience',
+      req,
+      res,
     })
     /*
     const showcase = await Api.get({
@@ -45,7 +53,7 @@ class create extends Component {
         activityId: myExp.data[0].id,
       },
     })*/
-    return { token, uuid, myExp }/* categories, showcase, tickets, operation*/ 
+    return { token, uuid, myExp, _content }/* categories, showcase, tickets, operation*/
   }
   async componentDidMount() {
     const showcase = await Api.get({
@@ -61,7 +69,7 @@ class create extends Component {
       }
     })
     const categories = await Api.get({
-        url: '/categories',
+      url: '/categories',
     })
     const operation = await Api.get({
       url: '/operation_days',
@@ -70,13 +78,13 @@ class create extends Component {
       },
     })
     this.setState({
-        showcase: showcase.data || [],
-        tickets: tickets.data || [],
-        categories: categories.data || [],
-        operation: operation.data || [],
+      showcase: showcase.data || [],
+      tickets: tickets.data || [],
+      categories: categories.data || [],
+      operation: operation.data || [],
     })
   }
-  
+
   state = {
     exp: this.props.myExp.data[0] || {},
     id: this.props.myExp.data[0].id,
@@ -99,6 +107,8 @@ class create extends Component {
     start: moment(),
     end: moment(),
     operation: [],
+    loadingShowcasePhoto: false,
+
   }
   setStep(step) {
     this.setState({
@@ -120,7 +130,7 @@ class create extends Component {
       category: e.target.value,
     })
   }
-  setLocation(location) {    
+  setLocation(location) {
     this.setState({
       city: location.description,
       lat: location.location.lat,
@@ -128,9 +138,12 @@ class create extends Component {
     })
   }
   async uploadShowcase(file) {
-     const data = file[0]
-     const url = await UploadShowcase(data)
-     const update = await Api.post({
+    this.setState({
+      loadingShowcasePhoto: true,
+    })
+    const data = file[0]
+    const url = await UploadShowcase(data)
+    const update = await Api.post({
       url: '/showcases',
       data: {
         path: url,
@@ -146,8 +159,9 @@ class create extends Component {
       },
     })
     this.setState({
+      loadingShowcasePhoto: false,
       showcase: showcase.data,
-    }) 
+    })
   }
   async uploadCoverPhoto(file) {
     this.setState({
@@ -156,7 +170,7 @@ class create extends Component {
     const data = file[0]
     const url = await UploadCoverPhoto(data)
     const update = await Api.patch({
-      url: '/activities/'+this.state.id,
+      url: '/activities/' + this.state.id,
       data: {
         cover_photo: url,
       },
@@ -170,7 +184,7 @@ class create extends Component {
   }
   async deleteShowcase(showcase_id) {
     const del = await Api.del({
-      url: '/showcases/'+showcase_id,
+      url: '/showcases/' + showcase_id,
       params: {
         activityId: this.state.id
       },
@@ -193,7 +207,7 @@ class create extends Component {
     } = this.state
     try {
       const updateDetail = await Api.patch({
-        url: '/activities/'+this.state.id,
+        url: '/activities/' + this.state.id,
         data: {
           activity_name,
           activity_desc,
@@ -204,7 +218,7 @@ class create extends Component {
         },
         authType: 'Bearer',
         authToken: this.props.token.token
-      }) 
+      })
       location.reload()
     } catch (error) {
       console.log(Object.assign({}, error))
@@ -226,9 +240,9 @@ class create extends Component {
     })
   }
   setStart(start) {
-     this.handleDateChange({ start })
+    this.handleDateChange({ start })
   }
-  setEnd(end){
+  setEnd(end) {
     this.handleDateChange({ end })
   }
   handleDateChange = ({ start, end }) => {
@@ -272,7 +286,7 @@ class create extends Component {
   }
   async deleteTicket(ticket_id) {
     const del = await Api.del({
-      url: '/tickets/'+ticket_id,
+      url: '/tickets/' + ticket_id,
       params: {
         activityId: this.state.id,
       },
@@ -290,11 +304,12 @@ class create extends Component {
     })
   }
   render() {
+    const { _content } = this.props
     return (
       <div>
         <Header
-         css={['/asset/css/wysiwyg.css', '/asset/css/datepicker.css']} 
-         script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
+          css={['/asset/css/wysiwyg.css', '/asset/css/datepicker.css']}
+          script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
         />
         <div id="content">
           <div className="toolbar-right">
@@ -303,52 +318,57 @@ class create extends Component {
           <div className="wrapper">
             {
               this.state.step === 1 && (
-                <Preview 
+                <Preview
+                  _content={_content}
                   exp={this.state.exp}
                   showcase={this.state.showcase}
                   tickets={this.state.tickets}
                   operation={this.state.operation}
                   id={this.state.id}
                   token={this.props.token}
-                />   
+                />
               )
             }
             {
               this.state.step === 2 && (
                 <ExperienceDetail
-                 categories={this.state.categories} 
-                 token={this.props.token}
-                 id={this.state.id}
-                 activity_name={this.state.activity_name}
-                 activity_desc={this.state.activity_desc} 
-                 category={this.state.category} 
-                 city={this.state.city} 
-                 lat={this.state.lat} 
-                 lng={this.state.lng} 
-                 setActivityName={this.setActivityName.bind(this)}
-                 setDescription={this.setDescription.bind(this)}
-                 setCategory={this.setCategory.bind(this)}
-                 setLocation={this.setLocation.bind(this)}
-                 city={this.state.city}
-                 updateExperienceDetail={this.updateExperienceDetail.bind(this)}
+                  _content={_content}
+                  categories={this.state.categories}
+                  token={this.props.token}
+                  id={this.state.id}
+                  activity_name={this.state.activity_name}
+                  activity_desc={this.state.activity_desc}
+                  category={this.state.category}
+                  city={this.state.city}
+                  lat={this.state.lat}
+                  lng={this.state.lng}
+                  setActivityName={this.setActivityName.bind(this)}
+                  setDescription={this.setDescription.bind(this)}
+                  setCategory={this.setCategory.bind(this)}
+                  setLocation={this.setLocation.bind(this)}
+                  city={this.state.city}
+                  updateExperienceDetail={this.updateExperienceDetail.bind(this)}
                 />
               )
             }
             {
               this.state.step === 3 && (
                 <CoverAndShowcase
+                  _content={_content}
                   loadingCoverPhoto={this.state.loadingCoverPhoto}
                   showcase={this.state.showcase}
                   cover_photo={this.state.cover_photo}
                   uploadShowcase={this.uploadShowcase.bind(this)}
                   uploadCoverPhoto={this.uploadCoverPhoto.bind(this)}
                   deleteShowcase={this.deleteShowcase.bind(this)}
+                  loadingShowcasePhoto={this.state.loadingShowcasePhoto}
                 />
               )
             }
             {
               this.state.step === 4 && (
-                <Ticket 
+                <Ticket
+                   _content={_content}
                   ticket_name={this.state.ticket_name}
                   ticket_desc={this.state.ticket_desc}
                   price={this.state.price}
@@ -367,7 +387,8 @@ class create extends Component {
             }
             {
               this.state.step === 5 && (
-                <OperatingDay 
+                <OperatingDay
+                   _content={_content}
                   aid={this.state.id}
                   token={this.props.token}
                 />
@@ -377,29 +398,29 @@ class create extends Component {
           <div className="nav-bottom mt-blue-midnight mobile-only">
             <div className="box-menu">
               <div className="box">
-                <a onClick={this.setStep.bind(this, 1)} className={ this.state.step === 1 ? "active" : "txt-mt-pink"}>
+                <a onClick={this.setStep.bind(this, 1)} className={this.state.step === 1 ? "active" : "txt-mt-pink"}>
                   <i className="fa fa-desktop fa-lg"></i>
                 </a>
               </div>
               <div className="box">
-                 <a onClick={this.setStep.bind(this, 2)} className={ this.state.step === 2 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-info-circle fa-lg"></i>
-                  </a>
+                <a onClick={this.setStep.bind(this, 2)} className={this.state.step === 2 ? "active" : "txt-mt-pink"}>
+                  <i className="fa fa-info-circle fa-lg"></i>
+                </a>
               </div>
               <div className="box">
-                 <a onClick={this.setStep.bind(this, 3)} className={ this.state.step === 3 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-camera fa-lg"></i>
-                  </a>
+                <a onClick={this.setStep.bind(this, 3)} className={this.state.step === 3 ? "active" : "txt-mt-pink"}>
+                  <i className="fa fa-camera fa-lg"></i>
+                </a>
               </div>
-               <div className="box">
-                 <a onClick={this.setStep.bind(this, 4)} className={ this.state.step === 4 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-ticket fa-lg"></i>
-                  </a>
+              <div className="box">
+                <a onClick={this.setStep.bind(this, 4)} className={this.state.step === 4 ? "active" : "txt-mt-pink"}>
+                  <i className="fa fa-ticket fa-lg"></i>
+                </a>
               </div>
-               <div className="box">
-                 <a onClick={this.setStep.bind(this, 5)} className={ this.state.step === 5 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-calendar fa-lg"></i>
-                  </a>
+              <div className="box">
+                <a onClick={this.setStep.bind(this, 5)} className={this.state.step === 5 ? "active" : "txt-mt-pink"}>
+                  <i className="fa fa-calendar fa-lg"></i>
+                </a>
               </div>
             </div>
           </div>
@@ -407,28 +428,28 @@ class create extends Component {
             <div className="menu-list">
               <div className="menu-content">
                 <li onClick={this.setStep.bind(this, 1)}>
-                  <a className={ this.state.step === 1 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-desktop fa-lg"></i> Preview
+                  <a className={this.state.step === 1 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-desktop fa-lg"></i> {_content.preview}
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 2)}>
-                  <a className={ this.state.step === 2 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-info-circle fa-lg"></i> Experience Detail
+                  <a className={this.state.step === 2 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-info-circle fa-lg"></i> {_content.exp_detail}
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 3)}>
-                  <a className={ this.state.step === 3 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-camera fa-lg"></i> Cover and Showcase
+                  <a className={this.state.step === 3 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-camera fa-lg"></i> {_content.cover}
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 4)}>
-                  <a className={ this.state.step === 4 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-ticket fa-lg"></i> Tickets
+                  <a className={this.state.step === 4 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-ticket fa-lg"></i> {_content.ticket}
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 5)} >
-                  <a className={ this.state.step === 5 ? "active" : "txt-mt-pink"}>
-                    <i className="fa fa-calendar fa-lg"></i> Operation Day
+                  <a className={this.state.step === 5 ? "active" : "txt-mt-pink"}>
+                    <i className="fa fa-calendar fa-lg"></i> {_content.day}
                   </a>
                 </li>
               </div>

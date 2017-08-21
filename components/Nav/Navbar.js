@@ -81,12 +81,10 @@ class Navbar extends Component {
           password,
         }
       })
-      console.log(auth)
       cookie.savingCookies({ data: auth.axiosData })
       window.location = '/'
     } catch (error) {
       const err = Object.assign({}, error);
-      console.log('err' + err.request.status)
       if (err && err.request.status === 400) {
         this.setState({
           errorMsg: 'Username has already been used'
@@ -123,7 +121,6 @@ class Navbar extends Component {
     window.location = '/register'
   }
   logout() {
-    console.log('logout')
     cookie.removeCookies({ cookieName: 'mttk' })
     window.location = '/'
   }
@@ -318,7 +315,6 @@ const Menu = ({ token, logout, cover_photo }) => (
           <Nav pullRight className="is-not-mobile">
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ paddingTop: 8 }}>
               <MenuItem onClick={() => window.location = '/company/profile'} eventKey={1.1}>Company Profile</MenuItem>
-              <MenuItem onClick={() => window.location = '/dashboard/booking'} eventKey={1.2}>Dashboard</MenuItem>
               <div className="divider" />
               <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
             </DropdownButton>
@@ -326,7 +322,6 @@ const Menu = ({ token, logout, cover_photo }) => (
           <Bar.Collapse>
             <Nav pullRight className="mobile-only">
               <NavItem onClick={() => window.location = '/company/profile'} eventKey={1}>Company Profile</NavItem>
-              <NavItem onClick={() => window.location = '/dashboard/booking'} eventKey={2}>Dashboard</NavItem>
               <div className="divider" />
               <NavItem onClick={logout} eventKey={3}>Logout</NavItem>
             </Nav>

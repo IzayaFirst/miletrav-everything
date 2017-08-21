@@ -137,9 +137,9 @@ class Ticket extends Component {
           </div>
         </div>
         {
-          this.props.tickets && this.props.tickets.map(ticket => (
+          this.props.tickets && this.props.tickets.map((ticket, index) => (
             <div className="col-xs-12 col-sm-6" key={ticket.id}>
-              <TicketCard {...ticket} deleteTicket={this.props.deleteTicket.bind(this)}/>
+              <TicketCard no={index} {...ticket} deleteTicket={this.props.deleteTicket.bind(this)}/>
             </div>
             )
           )

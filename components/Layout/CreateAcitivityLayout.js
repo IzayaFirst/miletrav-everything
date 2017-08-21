@@ -9,6 +9,7 @@ class CreateAcitivityLayout extends Component {
   state = {
     activity: [],
     loadingActivity: false,
+    _content: {},
   }
   async componentDidMount() {
     clearTimeout(id)
@@ -49,6 +50,7 @@ class CreateAcitivityLayout extends Component {
 
   }
   render() {
+    const { _content } = this.props 
     return (
       <div id="content">
         <div className="container">
@@ -57,15 +59,15 @@ class CreateAcitivityLayout extends Component {
               <div className="welcome-container">
                 <div>
                   <div className="welcome-text">
-                    <div className="txt-mt-pink">Welcome Back</div>
-                    <span className="txt-mt-blue-midnight">Keep track of and edit all your experiences. Happy hosting!</span>
+                    <div className="txt-mt-pink">{_content.title}</div>
+                    <span className="txt-mt-blue-midnight">{_content.desc}</span>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-sm-4">
               <div className="create">
-                <a onClick={this.newExperience.bind(this)} className="btn btn-primary">New Experience</a>
+                <a onClick={this.newExperience.bind(this)} className="btn btn-primary">{_content.button}</a>
               </div>
             </div>
           </div>

@@ -5,6 +5,7 @@ import Overlay from './Overlay'
 class TicketCard extends Component {
   state = {
     overlay: false,
+    err_delete: false,
   }
   setOverlay() {
     this.setState({
@@ -18,9 +19,19 @@ class TicketCard extends Component {
   }
   deleteTicket() {
     this.setState({
+      err_delete: false,
+    })
+    try {
+      this.props.deleteTicket(this.props.id)
+
+    } catch (err) {
+      this.setState({
+        err_delete: true,
+      })
+    }
+    this.setState({
       overlay: false,
     })
-    this.props.deleteTicket(this.props.id)
   }
   render() {
     console.log(this.props)
@@ -49,7 +60,7 @@ class TicketCard extends Component {
             <div className="ticket-available">
               <i className="fa fa-calendar-check-o" />{moment(this.props.begin).format('LL')} - {moment(this.props.end).format('LL')}
             </div>
-             {
+            {
               this.props.buy && (
                 <div className="">
                   <a href={`/booking/${this.props.id}`} className="btn btn-primary buy-btn">
@@ -70,6 +81,13 @@ class TicketCard extends Component {
                 <span onClick={this.close.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
               </div>
               <div className="body">
+                {
+                  this.state.err_delete && (
+                   <div className="error-status">
+                     Cannot delete tickets because you have customer booking this tickets
+                   </div>
+                  )
+                }
                 <button onClick={this.deleteTicket.bind(this)} className="btn btn-primary btn-confirm">
                   Delete
                 </button>
@@ -78,6 +96,12 @@ class TicketCard extends Component {
                 </button>
               </div>
               <style jsx>{`
+                  .error-status {
+                    color: #e62117;
+                    font-size: 12px;
+                    font-weight: 400;
+                    padding-left: 20px;
+                  }
                   .buy-btn {
                     padding: 10px 5px;
                   }

@@ -111,6 +111,15 @@ class CoverAndShowcase extends Component {
                 </button>
               </Dropzone>
             </div>
+            <div className="col-xs-2 col-sm-2">
+              {
+                this.props.loadingShowcasePhoto && (
+                  <span style={{ fontSize: 26 }}>
+                    <i className="fa fa-cog fa-spin"/>
+                  </span>
+                )
+              }
+            </div>
           </div>
           {
             this.state.overlay && (

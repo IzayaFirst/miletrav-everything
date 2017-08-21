@@ -53,7 +53,6 @@ class Preview extends Component {
 
   }
   render() {
-    console.log(this.props.exp.status)
     return (
       <div className="row">
         <div className="title txt-mt-pink">
@@ -114,7 +113,7 @@ class Preview extends Component {
             <div className="operation">
               <div className="header-section">Open on</div>
               {
-                this.state.operation.map((val => (
+                this.state.operation.sort((a, b) => a.day - b.day).map((val => (
                   <div className="operation-row" key={val.id}>
                     <span className="day txt-mt-blue-midnight">{getDay(val.day)}</span>
                     <span className="time right">
@@ -126,8 +125,9 @@ class Preview extends Component {
             </div>
             <div className="ticket">
               {
-                this.props.tickets.map(val => (
+                this.props.tickets.map((val, index) => (
                   <TicketCard
+                    no={index}
                     title={val.title}
                     desc={val.desc}
                     price={val.price}

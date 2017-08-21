@@ -20,17 +20,23 @@ class index extends Component {
       req,
       res,
     })
-    return { token, category: category.data , _content}
+    const _content_dashboard = await getContent({
+      language: req.cookies.language,
+      path: 'dashboard',
+      req,
+      res,
+    })
+    return { token, category: category.data , _content, _content_dashboard}
   }
   render() {
-    const { _content } = this.props
+    const { _content, _content_dashboard } = this.props
     return (
       <div>
         <Header />
         <Navbar token={this.props.token ? this.props.token : false} />
         {
           this.props.token && this.props.token.data.is_company && (
-            <CreateAcitivityLayout />
+            <CreateAcitivityLayout _content={_content_dashboard}/>
           )
         }
         {
