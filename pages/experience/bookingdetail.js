@@ -12,19 +12,29 @@ class bookingdetail extends Component {
     const token = getCookiesFromReq(req)
     const booking = await Api.get({
       url: '/bookings',
+      params: {
+        userId: token.data.id,
+      }
     })
     const activity = await Api.get({
       url: '/activities',
     })
-    return { token, booking: booking.data, activity: activity.data }
+    const ticket = await Api.get({
+      url: '/tickets',
+    })
+    return { token, booking: booking.data, activity: activity.data, ticket: ticket.data }
   }
-  getActivityName(id) {
+  getTicket(id) {
+    const tickets = this.props.ticket || []
+    const ticket = tickets.filter(val => val.id === id)
+    return ticket[0]
+  }
+  getActivity(id) {
     const activities = this.props.activity || []
     const activity = activities.filter(val => val.id === id)
     return activity[0]
   }
   render() {
-    console.log(this.props.booking)
     return (
       <div>
         <Header
@@ -37,18 +47,35 @@ class bookingdetail extends Component {
           </div>
         </div>
         <div className="content">
+          <div className="booking-card txt-mt-blue-midnight">
+                <div className="row" >
+                  <div className="col-xs-6 col-sm-3" >
+                   <div className="booking-title">Ticket title</div>
+                  </div>
+                  <div className="col-xs-6 col-sm-3" >
+                     <div className="booking-title">Price</div>
+                  </div>
+                  <div className="col-xs-6 col-sm-3" >
+                    <div className="booking-title">Amount</div>
+                  </div>
+                   <div className="col-xs-6 col-sm-3" >
+                    <div className="booking-title">Experience date</div>
+                  </div>
+                </div>
+              </div>
+
           {
             this.props.booking.map((val, index) => (
               <div className="booking-card txt-mt-blue-midnight" key={val.id}>
                 <div className="row" >
                   <div className="col-xs-6 col-sm-3" >
-                    <div className="booking-title">{this.getActivityName(val.activityId).activity_name}</div>
+                   <div className="booking-title">{this.getTicket(val.ticketId).title}</div>
                   </div>
                   <div className="col-xs-6 col-sm-3" >
-                    <div className="booking-title">{val.title}</div>
+                     <div className="booking-title">{this.getTicket(val.ticketId).price} Baht</div>
                   </div>
                   <div className="col-xs-6 col-sm-3" >
-                    <div className="booking-title">amount: {val.price}</div>
+                    <div className="booking-title">amount: {val.amount}</div>
                   </div>
                    <div className="col-xs-6 col-sm-3" >
                     <div className="booking-title">{moment(val.date).format('LL')}</div>
@@ -72,7 +99,7 @@ class bookingdetail extends Component {
             }
             .booking-card {
               display: block;
-              margin: 15px 25px;
+              margin: 0 25px;
               padding: 20px;
               background-color: #fff; 
             }

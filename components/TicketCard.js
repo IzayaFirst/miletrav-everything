@@ -17,24 +17,23 @@ class TicketCard extends Component {
       overlay: false,
     })
   }
-  deleteTicket() {
+  async deleteTicket() {
     this.setState({
       err_delete: false,
     })
-    try {
-      this.props.deleteTicket(this.props.id)
-
-    } catch (err) {
+    const isDelete = await this.props.deleteTicket(this.props.id)
+    if (!isDelete) {
       this.setState({
         err_delete: true,
       })
+    } else {
+      this.setState({
+        overlay: false,
+      })
     }
-    this.setState({
-      overlay: false,
-    })
   }
   render() {
-    const { _content } =this.props
+    const { _content } = this.props
     return (
       <div className="skill-card">
         {
@@ -76,23 +75,23 @@ class TicketCard extends Component {
             <Overlay>
               <div className="title-overlay">
                 <span className="header txt-mt-pink">
-                  { _content.confirm_delete }
-                  </span>
+                  {_content.confirm_delete}
+                </span>
                 <span onClick={this.close.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
               </div>
               <div className="body">
                 {
                   this.state.err_delete && (
-                   <div className="error-status">
-                     Cannot delete tickets because you have customer booking this tickets
+                    <div className="error-status">
+                      Cannot delete tickets because you have customer booking this tickets
                    </div>
                   )
                 }
                 <button onClick={this.deleteTicket.bind(this)} className="btn btn-primary btn-confirm">
-                  { _content.confirm }
+                  {_content.confirm}
                 </button>
                 <button onClick={this.close.bind(this)} className="btn">
-                  { _content.cancel }
+                  {_content.cancel}
                 </button>
               </div>
               <style jsx>{`

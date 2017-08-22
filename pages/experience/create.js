@@ -285,23 +285,35 @@ class create extends Component {
     })
   }
   async deleteTicket(ticket_id) {
-    const del = await Api.del({
-      url: '/tickets/' + ticket_id,
+    const booking = await Api.get({
+      url: '/bookings',
       params: {
-        activityId: this.state.id,
+        ticketId: ticket_id,
       },
-      authType: 'Bearer',
-      authToken: this.props.token.token,
     })
-    const tickets = await Api.get({
-      url: '/tickets',
-      params: {
-        activityId: this.state.id,
-      }
-    })
-    this.setState({
-      tickets: tickets.data,
-    })
+    if (booking.data.length === 0) {
+      const del = await Api.del({
+        url: '/tickets/' + ticket_id,
+        params: {
+          activityId: this.state.id,
+        },
+        authType: 'Bearer',
+        authToken: this.props.token.token,
+      })
+      const tickets = await Api.get({
+        url: '/tickets',
+        params: {
+          activityId: this.state.id,
+        }
+      })
+      this.setState({
+        tickets: tickets.data,
+      })
+      return true
+    } else {
+       return false
+    }
+
   }
   render() {
     const { _content } = this.props
@@ -368,7 +380,7 @@ class create extends Component {
             {
               this.state.step === 4 && (
                 <Ticket
-                   _content={_content}
+                  _content={_content}
                   ticket_name={this.state.ticket_name}
                   ticket_desc={this.state.ticket_desc}
                   price={this.state.price}
@@ -388,7 +400,7 @@ class create extends Component {
             {
               this.state.step === 5 && (
                 <OperatingDay
-                   _content={_content}
+                  _content={_content}
                   aid={this.state.id}
                   token={this.props.token}
                 />
