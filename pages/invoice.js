@@ -18,6 +18,7 @@ class invoice extends Component {
       url: '/bookings',
       params: {
         transaction,
+        userId: token.data.id
       },
     })
     const invoice = tr.data[0]
