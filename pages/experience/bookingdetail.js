@@ -81,7 +81,7 @@ class bookingdetail extends Component {
                     <div className="booking-title"><span className="mobile-only">Date : </span>{moment(val.date).format('LL')}</div>
                   </div>
                   <div className="col-xs-12 col-sm-2" >
-                    <div className="booking-title"><a className="btn btn-primary">View Detail</a></div>
+                    <div className="booking-title"><a href={`/invoice/${val.transaction}`} target="_blank"className="btn btn-primary">View Detail</a></div>
                   </div>
                 </div>
               </div>

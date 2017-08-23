@@ -38,7 +38,7 @@ class booking extends Component {
       const activity = await Api.get({
         url: `/activities/${ticket.axiosData.activityId}`,
       })
-       const operation = await Api.get({
+      const operation = await Api.get({
         url: '/operation_days',
         params: {
           activityId: ticket.axiosData.activityId,
@@ -116,7 +116,7 @@ class booking extends Component {
   }
   filterDate = (date) => {
     const day = date.day()
-    const operation = this.state.operation.sort((a, b) => a.day - b.day).map(val =>  val.day)
+    const operation = this.state.operation.sort((a, b) => a.day - b.day).map(val => val.day)
     const newDay = []
     operation.map(val => {
       const dc = bindDay.find(d => {
@@ -179,7 +179,7 @@ class booking extends Component {
                           dateFormat="DD/MM/YYYY"
                           minDate={moment(this.state.ticket.begin).isAfter(moment()) ? this.state.ticket.begin : moment()}
                           maxDate={this.state.ticket.end}
-                          selected={this.state.date || moment()}
+                          selected={this.state.date}
                           filterDate={this.filterDate}
                           onChange={this.setBookingDate.bind(this)}
                           className="form-control form-miletrav"
@@ -239,41 +239,44 @@ class booking extends Component {
                   <div className="information-title txt-mt-blue-midnight">
                     Thank you for your purchase
                   </div>
-                  <div id="ticket">
-                    <div className="ticket-demo">
-                      <div className="ticket-demo-card">
-                        <div className="row">
-                          <div className="col-xs-8 col-sm-9">
-                            <div className="ticket-demo-title">
-                              {this.state.activity.activity_name}
-                            </div>
-                            <div>
-                              {this.state.amount + ' Person(s)'}
-                            </div>
-                            <div>
-                              {moment(this.state.date).format('LL')}
-                            </div>
-                            <div className="ticket-demo-location">
-                              {this.state.activity.city.toUpperCase()}
-                            </div>
+
+                  {
+                    /*<div id="ticket">
+                      <div className="ticket-demo">
+                    <div className="ticket-demo-card">
+                      <div className="row">
+                        <div className="col-xs-8 col-sm-9">
+                          <div className="ticket-demo-title">
+                            {this.state.activity.activity_name}
                           </div>
-                          <div className="col-xs-4 col-sm-3">
-                            <div className="ticket-demo-ticket-title">
-                              <div>{this.state.ticket.title} Ticket</div>
-                              <div className="ticket-demo-price">
-                                {this.state.ticket.price === 0 ? 'Free' : this.state.ticket.price + ' Baht'}
-                              </div>
+                          <div>
+                            {this.state.amount + ' Person(s)'}
+                          </div>
+                          <div>
+                            {moment(this.state.date).format('LL')}
+                          </div>
+                          <div className="ticket-demo-location">
+                            {this.state.activity.city.toUpperCase()}
+                          </div>
+                        </div>
+                        <div className="col-xs-4 col-sm-3">
+                          <div className="ticket-demo-ticket-title">
+                            <div>{this.state.ticket.title} Ticket</div>
+                            <div className="ticket-demo-price">
+                              {this.state.ticket.price === 0 ? 'Free' : this.state.ticket.price + ' Baht'}
                             </div>
                           </div>
                         </div>
                       </div>
-                      <span className="ticket-transaction">
-                        ref. {this.state.transaction}
-                      </span>
                     </div>
-                  </div>
+                    <span className="ticket-transaction">
+                      ref. {this.state.transaction}
+                    </span>
+                  </div></div>
+                    */
+                  }
                   <div className="pdf-generate-container">
-                    <a onClick={this.savePdf.bind(this)} className="btn btn-primary">Save your tickets</a>
+                    <a href={`/invoice/${this.state.transaction}`} /*onClick={this.savePdf.bind(this)}*/ className="btn btn-primary">View your transaction</a>
                   </div>
                 </div>
               )

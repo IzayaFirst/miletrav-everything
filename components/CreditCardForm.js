@@ -12,7 +12,7 @@ class CreditCardForm extends Component {
   state = {
     number: '',
     name: '',
-    exp: '',
+    expiry: '',
     cvc: '',
     focused: '',
     validate_number: true,
