@@ -8,6 +8,7 @@ import Navbar from '../components/Nav/Navbar'
 import * as Api from '../api'
 import CreditCardForm from '../components/CreditCardForm'
 import Footer from '../components/Footer'
+import { bindDay } from '../helpers/master'
 
 class booking extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -22,10 +23,12 @@ class booking extends Component {
     token: this.props.token,
     step: 1,
     ticket: {},
-    date: moment(),
+    date: null,
     amount: 1,
     transaction: '',
     activity: {},
+    booking_err: false,
+    operation: [],
   }
   async componentDidMount() {
     const ticket = await Api.get({
@@ -35,8 +38,15 @@ class booking extends Component {
       const activity = await Api.get({
         url: `/activities/${ticket.axiosData.activityId}`,
       })
+       const operation = await Api.get({
+        url: '/operation_days',
+        params: {
+          activityId: ticket.axiosData.activityId,
+        }
+      })
       this.setState({
         activity: activity.axiosData,
+        operation: operation.data
       })
     }
     this.setState({
@@ -55,6 +65,17 @@ class booking extends Component {
     })
   }
   async setStep(step) {
+    this.setState({
+      booking_err: false,
+    })
+    if (step === 2) {
+      if (!this.state.date) {
+        this.setState({
+          booking_err: true,
+        })
+        return
+      }
+    }
     if (this.state.ticket.price === 0) {
       const transaction = await Api.post({
         url: '/bookings',
@@ -92,6 +113,20 @@ class booking extends Component {
     img.src = uri
     doc.addImage(img, 'png', 25, 15, 110, 30);
     doc.save('a4.pdf')
+  }
+  filterDate = (date) => {
+    const day = date.day()
+    const operation = this.state.operation.sort((a, b) => a.day - b.day).map(val =>  val.day)
+    const newDay = []
+    operation.map(val => {
+      const dc = bindDay.find(d => {
+        if (d.day === val) {
+          newDay.push(d.momemntDay)
+        }
+      })
+    })
+    const is = newDay.filter(val => val === day).length > 0
+    return is
   }
   render() {
     return (
@@ -144,7 +179,8 @@ class booking extends Component {
                           dateFormat="DD/MM/YYYY"
                           minDate={moment(this.state.ticket.begin).isAfter(moment()) ? this.state.ticket.begin : moment()}
                           maxDate={this.state.ticket.end}
-                          selected={this.state.date}
+                          selected={this.state.date || moment()}
+                          filterDate={this.filterDate}
                           onChange={this.setBookingDate.bind(this)}
                           className="form-control form-miletrav"
                         />
@@ -157,6 +193,13 @@ class booking extends Component {
                           <option value="3">3</option>
                         </select>
                       </div>
+                      {
+                        this.state.booking_err && (
+                          <div className="err error-status">
+                            Your Booking date is after the last day of available tickets
+                          </div>
+                        )
+                      }
                     </div>
                   </div>
                   <div className="form-group">
@@ -238,6 +281,16 @@ class booking extends Component {
           </div>
         </div>
         <style jsx>{`
+          .err {
+            text-align: center;
+            padding: 15px 55px; 
+          }
+          .error-status {
+            color: #e62117;
+            font-size: 12px;
+            font-weight: 400;
+            padding-left: 20px;
+          }
           .ticket-transaction {
             padding: 3px 5px;
             font-size: 10px;

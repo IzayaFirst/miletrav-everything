@@ -28,6 +28,36 @@ const day = [
     dayName: 'Sunday',
   },
 ]
+export const bindDay = [
+  {
+    day: 0,
+    momemntDay: 1,
+  },
+  {
+    day: 1,
+    momemntDay: 2,
+  },
+  {
+    day: 2,
+    momemntDay: 3,
+  },
+  {
+    day: 3,
+    momemntDay: 4,
+  },
+  {
+    day: 4,
+    momemntDay: 5,
+  },
+  {
+    day: 5,
+    momemntDay: 6,
+  },
+  {
+    day: 6,
+    momemntDay: 0,
+  },
+]
 const icons = [
   {
     id: 1,

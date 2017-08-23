@@ -47,19 +47,19 @@ class bookingdetail extends Component {
           </div>
         </div>
         <div className="content">
-          <div className="booking-card txt-mt-blue-midnight">
+          <div className="booking-card txt-mt-blue-midnight is-not-mobile">
                 <div className="row" >
-                  <div className="col-xs-6 col-sm-3" >
+                  <div className="col-xs-12 col-sm-4" >
                    <div className="booking-title">Ticket title</div>
                   </div>
-                  <div className="col-xs-6 col-sm-3" >
+                  <div className="col-xs-12 col-sm-2" >
                      <div className="booking-title">Price</div>
                   </div>
-                  <div className="col-xs-6 col-sm-3" >
+                  <div className="col-xs-12 col-sm-2" >
                     <div className="booking-title">Amount</div>
                   </div>
-                   <div className="col-xs-6 col-sm-3" >
-                    <div className="booking-title">Experience date</div>
+                   <div className="col-xs-12 col-sm-2" >
+                    <div className="booking-title">Date</div>
                   </div>
                 </div>
               </div>
@@ -68,21 +68,23 @@ class bookingdetail extends Component {
             this.props.booking.map((val, index) => (
               <div className="booking-card txt-mt-blue-midnight" key={val.id}>
                 <div className="row" >
-                  <div className="col-xs-6 col-sm-3" >
-                   <div className="booking-title">{this.getTicket(val.ticketId).title}</div>
+                  <div className="col-xs-12 col-sm-4" >
+                   <div className="booking-title"><span className="mobile-only">Ticket title : </span>{this.getTicket(val.ticketId).title}</div>
                   </div>
-                  <div className="col-xs-6 col-sm-3" >
-                     <div className="booking-title">{this.getTicket(val.ticketId).price} Baht</div>
+                  <div className="col-xs-12 col-sm-2" >
+                     <div className="booking-title"><span className="mobile-only">Price : </span>{this.getTicket(val.ticketId).price} Baht</div>
                   </div>
-                  <div className="col-xs-6 col-sm-3" >
-                    <div className="booking-title">amount: {val.amount}</div>
+                  <div className="col-xs-12 col-sm-2" >
+                    <div className="booking-title"><span className="mobile-only">Amount : </span>{val.amount}</div>
                   </div>
-                   <div className="col-xs-6 col-sm-3" >
-                    <div className="booking-title">{moment(val.date).format('LL')}</div>
+                   <div className="col-xs-12 col-sm-2" >
+                    <div className="booking-title"><span className="mobile-only">Date : </span>{moment(val.date).format('LL')}</div>
+                  </div>
+                  <div className="col-xs-12 col-sm-2" >
+                    <div className="booking-title"><a className="btn btn-primary">View Detail</a></div>
                   </div>
                 </div>
               </div>
-
             ))
           }
         </div>
@@ -97,11 +99,21 @@ class bookingdetail extends Component {
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
             }
+          
             .booking-card {
-              display: block;
               margin: 0 25px;
               padding: 20px;
               background-color: #fff; 
+            }
+            @media only screen and (min-width: 768px) {
+              .booking-card {
+                display: block;
+              }
+            }
+            @media only screen and (max-width: 768px) {
+              .booking-title {
+                padding: 10px 0;
+              }
             }
             .header-page {
               text-align: left;

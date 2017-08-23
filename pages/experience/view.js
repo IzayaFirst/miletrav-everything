@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import GoogleMapReact from 'google-map-react'
+import moment from 'moment'
 import StarRating from 'react-star-rating'
 import { getCookiesFromReq } from '../../helpers/cookies'
 import Header from '../../components/Header/Header'
@@ -190,7 +191,7 @@ class view extends Component {
                 <i className="fa fa-clock-o" style={{ marginRight: 10 }} /> Selected your tickets
               </div>
               {
-                this.state.ticket.map((val,index) => (
+                this.state.ticket.filter(val => !moment().isAfter(moment(val.end))).map((val,index) => (
                   <div className="ticket-container" key={val.id}>
                     <TicketCard {...val} no={index} buy={true} />
                   </div>
@@ -267,7 +268,7 @@ class view extends Component {
               padding: 15px 0;
             }
             .map {
-              height: 250px;
+              height: 350px;
               margin: 10px 0;
             }
             .category {
@@ -296,7 +297,7 @@ class view extends Component {
               display: inline-block;
               position: relative;
               width: 100%;
-              height: 350px;
+              height: 450px;
             }
             .activity-cover {
               width: 100%;
