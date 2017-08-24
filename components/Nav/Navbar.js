@@ -311,22 +311,15 @@ const Menu = ({ token, logout, cover_photo }) => (
   <div>
     {
       token.data.is_company && (
-        <div>
-          <Nav pullRight className="is-not-mobile">
-            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ paddingTop: 8 }}>
+        <Bar.Collapse>
+          <Nav pullRight>
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
               <MenuItem onClick={() => window.location = '/company/profile'} eventKey={1.1}>Company Profile</MenuItem>
               <div className="divider" />
               <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
             </DropdownButton>
           </Nav>
-          <Bar.Collapse>
-            <Nav pullRight className="mobile-only">
-              <NavItem onClick={() => window.location = '/company/profile'} eventKey={1}>Company Profile</NavItem>
-              <div className="divider" />
-              <NavItem onClick={logout} eventKey={3}>Logout</NavItem>
-            </Nav>
-          </Bar.Collapse>
-        </div>
+        </Bar.Collapse>
       )
     }
     {

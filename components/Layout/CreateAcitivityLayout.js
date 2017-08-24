@@ -87,6 +87,7 @@ class CreateAcitivityLayout extends Component {
                     url={val.uuid}
                     category={val.category}
                     city={val.city}
+                    status={val.status}
                   />
                 </div>
               ))
@@ -141,17 +142,25 @@ class CreateAcitivityLayout extends Component {
 
 export default CreateAcitivityLayout
 
-const CardActivity = ({title, city, url, category}) => (
+const CardActivity = ({title, city, url, category, status}) => (
   <a href={`/create-experience/${url}`}>
     <div className="card-activity">
       <div className="activity-title txt-mt-blue-midnight">
         {title}
+      </div>
+      <div style={{margin: '15px 0'}}>
+        <span className="status" style={{ background: status === true ? '#62c4a4': '#E6326E'}}>{status === true ? 'Opened': 'Closed'}</span>
       </div>
       <div className="card-desc txt-mt-blue-midnight">
         {city || ''} · {category || ''}
       </div>
     <style jsx>
         {`
+        .status {
+          color: white;
+          padding: 5px;
+          border-radius: 4px;
+        }
         .card-desc {
           font-size: 16px;
         }
