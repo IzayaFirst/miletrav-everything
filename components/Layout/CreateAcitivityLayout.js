@@ -80,7 +80,9 @@ class CreateAcitivityLayout extends Component {
               )
             }
             {
-              this.state.loadingActivity && this.state.activity.map(val => (
+              this.state.loadingActivity && this.state.activity.sort((a,b) => {
+                return (a.status === b.status)? 0 : a.status ? -1 : 1
+              }).map(val => (
                 <div className="col-xs-12 col-sm-4 col-md-4" style={{ padding: 15 }} key={val.id}>
                   <CardActivity 
                     title={val.activity_name}

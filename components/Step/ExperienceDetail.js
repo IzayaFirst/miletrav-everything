@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Geosuggest from 'react-geosuggest';
 import { isRequired } from '../../helpers/validation'
+import * as Api from '../../api'
 
+let id = 0
 class ExperienceDetail extends Component {
   constructor(props) {
     super(props) 
@@ -15,6 +17,7 @@ class ExperienceDetail extends Component {
     validate_desc: true,
     validate_category: true,
     initialEditor: false,
+    validate_title_not_duplicate: true,
   }
   componentDidMount() {
     this.setState({
@@ -27,24 +30,46 @@ class ExperienceDetail extends Component {
       edit: true,
     })
   }
-  updateExp(e) {
+ async updateExp(e) {
     this.setState({
       validate_title: true,
       validate_desc: true,
       validate_category: true,
+      validate_title_not_duplicate: true,
     })
     const validate_title = isRequired(this.props.activity_name === 'New Experience' ? '' : this.props.activity_name)
     const validate_desc = isRequired(this.props.activity_desc)
     const validate_category = isRequired(this.props.category)
+    const validate_title_not_duplicate = await this.checkTitle()
     this.setState({
       validate_title,
       validate_desc,
       validate_category,
+      validate_title_not_duplicate,
     })
-    if (validate_title && validate_desc && validate_category) {
+    if (validate_title && validate_desc && validate_category && validate_title_not_duplicate) {
       this.props.updateExperienceDetail()
     }
     e.preventDefault()
+  }
+
+  async checkTitle() {
+    const activity_name = this.props.activity_name
+    if (activity_name === 'New Experience') {
+      return false
+    } else {
+      const check = await Api.get({
+        url: '/activities',
+        params: {
+          activity_name: activity_name.trim().replace(/\s+/g,' '),
+        }
+      })
+      if (check.data.length === 0) {
+        return true
+      } else {
+        return false
+      }
+    }
   }
   render() {
     const modules = {
@@ -72,6 +97,13 @@ class ExperienceDetail extends Component {
                 !this.state.validate_title && (
                   <div className="error-status">
                     { _content.exp_title_err }
+                  </div>
+                )
+              }
+              {
+                !this.state.validate_title_not_duplicate && (
+                  <div className="error-status">
+                    { _content.exp_dup }
                   </div>
                 )
               }

@@ -73,6 +73,9 @@ class view extends Component {
     bookmark: false,
   }
   async componentDidMount() {
+    if (!this.props.token) {
+      return
+    }
     const bookmark = await Api.get({
       url: '/bookmarks',
       params: {
@@ -115,6 +118,7 @@ class view extends Component {
     }
   }
   render() {
+    console.log(this.state.host)
     return (
       <div>
         <Header
@@ -132,7 +136,7 @@ class view extends Component {
                 {this.state.activity.activity_name}
               </div>
               <div className="host-by">
-                Host By {this.state.host.organize_name}
+                Host By <a href={`/host/detail/${this.state.host.id}`}>{this.state.host.organize_name}</a>
                 {
                   this.props.token && (
                     <a onClick={this.setBookmark.bind(this)} className="rating-section"><i className={this.state.bookmark ? 'fa fa-star txt-mt-pink' : 'fa fa-star'} style={{ margin: 5 }} />{this.state.bookmark ? 'Remove from wishlist' : 'Add to wishlist'}</a>

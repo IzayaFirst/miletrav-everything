@@ -209,7 +209,7 @@ class create extends Component {
       const updateDetail = await Api.patch({
         url: '/activities/' + this.state.id,
         data: {
-          activity_name,
+          activity_name: activity_name.trim().replace(/\s+/g,' '),
           activity_desc,
           category,
           city: city.toLowerCase(),

@@ -95,6 +95,7 @@ class Ticket extends Component {
                   <label>{_content.ticket_available}</label>
                 </div>
                 <div className="col-xs-6">
+                   <label>{_content.ticket_start}</label>
                   {
                     typeof window !== 'undefined' && ReactQuill && this.state.initialEditor && (
                       <DatePicker
@@ -110,6 +111,7 @@ class Ticket extends Component {
 
                 </div>
                 <div className="col-xs-6">
+                  <label>{_content.ticket_end}</label>
                   {
                     typeof window !== 'undefined' && ReactQuill && this.state.initialEditor && (
                       <DatePicker

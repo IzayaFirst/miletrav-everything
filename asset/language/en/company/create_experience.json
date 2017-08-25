@@ -39,6 +39,8 @@
   "ticket_available": "Ticket available since",
   "add_ticket": "Add Ticket",
   "day_title": "Describe your operation time",
-  "to": "to"
-
+  "to": "to",
+  "exp_dup": "Your Experience title is duplicated",
+  "ticket_start": "Start date",
+  "ticket_end": "End date"
 }
