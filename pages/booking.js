@@ -23,7 +23,7 @@ class booking extends Component {
     token: this.props.token,
     step: 1,
     ticket: {},
-    date: null,
+    date: moment(),
     amount: 1,
     transaction: '',
     activity: {},
@@ -52,7 +52,6 @@ class booking extends Component {
     this.setState({
       ticket: ticket.axiosData,
     })
-
   }
   setTransaction(transaction) {
     this.setState({
@@ -74,6 +73,15 @@ class booking extends Component {
           booking_err: true,
         })
         return
+      } else {
+        const isPast = moment(this.state.ticket.begin).isAfter(this.state.date) ? false : true
+        console.log(isPast)
+        if (!isPast) {
+          this.setState({
+            booking_err: true,
+          })
+          return
+        }
       }
     }
     if (this.state.ticket.price === 0) {
@@ -179,7 +187,7 @@ class booking extends Component {
                           dateFormat="DD/MM/YYYY"
                           minDate={moment(this.state.ticket.begin).isAfter(moment()) ? this.state.ticket.begin : moment()}
                           maxDate={this.state.ticket.end}
-                          selected={this.state.date}
+                          selected={this.state.date || moment()}
                           filterDate={this.filterDate}
                           onChange={this.setBookingDate.bind(this)}
                           className="form-control form-miletrav"
@@ -196,7 +204,7 @@ class booking extends Component {
                       {
                         this.state.booking_err && (
                           <div className="err error-status">
-                            Your Booking date is after the last day of available tickets
+                            Your Booking date is not in range of available tickets
                           </div>
                         )
                       }
