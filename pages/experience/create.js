@@ -407,60 +407,60 @@ class create extends Component {
               )
             }
           </div>
-          <div className="nav-bottom mt-blue-midnight mobile-only">
+          <div className="nav-bottom mt-primary mobile-only">
             <div className="box-menu">
               <div className="box">
-                <a onClick={this.setStep.bind(this, 1)} className={this.state.step === 1 ? "active" : "txt-mt-pink"}>
+                <a onClick={this.setStep.bind(this, 1)} className={this.state.step === 1 ? "active" : "txt-mt-green"}>
                   <i className="fa fa-desktop fa-lg"></i>
                 </a>
               </div>
               <div className="box">
-                <a onClick={this.setStep.bind(this, 2)} className={this.state.step === 2 ? "active" : "txt-mt-pink"}>
+                <a onClick={this.setStep.bind(this, 2)} className={this.state.step === 2 ? "active" : "txt-mt-green"}>
                   <i className="fa fa-info-circle fa-lg"></i>
                 </a>
               </div>
               <div className="box">
-                <a onClick={this.setStep.bind(this, 3)} className={this.state.step === 3 ? "active" : "txt-mt-pink"}>
+                <a onClick={this.setStep.bind(this, 3)} className={this.state.step === 3 ? "active" : "txt-mt-green"}>
                   <i className="fa fa-camera fa-lg"></i>
                 </a>
               </div>
               <div className="box">
-                <a onClick={this.setStep.bind(this, 4)} className={this.state.step === 4 ? "active" : "txt-mt-pink"}>
+                <a onClick={this.setStep.bind(this, 4)} className={this.state.step === 4 ? "active" : "txt-mt-green"}>
                   <i className="fa fa-ticket fa-lg"></i>
                 </a>
               </div>
               <div className="box">
-                <a onClick={this.setStep.bind(this, 5)} className={this.state.step === 5 ? "active" : "txt-mt-pink"}>
+                <a onClick={this.setStep.bind(this, 5)} className={this.state.step === 5 ? "active" : "txt-mt-green"}>
                   <i className="fa fa-calendar fa-lg"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div className="nav-side-menu mt-blue-midnight is-not-mobile">
+          <div className="nav-side-menu mt-primary is-not-mobile">
             <div className="menu-list">
               <div className="menu-content">
                 <li onClick={this.setStep.bind(this, 1)}>
-                  <a className={this.state.step === 1 ? "active" : "txt-mt-pink"}>
+                  <a className={this.state.step === 1 ? "active" : "txt-mt-green"}>
                     <i className="fa fa-desktop fa-lg"></i> {_content.preview}
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 2)}>
-                  <a className={this.state.step === 2 ? "active" : "txt-mt-pink"}>
+                  <a className={this.state.step === 2 ? "active" : "txt-mt-green"}>
                     <i className="fa fa-info-circle fa-lg"></i> {_content.exp_detail}
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 3)}>
-                  <a className={this.state.step === 3 ? "active" : "txt-mt-pink"}>
+                  <a className={this.state.step === 3 ? "active" : "txt-mt-green"}>
                     <i className="fa fa-camera fa-lg"></i> {_content.cover}
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 4)}>
-                  <a className={this.state.step === 4 ? "active" : "txt-mt-pink"}>
+                  <a className={this.state.step === 4 ? "active" : "txt-mt-green"}>
                     <i className="fa fa-ticket fa-lg"></i> {_content.ticket}
                   </a>
                 </li>
                 <li onClick={this.setStep.bind(this, 5)} >
-                  <a className={this.state.step === 5 ? "active" : "txt-mt-pink"}>
+                  <a className={this.state.step === 5 ? "active" : "txt-mt-green"}>
                     <i className="fa fa-calendar fa-lg"></i> {_content.day}
                   </a>
                 </li>
@@ -553,6 +553,7 @@ class create extends Component {
             }
             .nav-side-menu ul,
             .nav-side-menu li {
+              border-bottom: solid 1px #5a7780;
               list-style: none;
               padding: 20px 0;
               margin: 0px;

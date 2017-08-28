@@ -56,11 +56,11 @@ class Preview extends Component {
     const { _content } = this.props
     return (
       <div className="row">
-        <div className="title txt-mt-pink">
+        <div className="title txt-mt-green">
            { _content.preview_title }
         </div>
         <div className="col-xs-12 col-sm-12 col-md-8">
-          <div className="card">
+          <div className="">
             <div>
               {
                 this.props.exp.status && (

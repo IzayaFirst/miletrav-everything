@@ -68,9 +68,10 @@ class Footer extends Component {
               width: 100%;
             }
             .footer {
-              background: #FFF;
-              border-top: 2px solid #1B6FB1;
-              padding: 40px 4%;
+              border-top: #158DB4 solid 6px;
+              background: #1A3C47;
+              color: #FFFFFF;
+              padding: 40px 4% 80px;
             }            
           `}
         </style>

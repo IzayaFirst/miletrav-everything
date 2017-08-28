@@ -19,7 +19,7 @@ class Overlay extends Component {
             top: 0;
             width: 100%;
             height: 100vh;
-            background: rgba(35, 25, 70, .7);
+            background: rgba(0, 0, 0, 0.52);
             z-index: 999;
           }
           .overlay-container {

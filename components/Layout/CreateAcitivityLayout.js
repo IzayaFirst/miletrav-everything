@@ -59,7 +59,7 @@ class CreateAcitivityLayout extends Component {
               <div className="welcome-container">
                 <div>
                   <div className="welcome-text">
-                    <div className="txt-mt-pink">{_content.title}</div>
+                    <div className="txt-mt-green">{_content.title}</div>
                     <span className="txt-mt-blue-midnight">{_content.desc}</span>
                   </div>
                 </div>

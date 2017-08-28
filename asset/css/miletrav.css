@@ -89,11 +89,11 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 }
 
 .react-toggle--checked .react-toggle-track {
-  background-color: #19AB27;
+  background-color: #24A6A4;
 }
 
 .react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
-  background-color: #128D15;
+  background-color: #24A6A4;
 }
 
 .react-toggle-track-check {
@@ -295,6 +295,12 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
   background: #FAD73C;
 }
 
+.mt-primary {
+  background: #1B3C46;
+}
+.txt-mt-green {
+  color: #24A6A4;
+}
 .mt-gradient-2 {
   background: rgba(255, 109, 60, 1);
   background: -moz-linear-gradient(left, rgba(255, 109, 60, 1) 0%, rgba(134, 15, 185, 1) 100%);
@@ -369,7 +375,8 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
   display: table;
   width: 100%;
   margin-bottom: 10px;
-  border: 1px solid #E6326E;
+  border-radius: 4px;
+  border: 1px solid #24A6A4;
 }
 .skill-no {
   width: 30px;
@@ -380,7 +387,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
   font-weight: 600;
   display: table-cell;
   vertical-align: top;
-  background: #E6326E;
+  background: #24A6A4;
   color: #FFFFFF;
 }
 .skill-detail {
@@ -423,7 +430,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
   cursor: pointer;
 }
 .skill-delete a:hover {
-  color: #E6326E !important;
+  color: #158DB4 !important;
 }
 .padding-desc {
   padding-bottom: 5px;

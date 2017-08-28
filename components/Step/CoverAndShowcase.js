@@ -30,7 +30,7 @@ class CoverAndShowcase extends Component {
     const { _content } = this.props
     return (
       <div>
-        <div className="title txt-mt-pink">
+        <div className="title txt-mt-green">
           { _content.cover_title }
         </div>
         <div className="description txt-mt-blue-midnight">
@@ -126,7 +126,7 @@ class CoverAndShowcase extends Component {
             this.state.overlay && (
               <Overlay>
                 <div className="title-overlay">
-                  <span className="header txt-mt-pink">
+                  <span className="header txt-mt-green">
                     { _content.confirm_delete }
                   </span>
                   <span onClick={this.close.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
@@ -152,7 +152,7 @@ class CoverAndShowcase extends Component {
             cursor: pointer;
           }
           .delete-showcase:hover {
-            color: #E6326E !important;
+            color: #24A6A4 !important;
           }
           .btn-confirm {
             margin-right: 15px;
@@ -163,7 +163,7 @@ class CoverAndShowcase extends Component {
           }
           .title-overlay {
             padding-bottom: 10px;
-            border-bottom: 1px solid #E6326E;
+            border-bottom: 1px solid #24A6A4;
           }
           .header {
             font-size: 22px;

@@ -74,7 +74,7 @@ class TicketCard extends Component {
           this.state.overlay && (
             <Overlay>
               <div className="title-overlay">
-                <span className="header txt-mt-pink">
+                <span className="header txt-mt-green">
                   {_content.confirm_delete}
                 </span>
                 <span onClick={this.close.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
@@ -121,7 +121,7 @@ class TicketCard extends Component {
                   }
                   .title-overlay {
                     padding-bottom: 10px;
-                    border-bottom: 1px solid #E6326E;
+                    border-bottom: 1px solid #24A6A4;
                   }
                   .header {
                     font-size: 22px;

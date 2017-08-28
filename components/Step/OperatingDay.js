@@ -8,7 +8,7 @@ class OperatingDay extends Component {
     const { _content } = this.props
     return (
       <div>
-        <div className="title txt-mt-pink">
+        <div className="title txt-mt-green">
          {_content.day_title}
         </div>
         {
