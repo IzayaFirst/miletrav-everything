@@ -85,7 +85,7 @@ class Home extends Component {
             <div className="row">
             {
               this.props.category.map(val => (
-                <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
+                <div className="col-xs-12 col-sm-3 col-md-3" key={val.id}>
                   <a href={`/experience/category/${val.id}`}>
                     <div className="category-card">
                       <img width="40" height="40" src={getIcon(val.id)} />
@@ -109,7 +109,7 @@ class Home extends Component {
             <div className="row">
               {
                 this.state.lastest.map(val => (
-                  <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
+                  <div className="col-xs-12 col-sm-3 col-md-4" key={val.id}>
                     <a target="_blank" href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
@@ -169,7 +169,7 @@ class Home extends Component {
             <div className="row">
               {
                 this.state.lastestSport.map(val => (
-                  <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
+                  <div className="col-xs-12 col-sm-3 col-md-4" key={val.id}>
                     <a target="_blank" href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
@@ -199,7 +199,7 @@ class Home extends Component {
             <div className="row">
               {
                 this.state.lastestHistorical.map(val => (
-                  <div className="col-xs-12 col-sm-4 col-md-4" key={val.id}>
+                  <div className="col-xs-12 col-sm-3 col-md-4" key={val.id}>
                     <a target="_blank" href={`/experience/${val.uuid}`}>
                       <div className="activity-card">
                         <div className="card-img-container">
@@ -324,12 +324,19 @@ class Home extends Component {
               margin: 0 auto; 
             }
           }
-          @media only screen and (min-width: 768px) {
+          @media only screen and (max-width: 992px) {
             .section-activity {
               width: 65%;
               margin: 0 auto;
             }
           }
+          @media only screen and (min-width: 992px) {
+            .section-activity {
+              width: 85%;
+              margin: 0 auto;
+            }
+          }
+          
           
           .header-category {
             padding: 8px 0;
