@@ -31,7 +31,7 @@ export default class Header extends Component {
                 <link rel="stylesheet" href="/asset/css/bootstrap.css" />
                 <link rel="stylesheet" href="/asset/css/miletrav.css" />
                 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-                <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kanit|Indie+Flower|" />
+                <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kanit|Open+Sans|" />
                 {
                     this.props.css.map((css, index) => {
                         return (

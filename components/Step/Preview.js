@@ -60,7 +60,7 @@ class Preview extends Component {
            { _content.preview_title }
         </div>
         <div className="col-xs-12 col-sm-12 col-md-8">
-          <div className="">
+          <div className="card">
             <div>
               {
                 this.props.exp.status && (
@@ -198,18 +198,18 @@ class Preview extends Component {
             margin-bottom: 20px;
           }
           .card {
-            background: #E8E8E8;
+            background: #fff;
             color: #676767;
             padding: 15px 20px;
             -webkit-order-radius: 4px;
             -moz-order-radius: 4px;
-            order-radius: 4px;
+            border-radius: 4px;
             -moz-border-radius: 4px;
             -webkit-border-radius: 4px;
             -ms-border-radius: 4px;
             -o-border-radius: 4px;
             margin-bottom: 10px;
-       
+            border: #CCCCCC 1px solid;
           }
           .row {
             margin-right: 0px;

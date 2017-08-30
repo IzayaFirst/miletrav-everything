@@ -42,7 +42,7 @@ class bookingdetail extends Component {
         />
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="header">
-          <div className="header-page txt-mt-pink">
+          <div className="header-page txt-mt-white">
             <i className="fa fa-clock-o" style={{ marginRight: 10 }} />History
           </div>
         </div>
@@ -103,7 +103,8 @@ class bookingdetail extends Component {
             .booking-card {
               margin: 0 25px;
               padding: 20px;
-              background-color: #fff; 
+              background-color: #fff;
+              border: 1px solid #CCCCCC; 
             }
             @media only screen and (min-width: 768px) {
               .booking-card {
@@ -121,7 +122,7 @@ class bookingdetail extends Component {
               font-weight: 600;
             }
             .header {
-              background: #231946;
+              background: #1B3C46;
               padding: 25px 50px;
             }
             .row {

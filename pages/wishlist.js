@@ -39,7 +39,7 @@ class wishlist extends Component {
         <Header css={['/asset/css/datepicker.css', '/asset/css/credit-card.css']} omise={true} pdf={true} />
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="header">
-          <div className="header-page txt-mt-pink">
+          <div className="header-page txt-mt-white">
             <i className="fa fa-address-card" style={{ marginRight: 10 }} />Wishlist
           </div>
         </div>
@@ -97,7 +97,7 @@ class wishlist extends Component {
               font-weight: 600;
             }
             .header {
-              background: #231946;
+              background: #1B3C46;
               padding: 25px 50px;
             }
             .content {

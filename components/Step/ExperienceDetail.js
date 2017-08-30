@@ -195,6 +195,20 @@ class ExperienceDetail extends Component {
         </div>
         <style>
         {`
+         .card {
+            background: #fff;
+            color: #676767;
+            padding: 15px 20px;
+            -webkit-order-radius: 4px;
+            -moz-order-radius: 4px;
+            border-radius: 4px;
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            -ms-border-radius: 4px;
+            -o-border-radius: 4px;
+            margin-bottom: 10px;
+            border: #CCCCCC 1px solid;
+          }
           .error-status {
             color: #e62117;
             font-size: 12px;

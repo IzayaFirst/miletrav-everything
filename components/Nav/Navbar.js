@@ -159,7 +159,7 @@ class Navbar extends Component {
           this.state.overlay && (
             <Overlay>
               <div className="title-overlay">
-                <span className="header txt-mt-pink">
+                <span className="header txt-mt-green">
                   {this.state._content.modal_title}
                   </span>
                 <span onClick={this.toggleOff.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
@@ -167,7 +167,7 @@ class Navbar extends Component {
               <div className="body">
                 <form onSubmit={this.login.bind(this)}>
                   <div className="form-group">
-                    <label className="form-title txt-mt-pink">{this.state._content.username}</label>
+                    <label className="form-title txt-mt-green">{this.state._content.username}</label>
                     <input type="text" onChange={this.setUsername.bind(this)} placeholder={this.state._content.username_placeholder} className="form-control form-miletrav" />
                     {
                       !this.state.validate_username && (
@@ -178,7 +178,7 @@ class Navbar extends Component {
                     }
                   </div>
                   <div className="form-group">
-                    <label className="form-title txt-mt-pink">{this.state._content.password}</label>
+                    <label className="form-title txt-mt-green">{this.state._content.password}</label>
                     <input type="password" placeholder={this.state._content.password_placeholder} onChange={this.setPassword.bind(this)} className="form-control form-miletrav" />
                     {
                       !this.state.validate_password && (
@@ -226,7 +226,7 @@ class Navbar extends Component {
                     cursor: pointer;
                   }
                   .delete-showcase:hover {
-                    color: #E6326E !important;
+                    color: #24A6A4 !important;
                   }
                   .btn-confirm {
                     width: 100%;
@@ -236,7 +236,7 @@ class Navbar extends Component {
                   }
                   .title-overlay {
                     padding-bottom: 10px;
-                    border-bottom: 1px solid #E6326E;
+                    border-bottom: 1px solid #24A6A4;
                   }
                   .header {
                     font-size: 22px;
@@ -249,7 +249,7 @@ class Navbar extends Component {
                     cursor: pointer
                   }
                   .confirm:hover {
-                    color: #E6326E;
+                    color: #24A6A4;
                   }
                 `}
               </style>

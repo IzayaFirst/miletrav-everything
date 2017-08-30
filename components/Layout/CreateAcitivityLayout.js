@@ -159,6 +159,7 @@ const CardActivity = ({title, city, url, category, status}) => (
     <style jsx>
         {`
         .status {
+          font-weight: 600;
           color: white;
           padding: 5px;
           border-radius: 4px;

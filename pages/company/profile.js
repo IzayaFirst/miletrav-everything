@@ -352,6 +352,7 @@ class profile extends Component {
               margin: 0 auto;
               background-color: #fff;
               border-radius: 5px;
+              border: 1px #CCCCCC solid;
               padding: 15px;
             }   
             @media only screen and (max-width: 768px) {

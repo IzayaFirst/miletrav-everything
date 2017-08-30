@@ -136,10 +136,10 @@ class view extends Component {
                 {this.state.activity.activity_name}
               </div>
               <div className="host-by">
-                Host By <a href={`/host/detail/${this.state.host.id}`}>{this.state.host.organize_name}</a>
+                Host By <a style={{ fontWeight: 600 }}className="txt-mt-green" href={`/host/detail/${this.state.host.id}`}>{this.state.host.organize_name}</a>
                 {
                   this.props.token && (
-                    <a onClick={this.setBookmark.bind(this)} className="rating-section"><i className={this.state.bookmark ? 'fa fa-star txt-mt-pink' : 'fa fa-star'} style={{ margin: 5 }} />{this.state.bookmark ? 'Remove from wishlist' : 'Add to wishlist'}</a>
+                    <a onClick={this.setBookmark.bind(this)} className="rating-section"><i className={this.state.bookmark ? 'fa fa-star txt-mt-green' : 'fa fa-star'} style={{ margin: 5 }} />{this.state.bookmark ? 'Remove from wishlist' : 'Add to wishlist'}</a>
                   )
                 }
 

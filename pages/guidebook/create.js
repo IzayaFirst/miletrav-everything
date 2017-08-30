@@ -184,7 +184,7 @@ class create extends Component {
         <Header />
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="header">
-          <div className="header-page txt-mt-pink">
+          <div className="header-page txt-mt-white">
             <div className="title-section">
               {this.props.guidebook.title}
               {
@@ -199,7 +199,7 @@ class create extends Component {
               }
               <a onClick={this.setEditTitle.bind(this)} className="btn btn-primary right-btn" style={{ marginRight: 15 }} ><i className="fa fa-edit" style={{ paddingRight: 5 }} />Edit</a>
             </div>
-            <div className="detail-section txt-mt-pink">
+            <div className="detail-section txt-mt-white">
               Category: <span className="txt-mt-white">{this.props.guidebook.category ? this.props.guidebook.category : ' -'}</span>
             </div>
             <div className="detail-section" style={{ marginTop: 5 }}>
@@ -210,7 +210,7 @@ class create extends Component {
               ><i className="fa fa-upload" style={{ marginRight: 5 }} /> Upload</Dropzone> :
               {
                 !this.state.upload_loading && this.state.cover_photo != '' && (
-                  <a target="_blank" style={{ marginLeft: 10 }} className="txt-mt-pink" href={this.state.cover_photo}>See your cover</a>
+                  <a target="_blank" style={{ marginLeft: 10 }} className="txt-mt-green" href={this.state.cover_photo}>See your cover</a>
                 )
               }
               {
@@ -268,7 +268,7 @@ class create extends Component {
           this.state.delete_overlay && (
             <Overlay>
               <div className="title-overlay">
-                <span className="header-overlay  txt-mt-pink">
+                <span className="header-overlay  txt-mt-green">
                   Delete this place ?
                 </span>
                 <span onClick={this.closeDelete.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
@@ -290,14 +290,14 @@ class create extends Component {
           this.state.editTitle && (
             <Overlay>
               <div className="title-overlay">
-                <span className="header-overlay  txt-mt-pink">
+                <span className="header-overlay  txt-mt-green">
                   Update your guidebook
                   </span>
                 <span onClick={this.setEditTitle.bind(this)} className="confirm"><i className="fa fa-times-circle-o" aria-hidden="true" /></span>
               </div>
               <div className="body">
                 <div className="form-group">
-                  <label className="form-title txt-mt-pink">Title</label>
+                  <label className="form-title txt-mt-green">Title</label>
                   <input type="text" value={this.state.title} onChange={this.setTitle.bind(this)} placeholder="Fill in yout guidebook title" className="form-control form-miletrav" />
                   {
                     !this.state.validate_title && (
@@ -308,7 +308,7 @@ class create extends Component {
                   }
                 </div>
                 <div className="form-group">
-                  <label className="form-title txt-mt-pink">Category</label>
+                  <label className="form-title txt-mt-green">Category</label>
                   <select value={this.state.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
                     {
                       this.state.categories.map(val => (
@@ -413,7 +413,7 @@ class create extends Component {
           }
           .title-overlay {
             padding-bottom: 10px;
-            border-bottom: 1px solid #E6326E;
+            border-bottom: 1px solid #24A6A4;
           }
           .header-overlay {
             font-size: 22px;
@@ -426,7 +426,7 @@ class create extends Component {
             cursor: pointer
           }              
           .confirm:hover {
-          color: #E6326E;
+          color: #24A6A4;
           }
 
           .form-inline {
@@ -461,7 +461,7 @@ class create extends Component {
             font-weight: 600;
           }
           .header {
-            background: #231946;
+            background: #1B3C46;
             padding: 25px 50px;
           }
           `}

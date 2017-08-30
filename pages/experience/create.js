@@ -509,10 +509,11 @@ class create extends Component {
               padding-left: 30px;
             }
             .toolbar-right a:hover {
-              color: #E6326E !important;
+              color: #24A6A4 !important;
               text-decoration: none;
             }
             .toolbar-right a {
+              font-weight: 600;
               color: black !important;
             }
             .toolbar-right {
@@ -603,7 +604,7 @@ class create extends Component {
               padding-bottom: 80px;
             }
             body {
-              background-color: #F5F5FF !important;
+              background-color: #F4F8FB !important;
             }
           `}
         </style>
