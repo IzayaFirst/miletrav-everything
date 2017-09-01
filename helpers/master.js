@@ -1,60 +1,60 @@
 const day = [
   {
     day: 0,
-    dayName: 'Monday',
+    dayName: 'Sunday',
   },
   {
     day: 1,
-    dayName: 'Tuesday',
+    dayName: 'Monday',
   },
   {
     day: 2,
-    dayName: 'Wednesday',
+    dayName: 'Tuesday',
   },
   {
     day: 3,
-    dayName: 'Thursday',
+    dayName: 'Wednesday',
   },
   {
     day: 4,
-    dayName: 'Friday',
+    dayName: 'Thursday',
   },
   {
     day: 5,
-    dayName: 'Saturday',
+    dayName: 'Friday',
   },
   {
     day: 6,
-    dayName: 'Sunday',
+    dayName: 'Saturday',
   },
 ]
 export const bindDay = [
   {
-    day: 0,
+    day: 1,
     momemntDay: 1,
   },
   {
-    day: 1,
+    day: 2,
     momemntDay: 2,
   },
   {
-    day: 2,
+    day: 3,
     momemntDay: 3,
   },
   {
-    day: 3,
+    day: 4,
     momemntDay: 4,
   },
   {
-    day: 4,
+    day: 5,
     momemntDay: 5,
   },
   {
-    day: 5,
+    day: 6,
     momemntDay: 6,
   },
   {
-    day: 6,
+    day: 0,
     momemntDay: 0,
   },
 ]

@@ -36,11 +36,15 @@
   "ticket_desc_pl": "Descrive your ticket what they can do",
   "price": "Price / Person",
   "price_detail": "Let price 0 if your experience is free",
+  "price_err": "Price cannot below than 0",
   "ticket_available": "Ticket available since",
   "add_ticket": "Add Ticket",
-  "day_title": "Describe your operation time",
+  "day_title": "Ticket can be used on",
   "to": "to",
   "exp_dup": "Your Experience title is duplicated",
   "ticket_start": "Start date",
-  "ticket_end": "End date"
+  "ticket_end": "End date",
+  "amount": "amount",
+  "amount_err": "Please limit your ticket",
+  "amount_limit": "Limit your ticket"
 }

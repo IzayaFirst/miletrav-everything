@@ -56,8 +56,16 @@ class TicketCard extends Component {
           <div className="skill-exp">
             <div className="padding-desc" dangerouslySetInnerHTML={{ __html: this.props.desc }} />
             <div className="padding-desc">{this.props.price === 0 ? 'Free' : `${this.props.price} THB / person`}</div>
+            {
+              this.props.begin && this.props.end && (
+                <div className="ticket-available">
+                  <i className="fa fa-calendar-check-o" />{this.props.begin ? moment(this.props.begin).format('LL') : ''} - {this.props.end ? moment(this.props.end).format('LL') : ''}
+                </div>
+              )
+            }
+
             <div className="ticket-available">
-              <i className="fa fa-calendar-check-o" />{moment(this.props.begin).format('LL')} - {moment(this.props.end).format('LL')}
+              <i className="fa fa-ticket" />{this.props.amount ? this.props.amount : 'Unlimited'} Tickets
             </div>
             {
               this.props.buy && (

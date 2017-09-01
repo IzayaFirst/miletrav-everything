@@ -104,6 +104,7 @@ class create extends Component {
     ticket_name: '',
     ticket_desc: '',
     price: 0,
+    amount: 0,
     start: moment(),
     end: moment(),
     operation: [],
@@ -234,6 +235,11 @@ class create extends Component {
       ticket_desc: e,
     })
   }
+  setAmount(e) {
+    this.setState({
+      amount: e.target.value,
+    })
+  }
   setPrice(e) {
     this.setState({
       price: e.target.value,
@@ -249,13 +255,13 @@ class create extends Component {
     start = start || this.state.start
     end = end || this.state.end
     if (start.isAfter(end)) {
-      let temp = start
-      start = end
-      end = temp
+      /*let temp = start
+      start = end*/
+      end = start
     }
     this.setState({ start, end })
   }
-  async addTicket() {
+  async addTicket(isImmersive) {
     const add = await Api.post({
       url: '/tickets',
       data: {
@@ -263,8 +269,9 @@ class create extends Component {
         desc: this.state.ticket_desc.trim(),
         price: this.state.price,
         activityId: this.state.id,
-        begin: this.state.start.format("YYYY-MM-DD"),
-        end: this.state.end.format("YYYY-MM-DD"),
+        begin: isImmersive ? this.state.start.format("YYYY-MM-DD") : null,
+        end: isImmersive ? this.state.end.format("YYYY-MM-DD")  : null,
+        amount: this.state.amount == 0 ? null : this.state.amount,
       },
       authType: 'Bearer',
       authToken: this.props.token.token,
@@ -279,6 +286,7 @@ class create extends Component {
       ticket_name: '',
       ticket_desc: '',
       price: 0,
+      amount: 0,
       start: moment(),
       end: moment(),
       tickets: tickets.data,
@@ -393,11 +401,13 @@ class create extends Component {
                   setPrice={this.setPrice.bind(this)}
                   tickets={this.state.tickets}
                   addTicket={this.addTicket.bind(this)}
+                  amount={this.state.amount}
+                  setAmount={this.setAmount.bind(this)}
                   deleteTicket={this.deleteTicket.bind(this)}
                 />
               )
             }
-            {
+            {/*
               this.state.step === 5 && (
                 <OperatingDay
                   _content={_content}
@@ -405,7 +415,7 @@ class create extends Component {
                   token={this.props.token}
                 />
               )
-            }
+            */}
           </div>
           <div className="nav-bottom mt-primary mobile-only">
             <div className="box-menu">
@@ -429,11 +439,16 @@ class create extends Component {
                   <i className="fa fa-ticket fa-lg"></i>
                 </a>
               </div>
-              <div className="box">
+              {
+                /*
+                <div className="box">
                 <a onClick={this.setStep.bind(this, 5)} className={this.state.step === 5 ? "active" : "txt-mt-green"}>
                   <i className="fa fa-calendar fa-lg"></i>
                 </a>
               </div>
+                */
+              }
+              
             </div>
           </div>
           <div className="nav-side-menu mt-primary is-not-mobile">
@@ -459,11 +474,15 @@ class create extends Component {
                     <i className="fa fa-ticket fa-lg"></i> {_content.ticket}
                   </a>
                 </li>
-                <li onClick={this.setStep.bind(this, 5)} >
-                  <a className={this.state.step === 5 ? "active" : "txt-mt-green"}>
-                    <i className="fa fa-calendar fa-lg"></i> {_content.day}
-                  </a>
-                </li>
+                {
+                  /*
+                    <li onClick={this.setStep.bind(this, 5)} >
+                      <a className={this.state.step === 5 ? "active" : "txt-mt-green"}>
+                        <i className="fa fa-calendar fa-lg"></i> {_content.day}
+                      </a>
+                    </li>
+                  */
+                }
               </div>
             </div>
           </div>
