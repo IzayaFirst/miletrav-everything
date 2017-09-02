@@ -1,11 +1,28 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import Overlay from './Overlay'
+import * as Api from '../api'
+import { getDay } from '../helpers/master'
 
 class TicketCard extends Component {
+
+  async componentDidMount() {
+    const operation = await Api.get({
+      url: '/operation_days',
+      params: {
+        ticketId: this.props.id,
+      }
+    })
+    console.log(operation.data)
+    this.setState({
+      operation: operation.data,
+    })
+  }
+
   state = {
     overlay: false,
     err_delete: false,
+    operation: [],
   }
   setOverlay() {
     this.setState({
@@ -67,6 +84,14 @@ class TicketCard extends Component {
             <div className="ticket-available">
               <i className="fa fa-ticket" />{this.props.amount ? this.props.amount : 'Unlimited'} Tickets
             </div>
+            <div className="day-available">
+              Available Day
+            </div>
+            {this.state.operation.sort((a,b) => a.day - b.day).map(val => (
+              <div key={val.id}>
+                <span className="day-available">{getDay(val.day)} :</span> {val.start_time} - {val.end_time}
+              </div>
+            ))}
             {
               this.props.buy && (
                 <div className="">
@@ -77,6 +102,13 @@ class TicketCard extends Component {
               )
             }
           </div>
+            <style jsx>{`
+          
+          .day-available {
+            font-weight: 600;
+          }
+        `}
+      </style>
         </div>
         {
           this.state.overlay && (
@@ -144,6 +176,7 @@ class TicketCard extends Component {
                   .confirm:hover {
                     color: #E6326E;
                   }
+             
                 `}
               </style>
             </Overlay>

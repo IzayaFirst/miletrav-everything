@@ -128,12 +128,8 @@ class Preview extends Component {
               {
                 this.props.tickets.map((val, index) => (
                   <TicketCard
+                    {...val}
                     no={index}
-                    title={val.title}
-                    desc={val.desc}
-                    price={val.price}
-                    begin={val.begin}
-                    end={val.end}
                     isEdit={true}
                   />
                 ))

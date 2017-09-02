@@ -210,7 +210,7 @@ class create extends Component {
       const updateDetail = await Api.patch({
         url: '/activities/' + this.state.id,
         data: {
-          activity_name: activity_name.trim().replace(/\s+/g,' '),
+          activity_name: activity_name.trim().replace(/\s+/g, ' '),
           activity_desc,
           category,
           city: city.toLowerCase(),
@@ -261,7 +261,8 @@ class create extends Component {
     }
     this.setState({ start, end })
   }
-  async addTicket(isImmersive) {
+  async addTicket(isImmersive, operation_day) {
+    console.log(operation_day)
     const add = await Api.post({
       url: '/tickets',
       data: {
@@ -270,12 +271,28 @@ class create extends Component {
         price: this.state.price,
         activityId: this.state.id,
         begin: isImmersive ? this.state.start.format("YYYY-MM-DD") : null,
-        end: isImmersive ? this.state.end.format("YYYY-MM-DD")  : null,
+        end: isImmersive ? this.state.end.format("YYYY-MM-DD") : null,
         amount: this.state.amount == 0 ? null : this.state.amount,
       },
       authType: 'Bearer',
       authToken: this.props.token.token,
     })
+    console.log('add  ',add.axiosData.id)
+    if (operation_day.length > 0) {
+      operation_day.map(async (val) => {
+        const op = await Api.post({
+          url: '/operation_days',
+          data: {
+            ticketId: add.axiosData.id,
+            ...val,
+          },
+          authType: 'Bearer',
+          authToken: this.props.token.token,
+        })
+        console.log('op   ', op)
+      })
+
+    }
     const tickets = await Api.get({
       url: '/tickets',
       params: {
@@ -319,7 +336,7 @@ class create extends Component {
       })
       return true
     } else {
-       return false
+      return false
     }
 
   }
@@ -448,7 +465,7 @@ class create extends Component {
               </div>
                 */
               }
-              
+
             </div>
           </div>
           <div className="nav-side-menu mt-primary is-not-mobile">

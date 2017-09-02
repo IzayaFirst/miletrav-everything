@@ -48,9 +48,12 @@ class Ticket extends Component {
     if (!validate_name || !validate_price || !validate_amount) {
       return
     }
-    const { isImmersive } = this.state
-    await this.props.addTicket(isImmersive)
-
+    const { isImmersive, myDay } = this.state
+    await this.props.addTicket(isImmersive, myDay)
+    this.setState({
+      operationDay: [],
+      myDay: [],
+    })
   }
   setImmersive() {
     const isImmersive = !this.state.isImmersive
@@ -324,7 +327,7 @@ class Ticket extends Component {
         </div>
         {
           this.props.tickets && this.props.tickets.map((ticket, index) => (
-            <div className="col-xs-12 col-sm-8" key={ticket.id}>
+            <div className="col-xs-12 col-sm-9" key={ticket.id}>
               <TicketCard _content={_content} no={index} {...ticket} deleteTicket={this.props.deleteTicket.bind(this)} />
             </div>
           )
