@@ -77,8 +77,8 @@ class Navbar extends Component {
       const auth = await Api.post({
         url: '/auth/local',
         data: {
-          username,
-          password,
+          username: username.trim(),
+          password: password.trim(),
         }
       })
       cookie.savingCookies({ data: auth.axiosData })
@@ -90,6 +90,7 @@ class Navbar extends Component {
           errorMsg: 'Username has already been used'
         })
       } else if (err && err.request.status === 500) {
+        console.log(err)
         this.setState({
           errorMsg: 'Username or password invalid'
         })

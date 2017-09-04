@@ -8,7 +8,7 @@ import Navbar from '../components/Nav/Navbar'
 import * as Api from '../api'
 import CreditCardForm from '../components/CreditCardForm'
 import Footer from '../components/Footer'
-import { bindDay } from '../helpers/master'
+import { bindDay, getDay } from '../helpers/master'
 
 class booking extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -28,6 +28,7 @@ class booking extends Component {
     transaction: '',
     activity: {},
     booking_err: false,
+    error: '',
     operation: [],
   }
   async componentDidMount() {
@@ -41,7 +42,7 @@ class booking extends Component {
       const operation = await Api.get({
         url: '/operation_days',
         params: {
-          activityId: ticket.axiosData.activityId,
+          ticketId: ticket.axiosData.id,
         }
       })
       this.setState({
@@ -66,16 +67,25 @@ class booking extends Component {
   async setStep(step) {
     this.setState({
       booking_err: false,
+      error: '',
     })
+    const { date } = this.state
+    const number_of_day = date.day()
+    const open_day = this.state.operation.map(val => val.day)
+    console.log(this.state.ticket.amount)
     if (step === 2) {
       if (!this.state.date) {
         this.setState({
           booking_err: true,
         })
         return
+      } else if (open_day.indexOf(number_of_day) < 0) {
+        this.setState({
+          booking_err: true,
+        })
+        return
       } else {
         const isPast = moment(this.state.ticket.begin).isAfter(this.state.date) ? false : true
-        console.log(isPast)
         if (!isPast) {
           this.setState({
             booking_err: true,
@@ -83,26 +93,49 @@ class booking extends Component {
           return
         }
       }
-    }
-    if (this.state.ticket.price === 0) {
-      const transaction = await Api.post({
-        url: '/bookings',
-        data: {
-          transaction: btoa(new Date().getTime()),
-          date: this.state.date,
-          amount: this.state.amount,
-          userId: this.state.token.data.id,
-          ticketId: this.state.ticket.id,
-        },
-        authToken: this.state.token.token,
-        authType: 'Bearer'
-      })
-      console.log(transaction)
-      this.setState({
-        transaction: transaction.axiosData.transaction,
-        step: 3,
-      })
-      return
+      if (this.state.ticket.price === 0 && this.state.ticket.amount) {
+        const transaction = await Api.post({
+          url: '/chargesAmountWithoutPricing',
+          data: {
+            date: this.state.date,
+            amount: parseInt(this.state.amount),
+            userId: this.state.token.data.id,
+            ticketId: this.state.ticket.id,
+          },
+          authToken: this.state.token.token,
+          authType: 'Bearer'
+        })
+        if (transaction.axiosData.miletrav_transaction) {
+          this.setState({
+            transaction: transaction.axiosData.transaction,
+            step: 3,
+          })
+        } else {
+          this.setState({
+            error: 'Ticket sold out !!',
+          })
+        }
+        return
+      }
+      if (this.state.ticket.price === 0 && (this.state.ticket.amount === 0 || !this.state.ticket.amount)) {
+        const transaction = await Api.post({
+          url: '/bookings',
+          data: {
+            transaction: btoa(new Date().getTime()),
+            date: this.state.date,
+            amount: parseInt(this.state.amount),
+            userId: this.state.token.data.id,
+            ticketId: this.state.ticket.id,
+          },
+          authToken: this.state.token.token,
+          authType: 'Bearer'
+        })
+        this.setState({
+          transaction: transaction.axiosData.transaction,
+          step: 3,
+        })
+        return
+      }
     }
     this.setState({
       step,
@@ -166,23 +199,40 @@ class booking extends Component {
                 <div className="booking-card">
                   <div className="booking-img">
                     <img width="50" height="50" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAFDElEQVR4Xu2a728URRjHv8/V97TxvRajaEwjbQIRlModPwqC2qYQbBSlxdQgmiIiP9Sa7iVUiwm09QUQMOkZiDRaoScK5JD2yCGiQSlGTKNGiv9Ay3t6j9kbRnb2du/2rtvs5m7vzaXdmWe+z2e+88zO5Ahl/qEyzx8BgMABZU4gWAJlboCgCAZLIFgCZU4gWAJlboDsXeCBN7kXjCYiVDOQaVAS34wJBmL/HqSocdKVJfDQFu4jwrZSdgUzov8cJk3mqACY9zpPhkKojKwBqu4HmAGi0vi+PQlc+DaTz8T4YZprCaCmnfWc0fZyqfhezSP2hVjON47q0yo+igNqX2PWH3W8KJ70nyjOAfn6O33udvGR+Vz7zAbAws2cscCHGwSdvV8VZ/98/Z0+d7sWyXyuDtgAWLxJOOCTdW4P7Y94O4eEoy/HbAA886pwwJHm4mbe7wVzy7DIK3XMBsCyjZka6Pln5LgQOFt6ZPysIrjqJeEAr2cycUIAmC09Mn4WgLUtwgHfDd6ziJd2cFuPVTxlG2zcIADEv/QHALf1WMVTAKxfLwAMDfkDgNt6rOIpAFqaBYDBk/4A4LYeq3gKgFeamPU3wGOn/AHAbT1W8RQAbS8IBwx84w8AbuuxiqcAaH9OvAkeOZ0bgGxX7JaZL36+nee9SzwWAuYb7ykAjH20hOpy9bXKTwGwdS2zfgA5eCY3ANmu2NuSfPHzAdiftH5feTfiTLdxfAVAx2rhgHQawxWE/r5zlMwnxovnA+dFrTKfFttWWAN4azWHKwjbWNx0of+szavwjlXCATI4A9qBhHqF5EXC5jHjZ8W9hZlB07PZAN5Zya0UwoAxr/0JGwD6QHvCXJ2+D60hQldmEEak53vVCbtXMs/krrDnvLMiK8cxt0+dtj6z1D+vxt2zgsMgjN7NI4o7iPUkacII1PZa/P1lrGUgpBHvHqUmY6fO5TM7M3SPOAMgxzG3//0kjxFhvlETM67XNFOt8X8fLOdhMBoJiO4duXcP6AiAFuZqEG6CMaUlqcoL62sR4bSuUWfAzBq1ME8SoZIZczXTzMu2tg74WF8KjJsM3O68SJVeAOheKtZ658XiAHQv5SkG5twhVGlJmrLKwRbAviWsgdBFQHxXSl0C++qLqwG7UoUlIscptJ9MtKeeh0NAo34VvvuSwyXQu4irEcKmNEHT6UxPI7LziloEDzxtXYXzFcYdPxQGQI5TaD8JoHcRh9MVGM3oYmihND7ffiVHEfx0cdb+ur3jR+rzwv65xpQ6Oy4LoOa/jX37n2KNGF3GPVP2y7oQOfTk/zMbxzT63rjqzxchqXPrTwKA+W8zvEMLMk54O7McAMh+WQCOLhQOaP85t1VlO6f39vniFeows85CdRv1KEUwtkDs722/5AYg2zm9O8wXr1AAZp2F6jbqUQAcrxMO2PhrYcWq0ASctndbj1U8BcBgrTgLtFz3BwC39VjFUwB8/YR4x173mz8AuK3HKp4CIF4jHNB4wx8A3NZjFU8BcOZx4YA1f/gDgNt6rOIpABKP8hQIczCNuoa/aMxpsZqtdonHxIQ0jM98QhKPcC0qcA3ArYZxqrY8DF2Yx1oId+8BSvM3EvomF438afMTGZ1K6mHWwGgF4cHZmllP4jJugRCr/1s9FNmeBj0R6cGgAQAPoPtqyMABvpoOD8QEDvAAuq+GDBzgq+nwQEzgAA+g+2rIwAG+mg4PxPwH9nu5bjqW0yAAAAAASUVORK5CYII=" alt="" />
-                    <div className="title txt-mt-blue-midnight">
+                    <div className="title txt-mt-green">
                       Book a ticket
-                </div>
+                    </div>
                   </div>
-                  <div className="ticket-desc txt-mt-pink">
+                  <div className="ticket-desc txt-mt-green">
                     Ticket : <span className="desc txt-mt-blue-midnight">{this.state.ticket.title}</span>
                   </div>
-                  <div className="ticket-desc txt-mt-pink">
-                    Price : <span className="desc txt-mt-blue-midnight">{this.state.ticket.price === 0 ? 'Free (0)' : this.state.ticket.price} Baht</span>
+                  <div className="ticket-desc txt-mt-green">
+                    Price : <span className="desc txt-mt-blue-midnight">{this.state.ticket.price === 0 ? 'Free (0)' : this.state.ticket.price} Baht / Ticket</span>
                   </div>
-                  <div className="ticket-desc txt-mt-pink">
+                  <div className="ticket-desc txt-mt-green">
                     Description <span className="desc txt-mt-blue-midnight" dangerouslySetInnerHTML={{ __html: this.state.ticket.desc }} />
                   </div>
+                  {
+                    this.state.ticket.begin && this.state.ticket.end && (
+                      <div className="ticket-desc txt-mt-green" style={{ margin: '15px 0' }}>
+                        Ticket can be used since <span className="desc txt-mt-blue-midnight">{moment(this.state.ticket.begin).format('LL')} to {moment(this.state.ticket.end).format('LL')}</span>
+                      </div>
+                    )
+                  }
+                  <div className="ticket-desc txt-mt-green">
+                    Available on
+                  </div>
+                  {
+                    this.state.operation.sort((a, b) => a.day - b.day).map((val => (
+                      <div className="ticket-desc txt-mt-green" key={val.id}>
+                        {getDay(val.day)} :  <span className="desc txt-mt-blue-midnight">{val.start_time} - {val.end_time}</span>
+                      </div>
+                    )))
+                  }
                   <div className="form-group" style={{ margin: '20px 0' }}>
                     <div className="row">
-                      <div className="col-xs-12 col-sm-4">
-                        <label className="txt-mt-pink">Booking Date</label>
+                      <div className="col-xs-12 col-sm-12 col-md-4">
+                        <label className="txt-mt-green">Booking Date</label>
                         <DatePicker
                           dateFormat="DD/MM/YYYY"
                           minDate={moment(this.state.ticket.begin).isAfter(moment()) ? this.state.ticket.begin : moment()}
@@ -193,8 +243,8 @@ class booking extends Component {
                           className="form-control form-miletrav"
                         />
                       </div>
-                      <div className="col-xs-12 col-sm-3">
-                        <label htmlFor="" className="txt-mt-pink">Amount</label>
+                      <div className="col-xs-12 col-sm-12 col-md-4">
+                        <label htmlFor="" className="txt-mt-green">Amount</label>
                         <select className="form-control form-miletrav" onChange={this.setAmount.bind(this)}>
                           <option value="1">1</option>
                           <option value="2">2</option>
@@ -205,6 +255,13 @@ class booking extends Component {
                         this.state.booking_err && (
                           <div className="err error-status">
                             Your Booking date is not in range of available tickets
+                          </div>
+                        )
+                      }
+                      {
+                        this.state.error != '' && (
+                          <div className="err error-status">
+                            {this.state.error}
                           </div>
                         )
                       }
@@ -416,14 +473,14 @@ class booking extends Component {
             vertical-align: middle;
           }
           .step.step-active {
-            background: #FF3377;
-            border: solid 2px #FF3377;
+            background: #24A6A4;
+            border: solid 2px #24A6A4;
           }
           .step-title.step-active {
-            color: #FF3377;
+            color: #24A6A4;
           }
           .step-line.step-active {
-            border-top: solid 1px #FF3377;
+            border-top: solid 1px #24A6A4;
           }
           .step-container-mobile {
             display: none;
@@ -434,7 +491,7 @@ class booking extends Component {
             color: #8c8c8c;
           }
           .step-mobile-title.step-active {
-            color: #FF3377;
+            color: #24A6A4;
           }
           @media only screen and (max-width: 480px) {
             .step-container {

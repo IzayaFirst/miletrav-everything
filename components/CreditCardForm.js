@@ -92,44 +92,80 @@ class CreditCardForm extends Component {
         const total = parseInt(this.props.amount) * this.props.ticket.price * 100
         const userId = this.props.token.data.id
         const ticketId = this.props.ticket.id
-        const check = await Api.post({
-          url: '/charges',
-          data: {
-            total,
-            userId,
-            ticketId,
-            amount: this.props.amount,
-            card: id,
-          },
-          authToken: this.props.token.token,
-          authType: 'Bearer'
-        })
-        const {
-          miletrav_transaction
-        } = check.axiosData
-        if (miletrav_transaction) {
-          const { id } = check.axiosData
-          this.props.setTransaction(id)
-          const transaction = await Api.post({
-            url: '/bookings',
-            data: {
-              transaction: id,
-              date: this.props.date,
-              amount: this.props.amount,
+        const isLimit = this.props.ticket.amount > 0 && this.props.ticket.amount
+        const date = this.props.date
+        const limit = this.props.ticket.amount
+        if (limit) {
+          console.log(
+              total,
               userId,
               ticketId,
+              date,
+              this.props.amount,
+              id,
+            )
+          const check = await Api.post({
+            url: '/chargesAmountWithPricing',
+            data: {
+              total,
+              userId,
+              ticketId,
+              date,
+              amount: parseInt(this.props.amount),
+              card: id,
             },
             authToken: this.props.token.token,
             authType: 'Bearer'
           })
-          this.props.setStep(3)
-          this.setState({
-            loading: false,
-          })
+          if(check.axiosData.miletrav_transaction) {
+            this.props.setTransaction(check.axiosData.transaction)
+            this.props.setStep(3)
+          } else {
+            this.setState({
+                loading: false,
+                error: 'Ticket is sold out'
+            })
+          }
         } else {
-          this.setState({
-            loading: false,
+          const check = await Api.post({
+            url: '/charges',
+            data: {
+              total,
+              userId,
+              ticketId,
+              date,
+              isLimit,
+              amount: this.props.amount,
+              card: id,
+            },
+            authToken: this.props.token.token,
+            authType: 'Bearer'
           })
+          if (miletrav_transaction) {
+            const { id } = check.axiosData
+            this.props.setTransaction(id)
+            const transaction = await Api.post({
+              url: '/bookings',
+              data: {
+                transaction: id,
+                date: this.props.date,
+                amount: parseInt(this.props.amount),
+                userId,
+                ticketId,
+              },
+              authToken: this.props.token.token,
+              authType: 'Bearer'
+            })
+            this.props.setStep(3)
+            this.setState({
+              loading: false,
+            })
+          } else {
+            this.setState({
+              loading: false,
+            })
+          }
+
         }
 
       } else {
@@ -142,7 +178,7 @@ class CreditCardForm extends Component {
   }
   render() {
     return (
-      <div className={ this.state.loading ? 'pending' : '' }>
+      <div className={this.state.loading ? 'pending' : ''}>
         <Cards
           number={this.state.number}
           name={this.state.name}
