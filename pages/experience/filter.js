@@ -79,29 +79,9 @@ class filter extends Component {
   }
   setTitle(e) {
     const title = e.target.value
-    clearTimeout(id)
     this.setState({
       title,
     })
-    id = setTimeout(async () => {
-      this.setState({
-        querying: true,
-      })
-      const activity = await Api.get({
-        url: `/searching`,
-        params: {
-          category: this.props.category_name,
-          title,
-          status: 1,
-          location: this.state.city
-        }
-      })
-      this.setState({
-        activity: activity.axiosData,
-        querying: false,
-      })
-    }, 2000)
-
   }
   setFilter(e) {
     const filter = parseInt(e.target.value)
@@ -110,6 +90,9 @@ class filter extends Component {
     })
   }
   async searchByTitle() {
+    this.setState({
+      querying: true,
+    })
     const { title } = this.state
     const activity = await Api.get({
       url: `/searching`,
@@ -117,9 +100,13 @@ class filter extends Component {
         category: this.props.category_name,
         title,
         status: 1,
+        location: this.state.city
       }
     })
-    console.log(activity)
+    this.setState({
+      activity: activity.axiosData,
+      querying: false,
+    })
 
   }
   render() {
@@ -138,96 +125,101 @@ class filter extends Component {
             {this.props.category_name}
           </div>
         </div>
-        <div className="filter">
-          <div className="form-group">
-            <label style={{ fontSize: 22, fontWeight: 600 }}>Filter</label>
-            <div className="row">
-              <div className="col-xs-6 col-sm-2">
-                <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
-                  {
-                    this.state.categories.map(val => (
-                      <option key={val.id} value={val.id}>{val.category_name}</option>
-                    ))
-                  }
-                </select>
+        <div className="container">
+          <div className="filter">
+            <div className="form-group">
+              <label style={{ fontSize: 22, fontWeight: 600 }}>Filter</label>
+              <div className="row">
+                <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
+                  <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
+                    {
+                      this.state.categories.map(val => (
+                        <option key={val.id} value={val.id}>{val.category_name}</option>
+                      ))
+                    }
+                  </select>
+                </div>
+                <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
+                  <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-control form-miletrav">
+                    <option value={0}>Experience</option>
+                    <option value={1}>GuideBook</option>
+                  </select>
+                </div>
+                {
+                  this.state.filter === 0 && (
+                    <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                      <Geosuggest
+                        onSuggestSelect={this.setLocation.bind(this)}
+                        placeholder="Select city from suggestion"
+                      />
+                    </div>
+                  )
+                }
+                {
+                  this.state.filter === 0 && (
+                    <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                      <input onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-control form-miletrav" />
+                    </div>
+                  )
+                }
+                <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
+                  <button onClick={this.searchByTitle.bind(this)} className="btn btn-primary" style={{ width: '100%' }}>Search</button>
+                </div>
               </div>
-              {
-                this.state.filter === 0 && (
-                  <div className="col-xs-6 col-sm-2">
-                    <Geosuggest
-                      onSuggestSelect={this.setLocation.bind(this)}
-                      placeholder="Select city from suggestion"
-                    />
-                  </div>
-                )
-              }
-              {
-                this.state.filter === 0 && (
-                  <div className="col-xs-6 col-sm-2">
-                    <input onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-control form-miletrav" />
-                  </div>
-                )
-              }
-              <div className="col-xs-6 col-sm-2">
-                <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-control form-miletrav">
-                  <option value={0}>Experience</option>
-                  <option value={1}>GuideBook</option>
-                </select>
+            </div>
+          </div>
+          <div>
+            <div className="section-activity">
+              <div className="row">
+                {
+                  this.state.querying && (
+                    <div>
+                      <LoadingAnimation />
+                    </div>
+                  )
+                }
+                {
+                  !this.state.querying && this.state.filter === 0 && this.state.activity.map(val => (
+                    <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                      <a target="_blank" href={`/experience/${val.uuid}`}>
+                        <ActivityCard
+                          cover_photo={val.cover_photo}
+                          activity_name={val.activity_name}
+                          city={val.city}
+                          category={val.category}
+                        />
+                      </a>
+                    </div>
+                  ))
+                }
+                {
+                  this.state.filter === 1 && this.state.guidebook.map(val => (
+                    <div className="col-xs-6 col-sm-2 col-md-2" key={val.id}>
+                      <a target="_blank" href={`/experience/${val.uuid}`}>
+                        <GuideBookCard
+                          uuid={val.uuid}
+                          cover_photo={val.cover_photo}
+                          title={val.title}
+                        />
+                      </a>
+                    </div>
+                  ))
+                }
+                {
+                  !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
+                    <EmptyState title="No any experience" />
+                  )
+                }
+                {
+                  !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
+                    <EmptyState title="No any guidebook" />
+                  )
+                }
               </div>
             </div>
           </div>
         </div>
-        <div className="content">
-          <div className="section-activity">
-            <div className="row">
-              {
-                this.state.querying && (
-                  <div>
-                    <LoadingAnimation />
-                  </div>
-                )
-              }
-              {
-                !this.state.querying && this.state.filter === 0 && this.state.activity.map(val => (
-                  <div className="col-xs-12 col-sm-4 col-md-3" key={val.id}>
-                    <a target="_blank" href={`/experience/${val.uuid}`}>
-                      <ActivityCard
-                        cover_photo={val.cover_photo}
-                        activity_name={val.activity_name}
-                        city={val.city}
-                        category={val.category}
-                      />
-                    </a>
-                  </div>
-                ))
-              }
-              {
-                this.state.filter === 1 && this.state.guidebook.map(val => (
-                  <div className="col-xs-6 col-sm-2 col-md-2" key={val.id}>
-                    <a target="_blank" href={`/experience/${val.uuid}`}>
-                      <GuideBookCard
-                        uuid={val.uuid}
-                        cover_photo={val.cover_photo}
-                        title={val.title}
-                      />
-                    </a>
-                  </div>
-                ))
-              }
-              {
-                !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
-                  <EmptyState title="No any experience"/>
-                )
-              }
-              {
-                !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
-                  <EmptyState title="No any guidebook"/>
-                )
-              }
-            </div>
-          </div>
 
-        </div>
         <style jsx>
           {`
             .gradient {

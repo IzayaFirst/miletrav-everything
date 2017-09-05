@@ -45,7 +45,7 @@ class ActivityCard extends Component {
             -webkit-line-clamp: 1;
           }
           .desc {
-            padding: 15px;
+            padding: 15px 0;
           }
           .cover {
             display: block;
@@ -68,7 +68,6 @@ class ActivityCard extends Component {
           .activity-card {
             background: #fff;
             width: 100%;
-            box-shadow: 0 1px 8px rgba(0,0,0,.2);
             border-radius: 4px;
             margin: 10px 0;
           }

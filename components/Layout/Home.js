@@ -101,87 +101,59 @@ class Home extends Component {
             */
           }
         </div>
-        <div className="section-activity">
-          <div className="section-title">
-            {_content.last_activity}
-          </div>
-          <div>
-            <div className="row">
-              {
-                this.state.lastest.map(val => (
-                  <div className="col-xs-12 col-sm-3 col-md-4" key={val.id}>
-                    <a target="_blank" href={`/experience/${val.uuid}`}>
-                      <div className="activity-card">
-                        <div className="card-img-container">
-                          <img src={val.cover_photo} alt="" className="cover" />
-                        </div>
-                        <div className="desc txt-mt-blue-midnight">
-                          <div className="card-title">
-                            {val.activity_name}
-                          </div>
-                          <div className="detail">
-                            {val.city.toUpperCase()} · {val.category}
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                ))
-              }
+        <div className="container">
+          <div className="section-activity">
+            <div className="section-title">
+              {_content.last_activity}
             </div>
-          </div>
-        </div>
-        <div className="section-activity">
-          <div className="section-title">
-            {_content.guide_for_you}
-          </div>
-          <div className="row">
-            {
-              this.state.lastestGuideBook.map(val => (
-                <div className="col-xs-6 col-sm-3 col-md-3" key={val.id}>
-                  <a target="_blank" href={`/guidebook/${val.uuid}`}>
-                    <div className="guidebook-background"
-                      style={{
-                        background: `url('${val.cover_photo}') center center no-repeat`,
-                        backgroundColor: '#404040',
-                        backgroundSize: 'cover',
-                      }}>
-                      <span className="guide-tag">
-                        Guide
-                      </span>
-                      </div>
-                    <div className="desc txt-mt-blue-midnight">
-                      <div className="card-title">
-                        {val.title}
-                      </div>
+            <div>
+              <div className="row">
+                {
+                  this.state.lastest.map(val => (
+                    <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
+                      <a target="_blank" href={`/experience/${val.uuid}`}>
+                        <div className="activity-card">
+                          <div className="card-img-container">
+                            <img src={val.cover_photo} alt="" className="cover" />
+                          </div>
+                          <div className="desc txt-mt-blue-midnight">
+                            <div className="card-title">
+                              {val.activity_name}
+                            </div>
+                            <div className="detail">
+                              {val.city.toUpperCase()} · {val.category}
+                            </div>
+                          </div>
+                        </div>
+                      </a>
                     </div>
-                  </a>
-                </div>
-              ))
-            }
+                  ))
+                }
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="section-activity">
-          <div className="section-title">
-            Sport
-          </div>
-          <div>
+          <div className="section-activity">
+            <div className="section-title">
+              {_content.guide_for_you}
+            </div>
             <div className="row">
               {
-                this.state.lastestSport.map(val => (
-                  <div className="col-xs-12 col-sm-3 col-md-4" key={val.id}>
-                    <a target="_blank" href={`/experience/${val.uuid}`}>
-                      <div className="activity-card">
-                        <div className="card-img-container">
-                          <img src={val.cover_photo} alt="" className="cover" />
-                        </div>
-                        <div className="desc txt-mt-blue-midnight">
-                          <div className="card-title">
-                            {val.activity_name}
-                          </div>
-                          <div className="detail">
-                            {val.city.toUpperCase()} · {val.category}
-                          </div>
+                this.state.lastestGuideBook.map(val => (
+                  <div className="col-xs-6 col-sm-6 col-md-3" key={val.id}>
+                    <a target="_blank" href={`/guidebook/${val.uuid}`}>
+                      <div className="guidebook-background"
+                        style={{
+                          background: `url('${val.cover_photo}') center center no-repeat`,
+                          backgroundColor: '#404040',
+                          backgroundSize: 'cover',
+                        }}>
+                        <span className="guide-tag">
+                          Guide
+                        </span>
+                      </div>
+                      <div className="desc txt-mt-blue-midnight">
+                        <div className="card-title">
+                          {val.title}
                         </div>
                       </div>
                     </a>
@@ -190,34 +162,64 @@ class Home extends Component {
               }
             </div>
           </div>
-        </div>
-        <div className="section-activity">
-          <div className="section-title">
-            Historical
+          <div className="section-activity">
+            <div className="section-title">
+              Sport
+            </div>
+            <div>
+              <div className="row">
+                {
+                  this.state.lastestSport.map(val => (
+                    <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
+                      <a target="_blank" href={`/experience/${val.uuid}`}>
+                        <div className="activity-card">
+                          <div className="card-img-container">
+                            <img src={val.cover_photo} alt="" className="cover" />
+                          </div>
+                          <div className="desc txt-mt-blue-midnight">
+                            <div className="card-title">
+                              {val.activity_name}
+                            </div>
+                            <div className="detail">
+                              {val.city.toUpperCase()} · {val.category}
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
           </div>
-          <div>
-            <div className="row">
-              {
-                this.state.lastestHistorical.map(val => (
-                  <div className="col-xs-12 col-sm-3 col-md-4" key={val.id}>
-                    <a target="_blank" href={`/experience/${val.uuid}`}>
-                      <div className="activity-card">
-                        <div className="card-img-container">
-                          <img src={val.cover_photo} alt="" className="cover" />
-                        </div>
-                        <div className="desc txt-mt-blue-midnight">
-                          <div className="card-title">
-                            {val.activity_name}
+          <div className="section-activity">
+            <div className="section-title">
+              Historical
+            </div>
+            <div>
+              <div className="row">
+                {
+                  this.state.lastestHistorical.map(val => (
+                    <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
+                      <a target="_blank" href={`/experience/${val.uuid}`}>
+                        <div className="activity-card">
+                          <div className="card-img-container">
+                            <img src={val.cover_photo} alt="" className="cover" />
                           </div>
-                          <div className="detail">
-                            {val.city.toUpperCase()} · {val.category}
+                          <div className="desc txt-mt-blue-midnight">
+                            <div className="card-title">
+                              {val.activity_name}
+                            </div>
+                            <div className="detail">
+                              {val.city.toUpperCase()} · {val.category}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </a>
-                  </div>
-                ))
-              }
+                      </a>
+                    </div>
+                  ))
+                }
+              </div>
             </div>
           </div>
         </div>
