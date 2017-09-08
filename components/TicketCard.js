@@ -80,21 +80,24 @@ class TicketCard extends Component {
                 </div>
               )
             }
-
-            <div className="ticket-available">
-              <i className="fa fa-ticket" />{this.props.amount ? this.props.amount : 'Unlimited'} Tickets
+            {
+              !this.props.buy && (
+                <div className="ticket-available">
+                  <i className="fa fa-ticket" />{this.props.amount ? this.props.amount : 'Unlimited'} Tickets
             </div>
+              )
+            }
             <div className="day-available">
               Available Day
             </div>
-            {this.state.operation.sort((a,b) => a.day - b.day).map(val => (
+            {this.state.operation.sort((a, b) => a.day - b.day).map(val => (
               <div key={val.id}>
                 <span className="day-available">{getDay(val.day)} :</span> {val.start_time} - {val.end_time}
               </div>
             ))}
             {
               this.props.buy && (
-                <div className="">
+                <div className="" style={{ marginTop: 10 }}>
                   <a href={`/booking/${this.props.id}`} className="btn btn-primary buy-btn">
                     <i className="fa fa-shopping-cart" /> Buy
                   </a>
@@ -102,13 +105,13 @@ class TicketCard extends Component {
               )
             }
           </div>
-            <style jsx>{`
+          <style jsx>{`
           
           .day-available {
             font-weight: 600;
           }
         `}
-      </style>
+          </style>
         </div>
         {
           this.state.overlay && (

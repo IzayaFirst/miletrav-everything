@@ -6,7 +6,7 @@ import Navbar from '../../components/Nav/Navbar'
 import ActivityCard from '../../components/ActivityCard'
 import GuideBookCard from '../../components/GuideBookCard'
 import * as Api from '../../api'
-import { getCover } from '../../helpers/master'
+import { getCover, getIcon } from '../../helpers/master'
 import LoadingAnimation from '../../components/LoadingAnimation'
 import Footer from '../../components/Footer'
 import EmptyState from '../../components/EmptyState'
@@ -116,6 +116,10 @@ class filter extends Component {
           script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
         />
         <Navbar token={this.props.token ? this.props.token : false} />
+        {
+          /**
+           * 
+
         <div className="category-section-title txt-mt-pink" style={{
           background: `url('${getCover(parseInt(this.state.id))}') center center no-repeat`,
           backgroundSize: 'cover'
@@ -125,101 +129,105 @@ class filter extends Component {
             {this.props.category_name}
           </div>
         </div>
-        <div className="container">
-          <div className="filter">
-            <div className="form-group">
-              <label style={{ fontSize: 22, fontWeight: 600 }}>Filter</label>
-              <div className="row">
-                <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
-                  <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
-                    {
-                      this.state.categories.map(val => (
-                        <option key={val.id} value={val.id}>{val.category_name}</option>
-                      ))
-                    }
-                  </select>
-                </div>
-                <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
-                  <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-control form-miletrav">
-                    <option value={0}>Experience</option>
-                    <option value={1}>GuideBook</option>
-                  </select>
-                </div>
-                {
-                  this.state.filter === 0 && (
-                    <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
-                      <Geosuggest
-                        onSuggestSelect={this.setLocation.bind(this)}
-                        placeholder="Select city from suggestion"
-                      />
-                    </div>
-                  )
-                }
-                {
-                  this.state.filter === 0 && (
-                    <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
-                      <input onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-control form-miletrav" />
-                    </div>
-                  )
-                }
-                <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
-                  <button onClick={this.searchByTitle.bind(this)} className="btn btn-primary" style={{ width: '100%' }}>Search</button>
+
+           */
+        }
+        <div className="content">
+          <div className="container">
+            <div className="filter">
+              <div className="form-group">
+                <label style={{ fontSize: 22, fontWeight: 600 }}>{this.props.category_name}</label>
+                <div className="row">
+                  <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
+                    <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
+                      {
+                        this.state.categories.map(val => (
+                          <option key={val.id} value={val.id}>{val.category_name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                  <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
+                    <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-control form-miletrav">
+                      <option value={0}>Experience</option>
+                      <option value={1}>GuideBook</option>
+                    </select>
+                  </div>
+                  {
+                    this.state.filter === 0 && (
+                      <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                        <Geosuggest
+                          onSuggestSelect={this.setLocation.bind(this)}
+                          placeholder="Select city from suggestion"
+                        />
+                      </div>
+                    )
+                  }
+                  {
+                    this.state.filter === 0 && (
+                      <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                        <input onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-control form-miletrav" />
+                      </div>
+                    )
+                  }
+                  <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
+                    <button onClick={this.searchByTitle.bind(this)} className="btn btn-primary" style={{ width: '100%' }}>Search</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div>
-            <div className="section-activity">
-              <div className="row">
-                {
-                  this.state.querying && (
-                    <div>
-                      <LoadingAnimation />
-                    </div>
-                  )
-                }
-                {
-                  !this.state.querying && this.state.filter === 0 && this.state.activity.map(val => (
-                    <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
-                      <a target="_blank" href={`/experience/${val.uuid}`}>
-                        <ActivityCard
-                          cover_photo={val.cover_photo}
-                          activity_name={val.activity_name}
-                          city={val.city}
-                          category={val.category}
-                        />
-                      </a>
-                    </div>
-                  ))
-                }
-                {
-                  this.state.filter === 1 && this.state.guidebook.map(val => (
-                    <div className="col-xs-6 col-sm-2 col-md-2" key={val.id}>
-                      <a target="_blank" href={`/experience/${val.uuid}`}>
-                        <GuideBookCard
-                          uuid={val.uuid}
-                          cover_photo={val.cover_photo}
-                          title={val.title}
-                        />
-                      </a>
-                    </div>
-                  ))
-                }
-                {
-                  !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
-                    <EmptyState title="No any experience" />
-                  )
-                }
-                {
-                  !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
-                    <EmptyState title="No any guidebook" />
-                  )
-                }
+            <div>
+              <div className="section-activity">
+                <div className="row">
+                  {
+                    this.state.querying && (
+                      <div>
+                        <LoadingAnimation />
+                      </div>
+                    )
+                  }
+                  {
+                    !this.state.querying && this.state.filter === 0 && this.state.activity.map(val => (
+                      <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                        <a target="_blank" href={`/experience/${val.uuid}`}>
+                          <ActivityCard
+                            cover_photo={val.cover_photo}
+                            activity_name={val.activity_name}
+                            city={val.city}
+                            category={val.category}
+                          />
+                        </a>
+                      </div>
+                    ))
+                  }
+                  {
+                    this.state.filter === 1 && this.state.guidebook.map(val => (
+                      <div className="col-xs-6 col-sm-2 col-md-2" key={val.id}>
+                        <a target="_blank" href={`/experience/${val.uuid}`}>
+                          <GuideBookCard
+                            uuid={val.uuid}
+                            cover_photo={val.cover_photo}
+                            title={val.title}
+                          />
+                        </a>
+                      </div>
+                    ))
+                  }
+                  {
+                    !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
+                      <EmptyState title="No any experience" />
+                    )
+                  }
+                  {
+                    !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
+                      <EmptyState title="No any guidebook" />
+                    )
+                  }
+                </div>
               </div>
             </div>
           </div>
         </div>
-
         <style jsx>
           {`
             .gradient {
@@ -272,6 +280,10 @@ class filter extends Component {
             .form-group {
               padding: 5px 0;
               margin-bottom: 0;
+            }
+            .content {
+              padding: 25px 0;
+              min-height: 70vh;
             }
           `}
         </style>

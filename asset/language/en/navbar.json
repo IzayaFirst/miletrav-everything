@@ -10,5 +10,6 @@
   "login": "Login",
   "error_username": " Please fill in username",
   "error_password": "Please fill in password",
-  "error_msg": "Username or password invalid"
+  "error_msg": "Username or password invalid",
+  "message": "message box"
 }

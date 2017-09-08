@@ -1,27 +1,32 @@
 import React, { Component } from 'react';
 import { getIcon } from '../../helpers/master'
 import * as Api from '../../api'
+import LoadingAnimation from '../LoadingAnimation'
 
 class Home extends Component {
   state = {
     lastest: [],
+    loading: true,
     lastestSport: [],
     lastestHistorical: [],
     lastestGuideBook: [],
   }
 
   async componentDidMount() {
+    this.setState({
+      loading: true,
+    })
     const lastestActivity = await Api.get({
       url: '/activities',
       params: {
-        $limit: 9,
+        $limit: 8,
         status: 1,
       }
     })
     const lastestSport = await Api.get({
       url: '/activities',
       params: {
-        $limit: 9,
+        $limit: 8,
         category: 'Sport',
         status: 1,
       }
@@ -29,7 +34,7 @@ class Home extends Component {
     const lastestHistorical = await Api.get({
       url: '/activities',
       params: {
-        $limit: 9,
+        $limit: 8,
         category: 'Historical',
         status: 1,
       }
@@ -37,7 +42,7 @@ class Home extends Component {
     const lastestGuideBook = await Api.get({
       url: '/guidebooks',
       params: {
-        $limit: 9,
+        $limit: 8,
         status: 1,
       }
     })
@@ -46,6 +51,7 @@ class Home extends Component {
       lastest: lastestActivity.data || [],
       lastestSport: lastestSport.data || [],
       lastestHistorical: lastestHistorical.data || [],
+      loading: false,
     })
   }
 
@@ -56,11 +62,20 @@ class Home extends Component {
   render() {
     const { _content } = this.props
     return (
+
       <div className="content">
-        <div className="title-page mt-gradient-4">
-          {_content.banner}
-        </div>
-        <div className="province">
+
+        {
+          this.state.loading && (
+            <LoadingAnimation />
+          )
+        }
+        {
+          /*
+          <div className="title-page mt-gradient-4">
+            {_content.banner}
+          </div>
+           <div className="province">
           <div>
             <div className="header-category txt-mt-blue-midnight">
               {_content.title}
@@ -68,161 +83,175 @@ class Home extends Component {
             <div className="title-category">
               <i className="fa fa-smile-o"></i>  {_content.title_box}
             </div>
-            <div className="category-filter">
-              <select onChange={this.chooseCategory.bind(this)} className="form-control-form-miletrav form-category">
-                {
-                  this.props.category.map(val => (
-                    <option value={val.id} key={val.id} >
-                      {val.category_name}
-                    </option>
-                  ))
-                }
-              </select>
-            </div>
+           
           </div>
+                  </div>
+
+          
+          */
+        }
+
+
+        {
+          /*
+          <div className="row">
           {
-            /*
-            <div className="row">
-            {
-              this.props.category.map(val => (
-                <div className="col-xs-12 col-sm-3 col-md-3" key={val.id}>
-                  <a href={`/experience/category/${val.id}`}>
-                    <div className="category-card">
-                      <img width="40" height="40" src={getIcon(val.id)} />
-                      <div className="category-title">
-                        {val.category_name}
-                      </div>
+            this.props.category.map(val => (
+              <div className="col-xs-12 col-sm-3 col-md-3" key={val.id}>
+                <a href={`/experience/category/${val.id}`}>
+                  <div className="category-card">
+                    <img width="40" height="40" src={getIcon(val.id)} />
+                    <div className="category-title">
+                      {val.category_name}
                     </div>
-                  </a>
-                </div>
-              ))
-            }
-          </div>
-            */
+                  </div>
+                </a>
+              </div>
+            ))
           }
         </div>
-        <div className="container">
-          <div className="section-activity">
-            <div className="section-title">
-              {_content.last_activity}
-            </div>
-            <div>
-              <div className="row">
-                {
-                  this.state.lastest.map(val => (
-                    <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
-                      <a target="_blank" href={`/experience/${val.uuid}`}>
-                        <div className="activity-card">
-                          <div className="card-img-container">
-                            <img src={val.cover_photo} alt="" className="cover" />
-                          </div>
-                          <div className="desc txt-mt-blue-midnight">
-                            <div className="card-title">
-                              {val.activity_name}
+          */
+        }
+        {
+          !this.state.loading && (
+            <div className="container">
+              <div className="section-activity">
+                <div className="category-filter">
+                  <label htmlFor="">{_content.title}</label>
+                  <select onChange={this.chooseCategory.bind(this)} className="form-control-form-miletrav form-category">
+                    <option>Category</option>
+                    {
+                      this.props.category.map(val => (
+                        <option value={val.id} key={val.id} >
+                          {val.category_name}
+                        </option>
+                      ))
+                    }
+                  </select>
+                </div>
+                <div className="section-title">
+                  {_content.last_activity}
+                </div>
+                <div>
+                  <div className="row">
+                    {
+                      this.state.lastest.map(val => (
+                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                          <a target="_blank" href={`/experience/${val.uuid}`}>
+                            <div className="activity-card">
+                              <div className="card-img-container">
+                                <img src={val.cover_photo} alt="" className="cover" />
+                              </div>
+                              <div className="desc txt-mt-blue-midnight">
+                                <div className="card-title">
+                                  {val.activity_name}
+                                </div>
+                                <div className="detail">
+                                  {val.city.toUpperCase()} · {val.category}
+                                </div>
+                              </div>
                             </div>
-                            <div className="detail">
-                              {val.city.toUpperCase()} · {val.category}
-                            </div>
-                          </div>
+                          </a>
                         </div>
-                      </a>
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-          </div>
-          <div className="section-activity">
-            <div className="section-title">
-              {_content.guide_for_you}
-            </div>
-            <div className="row">
-              {
-                this.state.lastestGuideBook.map(val => (
-                  <div className="col-xs-6 col-sm-6 col-md-3" key={val.id}>
-                    <a target="_blank" href={`/guidebook/${val.uuid}`}>
-                      <div className="guidebook-background"
-                        style={{
-                          background: `url('${val.cover_photo}') center center no-repeat`,
-                          backgroundColor: '#404040',
-                          backgroundSize: 'cover',
-                        }}>
-                        <span className="guide-tag">
-                          Guide
-                        </span>
-                      </div>
-                      <div className="desc txt-mt-blue-midnight">
-                        <div className="card-title">
-                          {val.title}
-                        </div>
-                      </div>
-                    </a>
+                      ))
+                    }
                   </div>
-                ))
-              }
-            </div>
-          </div>
-          <div className="section-activity">
-            <div className="section-title">
-              Sport
-            </div>
-            <div>
-              <div className="row">
-                {
-                  this.state.lastestSport.map(val => (
-                    <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
-                      <a target="_blank" href={`/experience/${val.uuid}`}>
-                        <div className="activity-card">
-                          <div className="card-img-container">
-                            <img src={val.cover_photo} alt="" className="cover" />
+                </div>
+              </div>
+              <div className="section-activity">
+                <div className="section-title">
+                  {_content.guide_for_you}
+                </div>
+                <div className="row">
+                  {
+                    this.state.lastestGuideBook.map(val => (
+                      <div className="col-xs-6 col-sm-6 col-md-3" key={val.id}>
+                        <a target="_blank" href={`/guidebook/${val.uuid}`}>
+                          <div className="guidebook-background"
+                            style={{
+                              background: `url('${val.cover_photo}') center center no-repeat`,
+                              backgroundColor: '#404040',
+                              backgroundSize: 'cover',
+                            }}>
+                            <span className="guide-tag">
+                              Guide
+                        </span>
                           </div>
                           <div className="desc txt-mt-blue-midnight">
                             <div className="card-title">
-                              {val.activity_name}
-                            </div>
-                            <div className="detail">
-                              {val.city.toUpperCase()} · {val.category}
+                              {val.title}
                             </div>
                           </div>
+                        </a>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+              <div className="section-activity">
+                <div className="section-title">
+                  Sport
+                </div>
+                <div>
+                  <div className="row">
+                    {
+                      this.state.lastestSport.map(val => (
+                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                          <a target="_blank" href={`/experience/${val.uuid}`}>
+                            <div className="activity-card">
+                              <div className="card-img-container">
+                                <img src={val.cover_photo} alt="" className="cover" />
+                              </div>
+                              <div className="desc txt-mt-blue-midnight">
+                                <div className="card-title">
+                                  {val.activity_name}
+                                </div>
+                                <div className="detail">
+                                  {val.city.toUpperCase()} · {val.category}
+                                </div>
+                              </div>
+                            </div>
+                          </a>
                         </div>
-                      </a>
-                    </div>
-                  ))
-                }
+                      ))
+                    }
+                  </div>
+                </div>
+              </div>
+              <div className="section-activity">
+                <div className="section-title">
+                  Historical
+            </div>
+                <div>
+                  <div className="row">
+                    {
+                      this.state.lastestHistorical.map(val => (
+                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                          <a target="_blank" href={`/experience/${val.uuid}`}>
+                            <div className="activity-card">
+                              <div className="card-img-container">
+                                <img src={val.cover_photo} alt="" className="cover" />
+                              </div>
+                              <div className="desc txt-mt-blue-midnight">
+                                <div className="card-title">
+                                  {val.activity_name}
+                                </div>
+                                <div className="detail">
+                                  {val.city.toUpperCase()} · {val.category}
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="section-activity">
-            <div className="section-title">
-              Historical
-            </div>
-            <div>
-              <div className="row">
-                {
-                  this.state.lastestHistorical.map(val => (
-                    <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
-                      <a target="_blank" href={`/experience/${val.uuid}`}>
-                        <div className="activity-card">
-                          <div className="card-img-container">
-                            <img src={val.cover_photo} alt="" className="cover" />
-                          </div>
-                          <div className="desc txt-mt-blue-midnight">
-                            <div className="card-title">
-                              {val.activity_name}
-                            </div>
-                            <div className="detail">
-                              {val.city.toUpperCase()} · {val.category}
-                            </div>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-          </div>
-        </div>
+          )
+        }
+
         <style>
           {`
           .guide-tag {
@@ -246,17 +275,16 @@ class Home extends Component {
             text-decoration: none
           }
           .category-filter {
-            width: 20%;
-            margin: 0 auto; 
+            margin: 15px auto;
           }
           .form-category {
+            display: block;
             padding: 6px 0;
             height: 100%;
             font-size: 20px;
-            width: 100%;
+            width: 20%;
             border: 3px solid #003;
             padding-left: 20px;
-            border-radius
           }
           option {
             font-weight: normal;
@@ -322,28 +350,31 @@ class Home extends Component {
               margin: 20px 15px;
             }
             .category-filter {
-              width: 70%;
+              width: 100%
               margin: 0 auto; 
             }
+        
           }
           @media only screen and (max-width: 992px) {
             .section-activity {
               width: 65%;
-              margin: 0 auto;
+              margin: 15px auto;
+            }
+            .form-category {
+              width: 100%;
             }
           }
           @media only screen and (min-width: 992px) {
             .section-activity {
               width: 85%;
-              margin: 0 auto;
+              margin: 15px auto;
             }
           }
           
           
           .header-category {
-            padding: 8px 0;
-            font-size: 28px;
-            color: white;
+            text-align: center;
+            font-size: 22px;
             font-weight: 600;
           }
           .category-title {
@@ -399,9 +430,10 @@ class Home extends Component {
             font-weight: 500;
           }
           .content {
-            margin-top: 0 auto;
+            margin: 0 auto;
             background: #fff;
-            min-height: 80vh;
+            padding: 15px 0;
+            min-height: 90vh;
           }
           `}
         </style>

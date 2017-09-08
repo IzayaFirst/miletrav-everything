@@ -127,9 +127,10 @@ const icons = [
 ]
 
 export const getIcon = (id) => {
-  return icons.find((icon) => {
+  const data = icons.find((icon) => {
     return icon.id === id
-  }).path
+  })
+  return data.path
 }
 
 export const getCover = (id) => {

@@ -139,7 +139,7 @@ class Navbar extends Component {
           </Bar.Header>
           {
             this.state.token ?
-              <Menu token={this.state.token} cover_photo={this.state.cover_photo} logout={this.logout.bind(this)} /> :
+              <Menu token={this.state.token} cover_photo={this.state.cover_photo} logout={this.logout.bind(this)} _content={this.state._content}/> :
               <Bar.Collapse>
                 <Nav pullRight>
                   <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>{this.state._content.register_company}</NavItem>
@@ -308,7 +308,7 @@ const ImgTitle = ({ token, cover_photo }) => (
   </div>
 )
 
-const Menu = ({ token, logout, cover_photo }) => (
+const Menu = ({ token, logout, cover_photo, _content }) => (
   <div>
     {
       token.data.is_company && (
@@ -327,6 +327,7 @@ const Menu = ({ token, logout, cover_photo }) => (
       !token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
+            <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}>{_content.message}</NavItem>
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
               <MenuItem onClick={() => window.location = '/user/profile'} eventKey={1.1}>Profile</MenuItem>
               <MenuItem onClick={() => window.location = '/booking/detail/me'} eventKey={1.2}>History</MenuItem>
