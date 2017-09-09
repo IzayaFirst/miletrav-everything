@@ -12,6 +12,7 @@ let firebaseConfig
 if (!firebase.apps.length) {
   firebaseConfig = firebase.initializeApp(config)
 }
+export default firebaseConfig
 
 export const UploadCoverPhoto = async (data) => {
   const fileName = btoa(new Date().getTime())
@@ -19,6 +20,21 @@ export const UploadCoverPhoto = async (data) => {
   const url = await upload.downloadURL
   return url
 }
+
+export const sendMessage = async (senderId , receiverId, message) => {
+  const low = senderId < receiverId ? senderId : receiverId
+  const high = senderId < receiverId ? receiverId : senderId
+  const table = low + "chat" + high
+  const db = await firebase.database().ref('chat').child(table)
+  const data = {
+    senderId,
+    receiverId,
+    message,
+    chatAt: new Date(),
+  }
+  const send = await db.push(data)
+  return data
+} 
 
 export const UploadGuideBook = async (data) => {
   const fileName = btoa(new Date().getTime())

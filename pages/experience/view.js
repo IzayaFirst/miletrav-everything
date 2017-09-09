@@ -182,7 +182,7 @@ class view extends Component {
         <Navbar token={this.props.token ? this.props.token : false} />
         {
           this.props.token && (
-            <ChatBox tokem={this.props.token} host={this.props.host}/>
+            <ChatBox token={this.props.token} host={this.props.host}/>
           )
         }
         <div className="content">

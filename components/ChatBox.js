@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
+import firebaseConfig, { sendMessage } from '../helpers/uploadToFirebase'
 
 class ChatBox extends Component {
   state = {
     isOpen: false,
     message: '',
+    messages: {},
   }
+  async componentDidMount() {
+    const senderId = this.props.token.data.id
+    const receiverId = this.props.host.id
+    const low = senderId < receiverId ? senderId : receiverId
+    const high = senderId < receiverId ? receiverId : senderId
+    const table = low + "chat" + high
+    const db = await firebaseConfig.database().ref('chat').child(table)
+    db.on('value', async (snapshot) => {
+      this.setState({
+        messages: snapshot.val() || {}
+      })
+    })
+  }
+
   open(e) {
-    const isOpen  = !this.state.isOpen
+    const isOpen = !this.state.isOpen
     this.setState({
       isOpen
     })
@@ -16,19 +32,34 @@ class ChatBox extends Component {
       message: e.target.value,
     })
   }
-  send(e) {
-      if(e.charCode === 13) {
-        console.log(this.state.message)
-        this.setState({
-          message: '',
-        })
+  async send(e) {
+    if (e.charCode === 13) {
+      const { message } = this.state
+      const validate = message.trim().length > 0
+      this.setState({
+        message: '',
+      })
+      if (validate) {
+        const senderId = this.props.token.data.id
+        const recieverId = this.props.host.id
+        const sending = await sendMessage(senderId, recieverId, message)
       }
+    }
   }
   render() {
     return (
       <div>
-        <div onClick={this.open.bind(this)}className="chatbox-container">
-          <img className="icon" src="/asset/chat.png" alt="" />
+        <div onClick={this.open.bind(this)} className="chatbox-container">
+          {
+            this.state.isOpen && (
+              <img className="icon-close" src="/asset/close.png" alt="" />
+            )
+          }
+          {
+            !this.state.isOpen && (
+              <img className="icon" src="/asset/chat.png" alt="" />
+            )
+          }
         </div>
         {
           this.state.isOpen && (
@@ -37,16 +68,44 @@ class ChatBox extends Component {
                 Conversation with {this.props.host.organize_name}
               </div>
               <div className="chat-container">
-               
+                {
+                  Object.keys(this.state.messages).map((key, index) => (
+                    <div className="token" key={key}>
+                      <div className={this.state.messages[key].senderId === this.props.token.data.id ? 'chat-token right' : 'chat-token left'}>
+                        {this.state.messages[key].message}
+                      </div>
+                    </div>
+                  ))
+                }
               </div>
               <div className="chat-form">
-                  <input type="text"  value={this.state.message} onChange={this.setMessage.bind(this)} onKeyPress={this.send.bind(this)} placeholder="Send a message" className="chat-input"/>
+                <input type="text" value={this.state.message} onChange={this.setMessage.bind(this)} onKeyPress={this.send.bind(this)} placeholder="Send a message" className="chat-input" />
               </div>
             </div>
           )
         }
         <style jsx>
           {`
+            .token {
+              width: 100%;
+              display: inline-block;
+            }
+            .right {
+              float: right;
+            }
+            .left {
+              float: left
+            }
+            .chat-token {
+              background: #00b3b3;
+              padding: 5px 8px 6px;
+              margin-bottom: 10px;
+              border-radius: 12px;
+              max-width: 100px;
+              color: #fff;
+              font-size: 14px;
+              display: block;
+            }
             .chat-form {
               border-top: 1px solid #cccccc;
             }
@@ -85,6 +144,11 @@ class ChatBox extends Component {
               position: absolute;
               top: 13px;
               left: 13px;
+            }
+            .icon-close {
+              position: absolute;
+              top: 22px;
+              left: 22px;
             }
             .chatbox-container {
               cursor: pointer;

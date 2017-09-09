@@ -314,6 +314,7 @@ const Menu = ({ token, logout, cover_photo, _content }) => (
       token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
+            <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}>{_content.message}</NavItem>
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
               <MenuItem onClick={() => window.location = '/company/profile'} eventKey={1.1}>Company Profile</MenuItem>
               <div className="divider" />
