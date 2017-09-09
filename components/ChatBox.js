@@ -3,12 +3,26 @@ import React, { Component } from 'react';
 class ChatBox extends Component {
   state = {
     isOpen: false,
+    message: '',
   }
   open(e) {
     const isOpen  = !this.state.isOpen
     this.setState({
       isOpen
     })
+  }
+  setMessage(e) {
+    this.setState({
+      message: e.target.value,
+    })
+  }
+  send(e) {
+      if(e.charCode === 13) {
+        console.log(this.state.message)
+        this.setState({
+          message: '',
+        })
+      }
   }
   render() {
     return (
@@ -20,16 +34,27 @@ class ChatBox extends Component {
           this.state.isOpen && (
             <div className="chat-box">
               <div className="chat-header">
-                Coversation with {this.props.host.organize_name}
+                Conversation with {this.props.host.organize_name}
               </div>
               <div className="chat-container">
                
+              </div>
+              <div className="chat-form">
+                  <input type="text"  value={this.state.message} onChange={this.setMessage.bind(this)} onKeyPress={this.send.bind(this)} placeholder="Send a message" className="chat-input"/>
               </div>
             </div>
           )
         }
         <style jsx>
           {`
+            .chat-form {
+              border-top: 1px solid #cccccc;
+            }
+            .chat-input {
+              width: 100%;
+              padding: 15px;
+              border: none
+            }
             .chat-header {
               padding: 25px;
               background: #00b3b3;
