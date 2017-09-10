@@ -6,5 +6,5 @@ module.exports = function (app, server, middlewareFunction) {
     server.get('/wishlist', middlewareFunction.requireMemberNotCompany , (req, res, next) => app.render(req, res, '/wishlist', middlewareFunction.getAllReqValue({ req, res })))
     server.get('/invoice/:transaction', middlewareFunction.requireMemberNotCompany , (req, res, next) => app.render(req, res, '/invoice', middlewareFunction.getAllReqValue({ req, res })))
     server.get('/message', middlewareFunction.requireMember , (req, res, next) => app.render(req, res, '/message', middlewareFunction.getAllReqValue({ req, res })))
-
+    server.get('/notification', middlewareFunction.requireMemberNotCompany , (req, res, next) => app.render(req, res, '/notification', middlewareFunction.getAllReqValue({ req, res })))
 }

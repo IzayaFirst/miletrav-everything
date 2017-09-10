@@ -5,6 +5,7 @@ import * as cookie from '../../helpers/cookies'
 import Overlay from '../Overlay'
 import * as Api from '../../api'
 import { getContent } from '../../helpers/translation'
+import NotificationButton from '../NotificationButton'
 
 class Navbar extends Component {
   constructor(props) {
@@ -314,7 +315,7 @@ const Menu = ({ token, logout, cover_photo, _content }) => (
       token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
-            <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}>{_content.message}</NavItem>
+            <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-commenting-o fa-lg" /></NavItem>
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
               <MenuItem onClick={() => window.location = '/company/profile'} eventKey={1.1}>Company Profile</MenuItem>
               <div className="divider" />
@@ -328,7 +329,8 @@ const Menu = ({ token, logout, cover_photo, _content }) => (
       !token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
-            <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}>{_content.message}</NavItem>
+            <NavItem onClick={() => window.location = '/notification'} eventKey={1} style={{ paddingTop: 8 }}><NotificationButton token={token}/></NavItem>
+            <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-commenting-o fa-lg" /></NavItem>
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
               <MenuItem onClick={() => window.location = '/user/profile'} eventKey={1.1}>Profile</MenuItem>
               <MenuItem onClick={() => window.location = '/booking/detail/me'} eventKey={1.2}>History</MenuItem>
