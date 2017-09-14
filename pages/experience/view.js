@@ -12,6 +12,7 @@ import TicketCard from '../../components/TicketCard'
 import Footer from '../../components/Footer'
 import Comment from '../../components/Comment'
 import ChatBox from '../../components/ChatBox'
+import Rating from '../../components/Rating'
 
 class view extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -204,6 +205,7 @@ class view extends Component {
                   }
 
                 </div>
+                <Rating token={this.props.token} activity={this.state.activity}/>
                 <div className="location">
                   <i className="fa fa-map-marker" style={{ marginRight: 15 }} />
                   {this.state.activity.city.toUpperCase()} · {this.state.activity.category}

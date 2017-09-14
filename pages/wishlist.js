@@ -70,7 +70,7 @@ class wishlist extends Component {
               height: 150px;
             }
             .title {
-              font-size: 14px;
+              font-size: 12px;
               font-weight: 500px;
               overflow: hidden;
               display: -webkit-box;
@@ -79,7 +79,7 @@ class wishlist extends Component {
               -webkit-box-orient: vertical;
               max-height: 40px;
               -webkit-line-clamp: 1;
-              padding: 10px;
+              padding: 14px;
             }
             .clear {
               clear: both;

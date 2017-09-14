@@ -25,6 +25,34 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
     outline: 0 none;
     border-color: #158DB4;
 }
+.react-rater {
+  display: inline-block;
+  line-height: normal; 
+}
+.react-rater > * {
+    display: inline-block; 
+}
+.react-rater a {
+  font-size: 24px;
+  text-decoration: none;
+  cursor: pointer;
+  color: #ccc;
+  position: relative; 
+}
+    .react-rater a.will-be-active {
+      color: #24A6A4; }
+    .react-rater a.is-active {
+      color: #24A6A4; }
+    .react-rater a.is-active-half:before {
+      color: #24A6A4;
+      content: '\2605';
+      position: absolute;
+      text-decoration: none;
+      left: 0;
+      width: 50%;
+      overflow: hidden; }
+    .react-rater a.is-disabled {
+      cursor: default; }
 
 .geosuggest {
   font-size: 18px;

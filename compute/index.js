@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL  = 'http://localhost:8080'
+const baseURL  = 'https://compute.miletrav.com'
 
 export async function get({ url, params, authType, authToken }) {
   const method = 'get'
@@ -51,7 +51,7 @@ function axiosRequest({ url, method, params, data, authType = 'Basic', authToken
       baseURL,
       url,
       method,
-      headers: Object.assign({ 'Content-Type': 'application/json' }, { Authorization: `${authType} ${authToken}` }),
+      headers: Object.assign({ 'Content-Type': 'application/json' },),
       withCredentials: false,
       data: Object.assign({}, data),
       params: Object.assign({}, params),
