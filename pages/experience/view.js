@@ -103,6 +103,13 @@ class view extends Component {
         bookmark: true,
       })
     }
+    if (this.props.token) {
+      const textarea = document.getElementById("textarea");
+      textarea.oninput = function () {
+        textarea.style.height = "";
+        textarea.style.height = Math.min(textarea.scrollHeight, 300) + "px"
+      }
+    }
   }
   setComment(e) {
     this.setState({
@@ -183,7 +190,7 @@ class view extends Component {
         <Navbar token={this.props.token ? this.props.token : false} />
         {
           this.props.token && (
-            <ChatBox token={this.props.token} host={this.props.host}/>
+            <ChatBox token={this.props.token} host={this.props.host} />
           )
         }
         <div className="content">
@@ -205,7 +212,11 @@ class view extends Component {
                   }
 
                 </div>
-                <Rating token={this.props.token} activity={this.state.activity}/>
+                {
+                  this.props.token && (
+                    <Rating token={this.props.token} activity={this.state.activity} />
+                  )
+                }
                 <div className="location">
                   <i className="fa fa-map-marker" style={{ marginRight: 15 }} />
                   {this.state.activity.city.toUpperCase()} · {this.state.activity.category}
@@ -263,8 +274,11 @@ class view extends Component {
                     <div className="comment-form">
                       <div className="form-group">
                         <div className="row">
-                          <div className="col-xs-12 col-sm-12 col-md-12">
-                            <textarea value={this.state.comment} onChange={this.setComment.bind(this)} ></textarea>
+                          <div className="col-xs-2 col-sm-1 col-md-1">
+                            <img src={this.props.token.data.cover_photo} className="resize-img" alt=""/>
+                          </div>
+                          <div className="col-xs-10 col-sm-11 col-md-11">
+                            <textarea id="textarea" placeholder="Leaves a comment" value={this.state.comment} onChange={this.setComment.bind(this)} rows="1"></textarea>
                             {
                               !this.state.validate_comment && (
                                 <div className="error-status">
@@ -297,7 +311,7 @@ class view extends Component {
                   </div>
                   {
                     this.state.comments.map(val => (
-                      <Comment {...val} />
+                      <Comment key={val.id} {...val} />
                     ))
                   }
                 </div>
@@ -307,6 +321,11 @@ class view extends Component {
         </div>
         <style jsx>
           {`
+            .resize-img {
+              width: 45px;
+              height: 45px;
+              border-radius: 50%;
+            }
             .review-title {
               padding: 10px 0;
               border-bottom: 1px solid #cccccc;
@@ -335,75 +354,14 @@ class view extends Component {
               box-shadow: none;
             }
             textarea {
-              background-color: rgba(0, 0, 0, 0);
-              border-bottom-color: rgb(158, 158, 158);
-              border-bottom-left-radius: 0px;
-              border-bottom-right-radius:0px;
-              border-bottom-style:solid;
-              border-bottom-width:1px;
-              border-image-outset:0px;
-              border-image-repeat:stretch;
-              border-image-slice:100%;
-              border-image-source:none;
-              border-image-width:1;
-              border-left-color:rgba(0, 0, 0, 0.87);
-              border-left-style:none;
-              border-left-width:0px;
-              border-right-color:rgba(0, 0, 0, 0.87);
-              border-right-style:none;
-              border-right-width:0px;
-              border-top-color:rgba(0, 0, 0, 0.87);
-              border-top-left-radius:0px;
-              border-top-right-radius:0px;
-              border-top-style:none;
-              border-top-width:0px;
-              box-shadow:none;
-              box-sizing:content-box;
-              color:rgba(0, 0, 0, 0.87);
-              cursor:auto;
-              display:inline-block;
-              flex-direction:column;
-              font-size:15px;
-              font-stretch:normal;
-              font-style:normal;
-              font-variant-caps:normal;
-              font-variant-ligatures:normal;
-              font-variant-numeric:normal;
-              font-weight:normal;
-              letter-spacing:normal;
-              line-height:22.5px;
-              margin-bottom:2px;
-              margin-left:0px;
-              margin-right:0px;
-              margin-top:0px;
-              outline-color:rgba(0, 0, 0, 0.87);
-              outline-style:none;
-              outline-width:0px;
-              overflow-x:auto;
-              overflow-y:hidden;
-              padding-left:0px;
-              padding-right:0px;
-              resize:none;
-              text-align:start;
-              text-indent:0px;
-              text-rendering:auto;
-              text-shadow:none;
-              text-size-adjust:100%;
-              text-transform:none;
-              transition-delay:0s;
-              transition-duration:0.3s;
-              transition-property:all;
-              transition-timing-function:ease;
-              user-select:text;
-              white-space:pre-wrap;
+              display: block;
               width: 100%;
-              height: auto;
-              word-spacing:0px;
-              word-wrap:break-word;
-              writing-mode:horizontal-tb;
-              -webkit-appearance:none;
-              -webkit-rtl-ordering:logical;
-              -webkit-border-image:none;
+              border-radius: 3px;
+              border: 1px solid #e5e5e5;
+              padding: 4px;
+              resize: none;
+              overflow: hidden;
+              line-height: 24px;
             }
             .comment-title {
               padding: 15px 0;

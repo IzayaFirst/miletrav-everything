@@ -31,13 +31,13 @@ class Comments extends Component {
           <div className="col-xs-4 col-sm-2 col-md-2">
             <div className="img">
               <div style={{
-                background: `url('${this.state.user.cover_photo}') top center`,
+                background: `url('${this.state.user.cover_photo}') `,
                 backgroundColor: '#2e2e2e',
                 width: '100%',
                 height: 48,
                 display: 'inline-block',
                 borderRadius: '50%'
-              }} />
+              }} className="full"/>
             </div>
 
           </div>
@@ -56,6 +56,9 @@ class Comments extends Component {
         </div>
         <style jsx>
           {`
+          .full {
+            background-size: cover !important;
+          }
           .user-title {
             font-weight: 600;
           }
