@@ -64,12 +64,11 @@ class Home extends Component {
     return (
 
       <div className="content">
-
-        {
-          this.state.loading && (
-            <LoadingAnimation />
-          )
-        }
+        <div className="province">
+          <div className="title-category">
+            <i className="fa fa-smile-o"></i>  {_content.title_box}
+          </div>
+        </div>
         {
           /*
           <div className="title-page mt-gradient-4">
@@ -77,12 +76,8 @@ class Home extends Component {
           </div>
            <div className="province">
           <div>
-            <div className="header-category txt-mt-blue-midnight">
-              {_content.title}
-            </div>
-            <div className="title-category">
-              <i className="fa fa-smile-o"></i>  {_content.title_box}
-            </div>
+            
+          
            
           </div>
                   </div>
@@ -111,6 +106,11 @@ class Home extends Component {
           }
         </div>
           */
+        }
+        {
+          this.state.loading && (
+            <LoadingAnimation />
+          )
         }
         {
           !this.state.loading && (
@@ -432,7 +432,7 @@ class Home extends Component {
           .content {
             margin: 0 auto;
             background: #fff;
-            padding: 15px 0;
+            padding-bottom: 25px;
             min-height: 90vh;
           }
           `}

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL  = 'https://api.miletrav.com' // //54.179.140.26'
+const baseURL  =  'https://api.miletrav.com' // //54.179.140.26'
 
 export async function get({ url, params, authType, authToken }) {
   const method = 'get'
