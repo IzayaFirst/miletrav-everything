@@ -13,6 +13,8 @@ import Footer from '../../components/Footer'
 import Comment from '../../components/Comment'
 import ChatBox from '../../components/ChatBox'
 import Rating from '../../components/Rating'
+import * as Compute from '../../compute'
+import Rater from 'react-rater'
 
 class view extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -84,7 +86,9 @@ class view extends Component {
     bookmark: false,
     comments: this.props.comments || [],
     comment: '',
+    rating: 0,
     validate_comment: true,
+    validate_rating: true,
   }
   async componentDidMount() {
     if (!this.props.token) {
@@ -120,12 +124,14 @@ class view extends Component {
     this.setState({
       validate_comment: true,
     })
-    const { comment } = this.state
+    const { comment, rating } = this.state
     const validate_comment = comment.trim().length > 0
+    const validate_rating = rating > 0
     this.setState({
       validate_comment,
+      validate_rating,
     })
-    if (!validate_comment) {
+    if (!validate_comment || !validate_rating) {
       return
     }
     const cc = await Api.post({
@@ -138,9 +144,20 @@ class view extends Component {
       authToken: this.props.token.token,
       authType: 'Bearer'
     })
+    const update = await Compute.post({
+      url: '/rating',
+      data: {
+        userId: this.props.token.data.id,
+        activityId: this.state.activity.id,
+        categoryId: this.props.token.data.id,
+        categoryName: this.state.activity.category,
+        rating: rating
+      }
+    })
     this.setState({
       comment: '',
       validate_comment: true,
+      validate_rating: true,
     })
     const comments = await Api.get({
       url: '/comments',
@@ -179,6 +196,12 @@ class view extends Component {
       })
     }
   }
+  rate(rate) {
+    const { rating } = rate
+    this.setState({
+      rating
+    })
+  }
   render() {
     console.log(this.state.comments)
     return (
@@ -212,10 +235,10 @@ class view extends Component {
                   }
 
                 </div>
-                {
+                {/*
                   this.props.token && (
                     <Rating token={this.props.token} activity={this.state.activity} />
-                  )
+                  )*/
                 }
                 <div className="location">
                   <i className="fa fa-map-marker" style={{ marginRight: 15 }} />
@@ -274,15 +297,18 @@ class view extends Component {
                     <div className="comment-form">
                       <div className="form-group">
                         <div className="row">
-                          <div className="col-xs-2 col-sm-1 col-md-1">
-                            <img src={this.props.token.data.cover_photo} className="resize-img" alt=""/>
-                          </div>
-                          <div className="col-xs-10 col-sm-11 col-md-11">
-                            <textarea id="textarea" placeholder="Leaves a comment" value={this.state.comment} onChange={this.setComment.bind(this)} rows="1"></textarea>
+                          <div className="col-xs-12 col-sm-12 col-md-12">
+                            <div className="comment-box">
+                              <img src={this.props.token.data.cover_photo} className="resize-img" alt="" />
+                              <textarea id="textarea" placeholder="Leaves a comment" value={this.state.comment} onChange={this.setComment.bind(this)} rows="1"></textarea>
+                            </div>
+                            <div className="rating-box">
+                              <span style={{ marginRight: 10, fontWeight: 600 }}>Give a rating : </span><Rater total={5} rating={this.state.rating} onRate={this.rate.bind(this)} />
+                            </div>
                             {
-                              !this.state.validate_comment && (
+                              !this.state.validate_comment || !this.state.validate_rating && (
                                 <div className="error-status">
-                                  can't be blank
+                                  can't be blank and please rating the activity
                                 </div>
                               )
                             }
@@ -320,10 +346,20 @@ class view extends Component {
           }
         </div>
         <style jsx>
-          {`
+          {`  
+            .rating-box {
+              text-align: left;
+              font-size: 14px;
+              padding: 5px 20px;
+            }
+            .comment-box {
+              display: flex;
+              padding: 0 20px;
+            }
             .resize-img {
-              width: 45px;
-              height: 45px;
+              width: 30px;
+              height: 30px;
+              margin-right: 10px;
               border-radius: 50%;
             }
             .review-title {

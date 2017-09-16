@@ -103,11 +103,9 @@ class overview extends Component {
         $limit: 100,
       }
     })
-    console.log(booking)
     const ticketPrice = this.state.ticket.filter(val => this.state.tid == val.id) 
     const price = ticketPrice[0].price || 0
     const bookings = booking.data || []
-    console.log(bookings.length)
     if (bookings.length > 0) {
       let totalEarn = 0
       let totalAmount = 0
@@ -117,7 +115,6 @@ class overview extends Component {
         totalEarn += p
         totalAmount += parseInt(val.amount)
       }) 
-      console.log(totalAmount)
       await this.setState({
         bookingTotalAmount: totalAmount || 0,
         bookingTotalEarn: totalEarn || 0,
