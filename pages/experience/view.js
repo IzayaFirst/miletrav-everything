@@ -71,8 +71,6 @@ class view extends Component {
         activityId,
       }
     })
-    console.log(comments)
-
     return { token, activity: activity.data[0], activityId, showcase: showcase.data, tickets: tickets.data, operation: operation.data, host: host.data[0], rating: rating[0], comments: comments.data }
   }
   state = {
@@ -89,11 +87,20 @@ class view extends Component {
     rating: 0,
     validate_comment: true,
     validate_rating: true,
+    isRate: false,
   }
   async componentDidMount() {
+   
     if (!this.props.token) {
       return
     }
+    const myComments = await Api.get({
+      url: '/comments',
+      params: {
+        activityId: this.props.activityId,
+        userId: this.props.token.data.id
+      }
+    })
     const bookmark = await Api.get({
       url: '/bookmarks',
       params: {
@@ -101,13 +108,18 @@ class view extends Component {
         userId: this.props.token.data.id,
       }
     })
+    if (myComments.data.length > 0) {
+      this.setState({
+        isRate: true,
+      })
+    }
     if (bookmark.data.length > 0) {
       this.setState({
         bookmarks: bookmark.data[0],
         bookmark: true,
       })
     }
-    if (this.props.token) {
+    if (this.props.token && !this.state.isRate) {
       const textarea = document.getElementById("textarea");
       textarea.oninput = function () {
         textarea.style.height = "";
@@ -156,8 +168,10 @@ class view extends Component {
     })
     this.setState({
       comment: '',
+      rating: 0,
       validate_comment: true,
       validate_rating: true,
+      isRate: true,
     })
     const comments = await Api.get({
       url: '/comments',
@@ -289,7 +303,7 @@ class view extends Component {
                 )
               }
               {
-                this.props.token && (
+                this.props.token && !this.state.isRate && (
                   <div className="comment-section">
                     <div className="comment-title mt-txt-blue-midnight">
                       Leaves a comment
@@ -337,7 +351,7 @@ class view extends Component {
                   </div>
                   {
                     this.state.comments.map(val => (
-                      <Comment key={val.id} {...val} />
+                      <Comment token={this.props.token} key={val.id} {...val} />
                     ))
                   }
                 </div>
