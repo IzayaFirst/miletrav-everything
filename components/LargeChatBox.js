@@ -79,6 +79,21 @@ class LargeChatBox extends Component {
         </div>
         <style>
           {`
+          ::-webkit-scrollbar{
+              height:10px;
+              width:10px;
+              border-radius: 4px;
+              border: 1px solid #CCCCCC
+              background: transparent;
+              transition: all 0.3s ease;
+          }
+          ::-webkit-scrollbar:hover{
+              background: #00b3b3;
+          }
+          ::-webkit-scrollbar-thumb{
+              background: #00b3b3;
+              border-radius: 4px;
+          }
           .token {
               width: 100%;
               display: inline-block;

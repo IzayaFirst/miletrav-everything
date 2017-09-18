@@ -87,7 +87,7 @@ class view extends Component {
     rating: 0,
     validate_comment: true,
     validate_rating: true,
-    isRate: false,
+    isRate: true,
   }
   async componentDidMount() {
    
@@ -111,6 +111,10 @@ class view extends Component {
     if (myComments.data.length > 0) {
       this.setState({
         isRate: true,
+      })
+    } else {
+      this.setState({
+        isRate: false,
       })
     }
     if (bookmark.data.length > 0) {
@@ -351,7 +355,7 @@ class view extends Component {
                   </div>
                   {
                     this.state.comments.map(val => (
-                      <Comment token={this.props.token} key={val.id} {...val} />
+                      <Comment token={this.props.token} activity={this.state.activity} key={val.id} {...val} />
                     ))
                   }
                 </div>

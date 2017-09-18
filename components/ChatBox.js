@@ -86,6 +86,7 @@ class ChatBox extends Component {
         }
         <style jsx>
           {`
+             
             .token {
               width: 100%;
               display: inline-block;

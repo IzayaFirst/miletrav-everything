@@ -109,6 +109,27 @@ class filter extends Component {
     })
 
   }
+  async smartSearch(e) {
+    if (e.charCode === 13) {
+      this.setState({
+        querying: true,
+      })
+      const { title } = this.state
+      console.log(this.props.category_name)
+      const activity = await Api.get({
+        url: `/smartSearch`,
+        params: {
+          category: this.props.category_name,
+          title,
+          status: 1,
+        }
+      })
+      this.setState({
+        activity: activity.axiosData,
+        querying: false,
+      })
+    }
+  }
   render() {
     return (
       <div>
@@ -136,10 +157,10 @@ class filter extends Component {
           <div className="container">
             <div className="filter">
               <div className="form-group">
-                <label style={{ fontSize: 22, fontWeight: 600 }}>{this.props.category_name}</label>
+                <label style={{ fontSize: 26, fontWeight: 600, marginBottom: 25 }}>Filter</label>
                 <div className="row">
-                  <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
-                    <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-control form-miletrav">
+                  <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                    <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-category">
                       {
                         this.state.categories.map(val => (
                           <option key={val.id} value={val.id}>{val.category_name}</option>
@@ -147,13 +168,13 @@ class filter extends Component {
                       }
                     </select>
                   </div>
-                  <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
-                    <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-control form-miletrav">
+                  <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                    <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-category">
                       <option value={0}>Experience</option>
                       <option value={1}>GuideBook</option>
                     </select>
                   </div>
-                  {
+                  {/*
                     this.state.filter === 0 && (
                       <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
                         <Geosuggest
@@ -162,17 +183,14 @@ class filter extends Component {
                         />
                       </div>
                     )
-                  }
+                  */}
                   {
                     this.state.filter === 0 && (
-                      <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
-                        <input onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-control form-miletrav" />
+                      <div className="col-xs-12 col-sm-6" style={{ marginBottom: 15 }}>
+                        <input onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-category" />
                       </div>
                     )
                   }
-                  <div className="col-xs-12 col-sm-2" style={{ marginBottom: 15 }}>
-                    <button onClick={this.searchByTitle.bind(this)} className="btn btn-primary" style={{ width: '100%' }}>Search</button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -229,7 +247,16 @@ class filter extends Component {
           </div>
         </div>
         <style jsx>
-          {`
+          {` 
+            .form-category {
+              display: block;
+              padding: 6px 0;
+              height: 100%;
+              font-size: 20px;
+              width: 100%;
+              border: 3px solid #003;
+              padding-left: 20px;
+            }
             .gradient {
               position: absolute;
               left: 0;
