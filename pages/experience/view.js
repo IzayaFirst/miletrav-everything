@@ -71,7 +71,10 @@ class view extends Component {
         activityId,
       }
     })
-    return { token, activity: activity.data[0], activityId, showcase: showcase.data, tickets: tickets.data, operation: operation.data, host: host.data[0], rating: rating[0], comments: comments.data }
+    const total = await Compute.get({
+      url: '/rating/average/'+activityId,
+    })
+    return { token, activity: activity.data[0], activityId, showcase: showcase.data, tickets: tickets.data, operation: operation.data, host: host.data[0], rating: rating[0], comments: comments.data, total: total.data[0] }
   }
   state = {
     host: this.props.host || {},
@@ -88,9 +91,12 @@ class view extends Component {
     validate_comment: true,
     validate_rating: true,
     isRate: true,
+    total: 0,
   }
   async componentDidMount() {
-   
+    this.setState({
+      total: this.props.total.avgRatings || 0
+    })
     if (!this.props.token) {
       return
     }
@@ -253,11 +259,7 @@ class view extends Component {
                   }
 
                 </div>
-                {/*
-                  this.props.token && (
-                    <Rating token={this.props.token} activity={this.state.activity} />
-                  )*/
-                }
+                <Rater rating={this.state.total} interactive={false}/>
                 <div className="location">
                   <i className="fa fa-map-marker" style={{ marginRight: 15 }} />
                   {this.state.activity.city.toUpperCase()} · {this.state.activity.category}

@@ -1,6 +1,20 @@
 import React, { Component } from 'react'
+import Rater from 'react-rater'
+import * as Compute from '../compute'
 
 class ActivityCard extends Component {
+  state = {
+    total: 0,
+  }
+  async componentDidMount() {
+    const total = await Compute.get({
+      url: '/rating/average/'+this.props.id
+    })
+    this.setState({
+      total: total.data[0].avgRatings || 0,
+    })
+  }
+  
   render() {
     return (
       <div>
@@ -15,10 +29,16 @@ class ActivityCard extends Component {
             <div className="detail">
               {this.props.city.toUpperCase()} · {this.props.category}
             </div>
+            <div className="rating">
+                <Rater rating={this.state.total} interactive={false}/>
+            </div>
           </div>
         </div>
         <style>
           {`
+          .react-rater a {
+            font-size: 16px;
+          }
           a:hover {
             text-decoration: none
           }
@@ -99,18 +119,6 @@ class ActivityCard extends Component {
             -webkit-transform: translate(-50%);
             transform: translate(-50%);
           }
-          .title-category {
-            padding: 15px 0;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 5px;
-            width: 100%;
-            margin: 20px 0;
-            display: inline-block;
-            background: #fff;
-            border: 3px solid #003;
-          }
           .category-card:hover {
             text-decoration: underline;
             border: 1px solid #c1c1c1;
@@ -135,11 +143,6 @@ class ActivityCard extends Component {
             padding: 20px 0;
             font-size: 18px;
             font-weight: 500;
-          }
-          .province {
-            background: url(/asset/img/colorful.png);
-            min-height: 30vh;
-            padding: 30px 0;
           }
           .content {
             margin-top: 0 auto;

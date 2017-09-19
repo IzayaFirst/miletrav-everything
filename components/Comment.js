@@ -104,7 +104,7 @@ class Comments extends Component {
       <div className="review-container">
         {
           this.state.canEdit && !this.state.edit && (
-            <span onClick={this.setEdit.bind(this)} className="edit-box fa fa-edit" />
+              <a className="edit-box" onClick={this.setEdit.bind(this)}>Edit</a>
           )
         }
         <div className="row">

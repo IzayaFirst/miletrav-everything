@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getIcon } from '../../helpers/master'
 import * as Api from '../../api'
 import LoadingAnimation from '../LoadingAnimation'
-
+import ActivityCard from '../ActivityCard'
 class Home extends Component {
   state = {
     lastest: [],
@@ -138,19 +138,7 @@ class Home extends Component {
                       this.state.lastest.map(val => (
                         <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
                           <a target="_blank" href={`/experience/${val.uuid}`}>
-                            <div className="activity-card">
-                              <div className="card-img-container">
-                                <img src={val.cover_photo} alt="" className="cover" />
-                              </div>
-                              <div className="desc txt-mt-blue-midnight">
-                                <div className="card-title">
-                                  {val.activity_name}
-                                </div>
-                                <div className="detail">
-                                  {val.city.toUpperCase()} · {val.category}
-                                </div>
-                              </div>
-                            </div>
+                            <ActivityCard {...val} />
                           </a>
                         </div>
                       ))
@@ -198,19 +186,7 @@ class Home extends Component {
                       this.state.lastestSport.map(val => (
                         <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
                           <a target="_blank" href={`/experience/${val.uuid}`}>
-                            <div className="activity-card">
-                              <div className="card-img-container">
-                                <img src={val.cover_photo} alt="" className="cover" />
-                              </div>
-                              <div className="desc txt-mt-blue-midnight">
-                                <div className="card-title">
-                                  {val.activity_name}
-                                </div>
-                                <div className="detail">
-                                  {val.city.toUpperCase()} · {val.category}
-                                </div>
-                              </div>
-                            </div>
+                            <ActivityCard {...val} />
                           </a>
                         </div>
                       ))
@@ -228,19 +204,7 @@ class Home extends Component {
                       this.state.lastestHistorical.map(val => (
                         <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
                           <a target="_blank" href={`/experience/${val.uuid}`}>
-                            <div className="activity-card">
-                              <div className="card-img-container">
-                                <img src={val.cover_photo} alt="" className="cover" />
-                              </div>
-                              <div className="desc txt-mt-blue-midnight">
-                                <div className="card-title">
-                                  {val.activity_name}
-                                </div>
-                                <div className="detail">
-                                  {val.city.toUpperCase()} · {val.category}
-                                </div>
-                              </div>
-                            </div>
+                           <ActivityCard {...val} />
                           </a>
                         </div>
                       ))
