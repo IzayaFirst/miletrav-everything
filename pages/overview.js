@@ -149,7 +149,7 @@ class overview extends Component {
                     <i className="fa fa-address-card" style={{ paddingRight: 10 }} />Total Transaction
                   </div>
                   <div className="total-earn">
-                    <span className="total-title" style={{ padding: '0 10px' }}>{this.state.totalTransaction}</span> THB
+                    <span className="total-title" style={{ padding: '0 10px' }}>{this.state.totalTransaction}</span> Transaction (s)
                   </div>
                 </div>
               </div>
@@ -159,7 +159,7 @@ class overview extends Component {
                     <i className="fa fa-users" style={{ paddingRight: 10 }} />Total Amount
                   </div>
                   <div className="total-earn">
-                    <span className="total-title" style={{ padding: '0 10px' }}>{this.state.totalBooking}</span> THB
+                    <span className="total-title" style={{ padding: '0 10px' }}>{this.state.totalBooking}</span> Person (s)
                   </div>
                 </div>
               </div>
