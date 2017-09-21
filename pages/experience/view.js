@@ -72,7 +72,7 @@ class view extends Component {
       }
     })
     const total = await Compute.get({
-      url: '/rating/average/'+activityId,
+      url: '/rating/average/' + activityId,
     })
     return { token, activity: activity.data[0], activityId, showcase: showcase.data, tickets: tickets.data, operation: operation.data, host: host.data[0], rating: rating[0], comments: comments.data, total: total.data[0] }
   }
@@ -94,9 +94,16 @@ class view extends Component {
     total: 0,
   }
   async componentDidMount() {
-    this.setState({
-      total: this.props.total.avgRatings || 0
-    })
+    if (this.props.total) {
+      this.setState({
+        total: this.props.total.avgRatings || 0
+      })
+    } else {
+      this.setState({
+        total: 0
+      })
+    }
+
     if (!this.props.token) {
       return
     }
@@ -259,7 +266,7 @@ class view extends Component {
                   }
 
                 </div>
-                <Rater rating={this.state.total} interactive={false}/>
+                <Rater rating={this.state.total} interactive={false} />
                 <div className="location">
                   <i className="fa fa-map-marker" style={{ marginRight: 15 }} />
                   {this.state.activity.city.toUpperCase()} · {this.state.activity.category}

@@ -8,13 +8,20 @@ class ActivityCard extends Component {
   }
   async componentDidMount() {
     const total = await Compute.get({
-      url: '/rating/average/'+this.props.id
+      url: '/rating/average/' + this.props.id
     })
-    this.setState({
-      total: total.data[0].avgRatings || 0,
-    })
+    if (total.data[0]) {
+      this.setState({
+        total: total.data[0].avgRatings || 0,
+      })
+    } else {
+       this.setState({
+        total: 0,
+      })
+    }
+
   }
-  
+
   render() {
     return (
       <div>
@@ -30,7 +37,7 @@ class ActivityCard extends Component {
               {this.props.city.toUpperCase()} · {this.props.category}
             </div>
             <div className="rating">
-                <Rater rating={this.state.total} interactive={false}/>
+              <Rater rating={this.state.total} interactive={false} />
             </div>
           </div>
         </div>

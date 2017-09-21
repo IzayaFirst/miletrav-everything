@@ -52,6 +52,12 @@ class filter extends Component {
     city: '',
     filter: 0,
     querying: false,
+    done: false,
+  }
+  componentDidMount() {
+    this.setState({
+      done: true,
+    })
   }
 
   setCategory(e) {
@@ -154,27 +160,30 @@ class filter extends Component {
            */
         }
         <div className="content">
-          <div className="container">
-            <div className="filter">
-              <div className="form-group">
-                <label style={{ fontSize: 26, fontWeight: 600, marginBottom: 25 }}>Filter</label>
-                <div className="row">
-                  <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
-                    <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-category">
-                      {
-                        this.state.categories.map(val => (
-                          <option key={val.id} value={val.id}>{val.category_name}</option>
-                        ))
-                      }
-                    </select>
-                  </div>
-                  <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
-                    <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-category">
-                      <option value={0}>Experience</option>
-                      <option value={1}>GuideBook</option>
-                    </select>
-                  </div>
-                  {/*
+          {
+            this.state.done && (
+
+              <div className="container">
+                <div className="filter">
+                  <div className="form-group">
+                    <label style={{ fontSize: 26, fontWeight: 600, marginBottom: 25 }}>Filter</label>
+                    <div className="row">
+                      <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                        <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-category">
+                          {
+                            this.state.categories.map(val => (
+                              <option key={val.id} value={val.id}>{val.category_name}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
+                      <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                        <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-category">
+                          <option value={0}>Experience</option>
+                          <option value={1}>GuideBook</option>
+                        </select>
+                      </div>
+                      {/*
                     this.state.filter === 0 && (
                       <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
                         <Geosuggest
@@ -184,67 +193,69 @@ class filter extends Component {
                       </div>
                     )
                   */}
-                  {
-                    this.state.filter === 0 && (
-                      <div className="col-xs-12 col-sm-6" style={{ marginBottom: 15 }}>
-                        <input onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-category" />
-                      </div>
-                    )
-                  }
+                      {
+                        this.state.filter === 0 && (
+                          <div className="col-xs-12 col-sm-6" style={{ marginBottom: 15 }}>
+                            <input onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-category" />
+                          </div>
+                        )
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="section-activity">
+                    <div className="row">
+                      {
+                        this.state.querying && (
+                          <div>
+                            <LoadingAnimation />
+                          </div>
+                        )
+                      }
+                      {
+                        !this.state.querying && this.state.filter === 0 && this.state.activity.map((val, index) => (
+                          <div className="col-xs-12 col-sm-6 col-md-3" key={val.uuid + index}>
+                            <a target="_blank" href={`/experience/${val.uuid}`}>
+                              <ActivityCard
+                                cover_photo={val.cover_photo}
+                                activity_name={val.activity_name}
+                                city={val.city}
+                                category={val.category}
+                              />
+                            </a>
+                          </div>
+                        ))
+                      }
+                      {
+                        this.state.filter === 1 && this.state.guidebook.map((val, index) => (
+                          <div className="col-xs-6 col-sm-2 col-md-2" key={val.uuid + index}>
+                            <a target="_blank" href={`/experience/${val.uuid}`}>
+                              <GuideBookCard
+                                uuid={val.uuid}
+                                cover_photo={val.cover_photo}
+                                title={val.title}
+                              />
+                            </a>
+                          </div>
+                        ))
+                      }
+                      {
+                        !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
+                          <EmptyState title="No any experience" />
+                        )
+                      }
+                      {
+                        !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
+                          <EmptyState title="No any guidebook" />
+                        )
+                      }
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className="section-activity">
-                <div className="row">
-                  {
-                    this.state.querying && (
-                      <div>
-                        <LoadingAnimation />
-                      </div>
-                    )
-                  }
-                  {
-                    !this.state.querying && this.state.filter === 0 && this.state.activity.map(val => (
-                      <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
-                        <a target="_blank" href={`/experience/${val.uuid}`}>
-                          <ActivityCard
-                            cover_photo={val.cover_photo}
-                            activity_name={val.activity_name}
-                            city={val.city}
-                            category={val.category}
-                          />
-                        </a>
-                      </div>
-                    ))
-                  }
-                  {
-                    this.state.filter === 1 && this.state.guidebook.map(val => (
-                      <div className="col-xs-6 col-sm-2 col-md-2" key={val.id}>
-                        <a target="_blank" href={`/experience/${val.uuid}`}>
-                          <GuideBookCard
-                            uuid={val.uuid}
-                            cover_photo={val.cover_photo}
-                            title={val.title}
-                          />
-                        </a>
-                      </div>
-                    ))
-                  }
-                  {
-                    !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
-                      <EmptyState title="No any experience" />
-                    )
-                  }
-                  {
-                    !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
-                      <EmptyState title="No any guidebook" />
-                    )
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
+            )
+          }
         </div>
         <style jsx>
           {` 
