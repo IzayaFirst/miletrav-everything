@@ -234,7 +234,6 @@ class view extends Component {
     })
   }
   render() {
-    console.log(this.state.comments)
     return (
       <div >
         <Header
