@@ -74,8 +74,6 @@ class Comments extends Component {
       url: '/comments/'+this.props.id,
       data: {
         text: text.trim(),
-        activityId: this.props.activity.id,
-        userId: this.props.token.data.id,
       },
       authToken: this.props.token.token,
       authType: 'Bearer'
