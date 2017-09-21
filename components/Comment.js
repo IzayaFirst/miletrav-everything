@@ -71,7 +71,7 @@ class Comments extends Component {
       return
     }
     const cc = await Api.patch({
-      url: '/comments',
+      url: '/comments/'+this.props.id,
       data: {
         text: text.trim(),
         activityId: this.props.activity.id,
