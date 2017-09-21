@@ -221,6 +221,7 @@ class filter extends Component {
                                 cover_photo={val.cover_photo}
                                 activity_name={val.activity_name}
                                 city={val.city}
+                                id={val.id}
                                 category={val.category}
                               />
                             </a>
