@@ -18,13 +18,7 @@ class NotificationButton extends Component {
     const noti = bookings.filter((val) => {
       const date = moment(val.date)
       const today = moment(new Date())
-      if (today.isBefore(date)) {
-        const duration = moment.duration(date.diff(today))
-        if (duration.days() >= 0 && duration.days() <= 7) {
-          return true
-        }
-      }
-      return false
+      return moment(date).isBetween(today, today.add(7 , "days"), null, '[]')
     })
     this.setState({
       noti: noti.length || 0,

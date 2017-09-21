@@ -32,15 +32,7 @@ class notification extends Component {
     const noti = bookings.filter((val) => {
       const date = moment(val.date)
       const today = moment(new Date())
-      if (today.isBefore(date)) {
-        console.log(today, date)
-        const duration = moment.duration(date.diff(today))
-        console.log(duration.days())
-        if (duration.days() >= 0 && duration.days() <= 7) {
-          return true
-        }
-      }
-      return false
+      return moment(date).isBetween(today, today.add(7 , "days"), null, '[]')
     })
     this.setState({
       oneweek: noti || [],
