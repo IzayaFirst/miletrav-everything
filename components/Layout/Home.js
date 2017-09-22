@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { getIcon } from '../../helpers/master'
 import * as Api from '../../api'
+import * as Compute from '../../compute'
 import LoadingAnimation from '../LoadingAnimation'
 import ActivityCard from '../ActivityCard'
+import RecommendCard from '../RecommendCard'
+
 class Home extends Component {
   state = {
     lastest: [],
@@ -10,12 +13,57 @@ class Home extends Component {
     lastestSport: [],
     lastestHistorical: [],
     lastestGuideBook: [],
+    type: '',
+    recommend: [],
   }
 
   async componentDidMount() {
     this.setState({
       loading: true,
     })
+    let recommend;
+    if (this.props.token) {
+      recommend = await Compute.get({
+        url: '/user_recommend/' + this.props.token.data.id
+      })
+      if (recommend.axiosData.status && recommend.data.length > 0) {
+        this.setState({
+          recommend: recommend.data,
+          type: 'user',
+        })
+      } else {
+        recommend = await Compute.get({
+          url: '/top_recommend/'
+        })
+        if (recommend.axiosData && recommend.axiosData.length > 0) {
+          this.setState({
+            recommend: recommend.axiosData,
+            type: 'top',
+          })
+        } else {
+          this.setState({
+            recommend: [],
+            type: '',
+          })
+        }
+      }
+
+    } else {
+      recommend = await Compute.get({
+        url: '/top_recommend/'
+      })
+      if (recommend.axiosData && recommend.axiosData.length > 0) {
+        this.setState({
+          recommend: recommend.axiosData,
+          type: 'top',
+        })
+      } else {
+        this.setState({
+          recommend: [],
+          type: '',
+        })
+      }
+    }
     const lastestActivity = await Api.get({
       url: '/activities',
       params: {
@@ -46,6 +94,8 @@ class Home extends Component {
         status: 1,
       }
     })
+    console.log(recommend)
+
     this.setState({
       lastestGuideBook: lastestGuideBook.data || [],
       lastest: lastestActivity.data || [],
@@ -135,11 +185,9 @@ class Home extends Component {
                 <div>
                   <div className="row">
                     {
-                      this.state.lastest.map(val => (
+                      this.state.recommend.map(val => (
                         <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
-                          <a target="_blank" href={`/experience/${val.uuid}`}>
-                            <ActivityCard {...val} />
-                          </a>
+                          <RecommendCard {...val} type={this.state.type} />
                         </div>
                       ))
                     }
@@ -204,7 +252,7 @@ class Home extends Component {
                       this.state.lastestHistorical.map(val => (
                         <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
                           <a target="_blank" href={`/experience/${val.uuid}`}>
-                           <ActivityCard {...val} />
+                            <ActivityCard {...val} />
                           </a>
                         </div>
                       ))

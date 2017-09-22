@@ -41,12 +41,12 @@ class index extends Component {
         }
         {
           !this.props.token && (
-            <Home category={this.props.category || []} _content={_content}/>
+            <Home token={this.props.token} category={this.props.category || []} _content={_content}/>
           )
         }
         {
           this.props.token && !this.props.token.data.is_company && (
-            <Home _content={_content} category={this.props.category || []} />
+            <Home token={this.props.token}  _content={_content} category={this.props.category || []} />
           )
         }
         <Footer />

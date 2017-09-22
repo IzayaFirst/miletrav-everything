@@ -158,7 +158,7 @@ class Comments extends Component {
                         <div className="btn-comment">
                           <button onClick={this.comment.bind(this)} className="btn btn-primary">
                             Submit
-                              </button>
+                          </button>
                         </div>
                       </div>
                     </div>

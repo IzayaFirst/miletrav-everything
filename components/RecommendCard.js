@@ -1,40 +1,63 @@
 import React, { Component } from 'react'
 import Rater from 'react-rater'
+import * as Api from '../api'
 import * as Compute from '../compute'
 
-class ActivityCard extends Component {
+class RecommendCard extends Component {
   state = {
     total: 0,
+    activity: {}
   }
   async componentDidMount() {
+    const { activityId } = this.props
+    const activity = await Api.get({
+      url: '/activities',
+      params: {
+        id: activityId,
+      }
+    })
+    this.setState({
+      activity: activity.data[0]
+    })
     const total = await Compute.get({
-      url: '/rating/average/' + this.props.id
+      url: '/rating/average/' + activityId
     })
     if (total.data[0]) {
       this.setState({
         total: total.data[0].avgRatings || 0,
       })
     } else {
-       this.setState({
+      this.setState({
         total: 0,
       })
     }
-
   }
 
   render() {
     return (
-      <div>
+       <a target="_blank" href={`/experience/${this.state.activity.uuid}`}>
         <div className="activity-card">
+          <div className="banner">
+            {
+              this.props.type === 'user' && (
+                 <span><i className="fa fa-gift" style={{ marginRight: 5 }}/>Recommend for you</span>
+              )
+            }
+            {
+              this.props.type === 'top' && (
+                <span> <i className="fa fa-fire" style={{ marginRight: 5 }}/>Popular Activity</span>
+              )
+            }
+          </div>
           <div className="card-img-container">
-            <img src={this.props.cover_photo} alt="" className="cover" />
+            <img src={this.state.activity.cover_photo} alt="" className="cover" />
           </div>
           <div className="desc txt-mt-blue-midnight">
             <div className="card-title">
-              {this.props.activity_name}
+              {this.state.activity.activity_name}
             </div>
             <div className="detail">
-              {this.props.category}
+              {this.state.activity.category}
             </div>
             <div className="rating">
               <Rater rating={this.state.total} interactive={false} />
@@ -43,6 +66,18 @@ class ActivityCard extends Component {
         </div>
         <style>
           {`
+          .banner {
+            color: #FFF;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 5px;
+            width: 60%;
+            position: absolute;
+            top: 20px;
+            left: 12px;
+            background: #24A6A4;
+            z-index: 999;
+          }
           .react-rater a {
             font-size: 16px;
           }
@@ -158,9 +193,9 @@ class ActivityCard extends Component {
           }
           `}
         </style>
-      </div>
-    )
+      </a>
+    );
   }
 }
 
-export default ActivityCard
+export default RecommendCard;
