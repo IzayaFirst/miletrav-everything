@@ -105,7 +105,7 @@ class ChatBox extends Component {
               max-width: 100px;
               color: #fff;
               font-size: 14px;
-              display: block;
+              display: inline-table;
             }
             .chat-form {
               border-top: 1px solid #cccccc;
@@ -127,7 +127,7 @@ class ChatBox extends Component {
             }
             .chat-container {
               padding: 25px;
-              overflow: auto;
+              overflow-y: auto;
               height: 400px;
               margin-bottom: 15px;
             }

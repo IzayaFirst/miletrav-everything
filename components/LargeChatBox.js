@@ -112,7 +112,7 @@ class LargeChatBox extends Component {
               max-width: 100px;
               color: #fff;
               font-size: 14px;
-              display: block;
+              display: inline-table;
             }
             .chat-form {
               border-top: 1px solid #cccccc;
