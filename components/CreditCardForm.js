@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Payment from 'payment'
 import Cards from 'react-credit-cards'
 import * as Api from '../api'
+import moment from 'moment'
 
 class CreditCardForm extends Component {
   componentDidMount() {
@@ -96,28 +97,20 @@ class CreditCardForm extends Component {
         const date = this.props.date
         const limit = this.props.ticket.amount
         if (limit) {
-          console.log(
-              total,
-              userId,
-              ticketId,
-              date,
-              this.props.amount,
-              id,
-            )
+          console.log(moment(date).format("YYYY-MM-DD HH:mm:ss"))
           const check = await Api.post({
             url: '/chargesAmountWithPricing',
             data: {
               total,
               userId,
               ticketId,
-              date,
+              date: moment(date).format("YYYY-MM-DD HH:mm:ss"),
               amount: parseInt(this.props.amount),
               card: id,
             },
             authToken: this.props.token.token,
             authType: 'Bearer'
           })
-          console.log('check1'+ check1)
           if(check.axiosData.miletrav_transaction) {
             this.props.setTransaction(check.axiosData.transaction)
             this.props.setStep(3)
@@ -134,7 +127,7 @@ class CreditCardForm extends Component {
               total,
               userId,
               ticketId,
-              date,
+              date: moment(date).format("YYYY-MM-DD HH:mm:ss"),
               isLimit,
               amount: this.props.amount,
               card: id,
@@ -149,7 +142,7 @@ class CreditCardForm extends Component {
               url: '/bookings',
               data: {
                 transaction: id,
-                date: this.props.date,
+                date: moment(this.props.date).format("YYYY-MM-DD HH:mm:ss"),
                 amount: parseInt(this.props.amount),
                 userId,
                 ticketId,

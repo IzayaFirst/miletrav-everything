@@ -97,7 +97,7 @@ class booking extends Component {
         const transaction = await Api.post({
           url: '/chargesAmountWithoutPricing',
           data: {
-            date: this.state.date,
+            date: moment(this.state.date).format("YYYY-MM-DD HH:mm:ss"),
             amount: parseInt(this.state.amount),
             userId: this.state.token.data.id,
             ticketId: this.state.ticket.id,
@@ -122,7 +122,7 @@ class booking extends Component {
           url: '/bookings',
           data: {
             transaction: btoa(new Date().getTime()),
-            date: this.state.date,
+            date: moment(this.state.date).format("YYYY-MM-DD HH:mm:ss"),
             amount: parseInt(this.state.amount),
             userId: this.state.token.data.id,
             ticketId: this.state.ticket.id,
