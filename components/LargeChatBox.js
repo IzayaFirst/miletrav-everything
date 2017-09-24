@@ -9,7 +9,6 @@ class LargeChatBox extends Component {
     reciever: 0,
   }
   async componentDidMount() {
-    console.log('xxxx')
     const { table, userId } = this.props
     const r = table.split('chat')
     const reciever = parseInt(r[0]) === parseInt(userId) ? parseInt(r[1]) : parseInt(r[0])
@@ -24,7 +23,6 @@ class LargeChatBox extends Component {
     })
   }
   async componentWillReceiveProps(nextProps) {
-    console.log('xxxx')
     const { table, userId } = nextProps
     const r = table.split('chat')
     const reciever = parseInt(r[0]) === parseInt(userId) ? parseInt(r[1]) : parseInt(r[0])

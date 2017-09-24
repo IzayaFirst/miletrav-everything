@@ -111,8 +111,8 @@ class Comments extends Component {
               <div className="col-xs-12">
                 <div className="img">
                   <div style={{
-                    background: `url('${this.state.user.cover_photo}') `,
-                    backgroundColor: '#2e2e2e',
+                    background: `url('${this.state.user.cover_photo || 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/avatar.png?alt=media&token=ed25f05a-3eda-48cf-b8d7-05775119d1b3'}') `,
+                    backgroundColor: '#FFF',
                     width: '100%',
                     height: 36,
                     display: 'inline-block',
