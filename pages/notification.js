@@ -26,14 +26,19 @@ class notification extends Component {
       url: '/bookings',
       params: {
         userId: token.data.id,
+        $limit: 50,
       }
     })
+    console.log(token.data.id)
     const bookings = booking.data
+    console.log(booking.data)
     const noti = bookings.filter((val) => {
-      const date = moment(val.date)
-      const today = moment(new Date())
-      return moment(date).isBetween(today, today.add(7 , "days"), null, '[]')
+      const date = moment(val.date).startOf('day')
+      const today = moment(new Date()).startOf('day')
+      const is = today <= date && date <= today.add(7 , "days")
+      return is
     })
+    console.log(noti)
     this.setState({
       oneweek: noti || [],
     })

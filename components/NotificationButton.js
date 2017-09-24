@@ -12,13 +12,15 @@ class NotificationButton extends Component {
       url: '/bookings',
       params: {
         userId: token.data.id,
+        $limit: 50,
       }
     })
     const bookings = booking.data
     const noti = bookings.filter((val) => {
-      const date = moment(val.date)
-      const today = moment(new Date())
-      return moment(date).isBetween(today, today.add(7 , "days"), null, '[]')
+      const date = moment(val.date).startOf('day')
+      const today = moment(new Date()).startOf('day')
+      const is = today <= date && date <= today.add(7 , "days")
+      return is
     })
     this.setState({
       noti: noti.length || 0,

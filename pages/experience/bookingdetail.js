@@ -14,6 +14,7 @@ class bookingdetail extends Component {
       url: '/bookings',
       params: {
         userId: token.data.id,
+        $limit: 50,
       }
     })
     const activity = await Api.get({

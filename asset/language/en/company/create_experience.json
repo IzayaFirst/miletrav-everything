@@ -46,5 +46,6 @@
   "ticket_end": "End date",
   "amount": "amount",
   "amount_err": "Please limit your ticket",
-  "amount_limit": "Limit your ticket"
+  "amount_limit": "Limit your ticket",
+  "operation_err": "Please define available date"
 }

@@ -20,6 +20,7 @@ class Ticket extends Component {
     validate_price: true,
     initialEditor: false,
     validate_amount: true,
+    validate_operation: true,
     isLimit: false,
     isImmersive: false,
     operationDay: [],
@@ -35,17 +36,20 @@ class Ticket extends Component {
       validate_name: true,
       validate_price: true,
       validate_amount: true,
+      validate_operation: true,
     })
     e.preventDefault()
     const validate_name = isRequired(this.props.ticket_name)
     const validate_price = this.props.price >= 0
     const validate_amount = this.props.amount > 0 || !this.state.isLimit
+    const validate_operation = this.state.operationDay.length > 0
     this.setState({
       validate_name,
       validate_price,
       validate_amount,
+      validate_operation,
     })
-    if (!validate_name || !validate_price || !validate_amount) {
+    if (!validate_name || !validate_price || !validate_amount || !validate_operation) {
       return
     }
     const { isImmersive, myDay } = this.state
@@ -260,8 +264,16 @@ class Ticket extends Component {
 
                       </div>
                     ))
+                  } 
+                  {
+                    !this.state.validate_operation && (
+                      <div className="error-status">
+                        {_content.operation_err}
+                      </div>
+                    )
                   }
                 </div>
+                
               </div>
             </div>
             <div className="form-group">

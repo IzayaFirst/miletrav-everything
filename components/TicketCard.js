@@ -13,7 +13,6 @@ class TicketCard extends Component {
         ticketId: this.props.id,
       }
     })
-    console.log(operation.data)
     this.setState({
       operation: operation.data,
     })
