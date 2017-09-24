@@ -73,7 +73,7 @@ class LargeChatBox extends Component {
           }
         </div>
         <div className="chat-form">
-          <input type="text" value={this.state.message} onChange={this.setMessage.bind(this)} onKeyPress={this.send.bind(this)} placeholder="Send a message" className="chat-input" />
+          <input type="text" value={this.state.message} onChange={this.setMessage.bind(this)} onKeyPress={this.send.bind(this)} placeholder="Send a message" className="chat-input form-control form-miletrav" />
         </div>
         <style>
           {`
@@ -114,11 +114,12 @@ class LargeChatBox extends Component {
             }
             .chat-form {
               border-top: 1px solid #cccccc;
+              padding: 10px;
             }
             .chat-input {
               width: 100%;
               padding: 15px;
-              border: none
+              border-radius: 4px;
             }
             .chat-header {
               padding: 25px;
