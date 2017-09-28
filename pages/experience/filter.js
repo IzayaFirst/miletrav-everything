@@ -53,6 +53,10 @@ class filter extends Component {
     filter: 0,
     querying: false,
     done: false,
+    suggestLocation: [],
+    suggestTitle: [],
+    isSuggest: false,
+    loadingSuggest: false,
   }
   componentDidMount() {
     this.setState({
@@ -83,11 +87,43 @@ class filter extends Component {
       querying: false,
     })
   }
-  setTitle(e) {
+  async setTitle(e) {
+    clearTimeout(id)
     const title = e.target.value
     this.setState({
       title,
     })
+    id = setTimeout(async () => {
+      this.setState({
+        loadingSuggest: true,
+      })
+      const suggestCity = await Api.get({
+        url: `/activities?city[$like]=%${title.replace(/ /g, "%")}%`,
+        params: {
+          category: this.props.category_name,
+          status: 1,
+          $limit: 5,
+        }
+      })
+      const suggestTitle = await Api.get({
+        url: `/activities?activity_name[$like]=%${title.replace(/ /g, "%")}%`,
+        params: {
+          category: this.props.category_name,
+          status: 1,
+          $limit: 5,
+        }
+      })
+      const location = suggestCity.data || []
+      const name = suggestTitle.data || []
+      const suggestLocation = location.filter(val => val.city.trim().length > 0).map(val => val.city)
+      const suggestName = name.filter(val => val.activity_name.trim().length > 0).map(val => val.activity_name)
+      await this.setState({
+        suggestLocation: [... new Set(suggestLocation)] || [],
+        suggestTitle: [... new Set(suggestName)] || [],
+        isSuggest: true,
+        loadingSuggest: false,
+      })
+    }, 1000)
   }
   setFilter(e) {
     const filter = parseInt(e.target.value)
@@ -115,13 +151,33 @@ class filter extends Component {
     })
 
   }
+  async searchTitleByClick(title) {
+    console.log('ttt')
+    this.setState({
+      title,
+      isSuggest: false,
+      querying: true,
+    })
+    const activity = await Api.get({
+      url: `/smartSearch`,
+      params: {
+        category: this.props.category_name,
+        title,
+        status: 1,
+      }
+    })
+    this.setState({
+      activity: activity.axiosData,
+      querying: false,
+    })
+  }
   async smartSearch(e) {
     if (e.charCode === 13) {
       this.setState({
         querying: true,
+        isSuggest: false,
       })
       const { title } = this.state
-      console.log(this.props.category_name)
       const activity = await Api.get({
         url: `/smartSearch`,
         params: {
@@ -135,6 +191,11 @@ class filter extends Component {
         querying: false,
       })
     }
+  }
+  setSuggestOut(e) {
+    this.setState({
+      isSuggest: false,
+    })
   }
   render() {
     return (
@@ -195,8 +256,32 @@ class filter extends Component {
                   */}
                       {
                         this.state.filter === 0 && (
-                          <div className="col-xs-12 col-sm-6" style={{ marginBottom: 15 }}>
-                            <input onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-category" />
+                          <div className="col-xs-12 col-sm-6" style={{ marginBottom: 15, position: 'relative' }}>
+                            <input   onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-category" />
+                            {
+                              this.state.filter === 0 && this.state.isSuggest && (
+                                <div  className="typeahead-container">
+                                  <div className="typeahead-box">
+                                    <div className="suggest-title">Activity Name</div>
+                                    {
+                                      this.state.suggestTitle.map((val, index) => (
+                                        <div onClick={this.searchTitleByClick.bind(this, val)} className="suggest-item" key={index}>
+                                          {val}
+                                        </div>
+                                      ))
+                                    }
+                                    <div className="suggest-title">Location</div>
+                                    {
+                                      this.state.suggestLocation.map((val, index) => (
+                                        <div onClick={this.searchTitleByClick.bind(this, val)} className="suggest-item" key={index}>
+                                          {val.toUpperCase() || ''}
+                                        </div>
+                                      ))
+                                    }
+                                  </div>
+                                </div>
+                              )
+                            }
                           </div>
                         )
                       }
@@ -260,6 +345,29 @@ class filter extends Component {
         </div>
         <style jsx>
           {` 
+            .suggest-item {
+              cursor: pointer;
+              padding: 5px 15px;
+            }
+            .suggest-item:hover {
+              background: #CCCCCC;
+            }
+            .suggest-title {
+              padding: 5px;
+              font-size: 16px;
+              font-weight: 600;
+            }
+            .typeahead-box {
+              position: absolute;
+              border: 1px solid #000;
+              top: 100%;
+              left: 15px;
+              right: 0;
+              background: #FFF;
+              z-index: 100;
+              width: calc(100% - 30px);
+            }
+
             .form-category {
               display: block;
               padding: 6px 0;
