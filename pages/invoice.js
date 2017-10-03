@@ -71,7 +71,7 @@ class invoice extends Component {
               <div className="qr-container" >
                 <div className="qr-image" id="qrcode">
                   <QRCode
-                    value={"http://localhost:5000/checkin?transaction=" + this.props.transaction.transaction}
+                    value={"https://www.miletrav.com/checkin?transaction=" + this.props.transaction.transaction}
                     size={128}
                     bgColor={"#ffffff"}
                     fgColor={"#000000"}
