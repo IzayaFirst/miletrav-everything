@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import QRCode from 'qrcode.react'
 import axios from 'axios'
 import domtoimage from 'dom-to-image'
 import { getCookiesFromReq } from '../helpers/cookies'
@@ -34,21 +35,28 @@ class invoice extends Component {
   }
   async savePdf() {
     let doc = new jsPDF({
-       orientation: 'landscape',
+      format: 'a6'
     })
-    const node = document.getElementById('invoice')
-    const uri = await domtoimage.toJpeg(node,  { quality: 1.5 })
+    const node = document.getElementById('qrcode')
+    const uri = await domtoimage.toPng(node, { quality: 1.5 })
     let img = new Image();
     img.src = uri
-    doc.addImage(img, 'png', 10, 15, 270, 95);
-    doc.save(this.props.transaction.transaction+'.pdf')
+    doc.setFontSize(10)
+    doc.addImage(img, 'png', 35, 15)
+    doc.text("Your Invoice :  " + this.props.transaction.transaction, 10, 60)
+    doc.text("Activity :  " + this.props.activity.activity_name, 10, 70)
+    doc.text("Ticket :  " + this.props.ticket.title, 10, 80)
+    doc.text("Pricing :  " + this.props.ticket.price + "Baht", 10, 90)
+    doc.text("For :  " + this.props.transaction.amount + "Person(s)", 10, 100)
+    doc.text("Booking Date :  " + moment(this.props.transaction.date).format('LL'), 10, 110)
+    doc.save(this.props.transaction.transaction + '.pdf')
   }
   render() {
     return (
       <div>
-        <Header pdf={true}/>
+        <Header pdf={true} />
         <div className="content">
-          <div >
+          <div className="card">
             <div className="cover_photo">
               <img src={this.props.activity.cover_photo} id="cover" alt="" className="resize" />
             </div>
@@ -60,6 +68,17 @@ class invoice extends Component {
                 Location : {this.props.activity.city.toUpperCase()}
               </div>
               <div className="activity_desc" dangerouslySetInnerHTML={{ __html: this.props.activity.activity_desc }} />
+              <div className="qr-container" >
+                <div className="qr-image" id="qrcode">
+                  <QRCode
+                    value={"http://localhost:5000/checkin?transaction=" + this.props.transaction.transaction}
+                    size={128}
+                    bgColor={"#ffffff"}
+                    fgColor={"#000000"}
+                    level={"L"}
+                  />
+                </div>
+              </div>
               <div className="transaction_info">
                 Your Invoice : {this.props.transaction.transaction}
               </div>
@@ -76,17 +95,25 @@ class invoice extends Component {
               <div className="ticket-info">
                 Booking Date: {moment(this.props.transaction.date).format('LL')}
               </div>
+              <div className="export">
+                <a onClick={this.savePdf.bind(this)} className="btn btn-primary">Export E-ticket</a>
+              </div>
             </div>
           </div>
-          <div className="export">
-            <a onClick={this.savePdf.bind(this)} className="btn btn-primary">Export</a>
-          </div>
+
         </div>
         <style jsx>
           {` 
+            .qr-image {
+              display: inline-block;
+              width: 128px;
+            }
+            .qr-container {
+              text-align: center;
+            }
             .export {
               text-align: center;
-              padding: 30px;
+              padding-top: 30px;
               background: #fff;
               border-radius: 4px;
             }
@@ -122,9 +149,23 @@ class invoice extends Component {
               border-radius: 4px;
             }
             .content {
-              padding: 50px 75px;
+              padding: 50px;
               background: #F5F5FF;
               height: 100%;
+            }
+            .card {
+              width: 60%;
+              margin: 0 auto;
+            }
+            @media only screen and (max-width: 968px) {
+              .card {
+                width: 80%;
+              }
+            }
+            @media only screen and (max-width: 768px) {
+              .card {
+                width: 80%;
+              }
             }
           `}
         </style>

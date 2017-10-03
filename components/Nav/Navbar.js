@@ -316,6 +316,7 @@ const Menu = ({ token, logout, cover_photo, _content }) => (
         <Bar.Collapse>
           <Nav pullRight>
             <NavItem onClick={() => window.location = '/'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-home fa-lg" /></NavItem>
+            <NavItem onClick={() => window.location = '/checkin'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-map-marker fa-lg" /></NavItem>
             <NavItem onClick={() => window.location = '/overview'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-area-chart fa-lg" /></NavItem>
             <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-commenting-o fa-lg" /></NavItem>
             <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>

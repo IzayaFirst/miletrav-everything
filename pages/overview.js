@@ -165,7 +165,7 @@ class overview extends Component {
               </div>
             </div>
             <div className="row" style={{ marginTop: 35 }}>
-              <div className="col-xs-12 col-sm-4 col-md-4">
+              <div className="col-xs-12 col-sm-12 col-md-12">
                 <div className="card">
                   <div className="card-title">
                     Your Activity
@@ -173,15 +173,19 @@ class overview extends Component {
                   <div className="description">
                     {
                       this.state.activity.map(val => (
-                        <div onClick={this.setActivityId.bind(this, val.id)} className={this.state.aid === val.id ? 'activity-row active': 'activity-row'} key={val.id}>
-                          {val.activity_name}
-                        </div>
+                        <a href={`/analytic/${val.uuid}`} key={val.id}>
+                          <div className="activity-row">
+                            {val.activity_name}
+                          </div>
+                        </a>
                       ))
                     }
                   </div>
                 </div>
               </div>
-              <div className="col-xs-12 col-sm-4 col-md-4">
+              {
+                /*
+                   <div className="col-xs-12 col-sm-4 col-md-4">
                 <div className="card">
                   <div className="card-title">
                     Your Tickets
@@ -204,6 +208,10 @@ class overview extends Component {
                   <div><span className="total-title-sm" style={{ padding: '0 10px' }}>Transaction : </span>{this.state.bookingTotalTransaction} transactions</div>
                 </div>
               </div>
+                
+                 */
+              }
+           
             </div>
           </div>
         </div>
@@ -213,9 +221,14 @@ class overview extends Component {
               background: #CCCCCC !important;
             }
             .activity-row {
-              padding: 4px 6px;
+              padding: 8px 6px;
               border-bottom: 1px solid #CCCCCC;
               cursor: pointer;
+            }
+            .description > a {
+              text-decoration: none;
+              color: #000;
+              font-size: 16px;
             }
             .description {
               height: 20vh;

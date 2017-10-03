@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { getIcon } from '../../helpers/master'
 import * as Api from '../../api'
 import * as Compute from '../../compute'
@@ -365,7 +365,6 @@ class Home extends Component {
               width: 100%
               margin: 0 auto; 
             }
-        
           }
           @media only screen and (max-width: 992px) {
             .section-activity {
@@ -382,8 +381,6 @@ class Home extends Component {
               margin: 15px auto;
             }
           }
-          
-          
           .header-category {
             text-align: center;
             font-size: 22px;

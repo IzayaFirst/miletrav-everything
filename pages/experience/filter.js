@@ -152,7 +152,6 @@ class filter extends Component {
 
   }
   async searchTitleByClick(title) {
-    console.log('ttt')
     this.setState({
       title,
       isSuggest: false,
@@ -197,9 +196,14 @@ class filter extends Component {
       isSuggest: false,
     })
   }
+  setSuggestIn(e) {
+    this.setState({
+      isSuggest: true,
+    })
+  }
   render() {
     return (
-      <div>
+      <div onClick={this.setSuggestOut.bind(this)}>
         <Header
           script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
         />
@@ -257,11 +261,11 @@ class filter extends Component {
                       {
                         this.state.filter === 0 && (
                           <div className="col-xs-12 col-sm-6" style={{ marginBottom: 15, position: 'relative' }}>
-                            <input   onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-category" />
+                            <input onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-category" />
                             {
                               this.state.filter === 0 && this.state.isSuggest && (
-                                <div  className="typeahead-container">
-                                  <div className="typeahead-box">
+                                <div className="typeahead-container">
+                                  <div  className="typeahead-box">
                                     <div className="suggest-title">Activity Name</div>
                                     {
                                       this.state.suggestTitle.map((val, index) => (
@@ -359,7 +363,9 @@ class filter extends Component {
             }
             .typeahead-box {
               position: absolute;
-              border: 1px solid #000;
+              border-left: 3px solid #003;
+              border-right: 3px solid #003;
+              border-bottom: 3px solid #003;
               top: 100%;
               left: 15px;
               right: 0;
