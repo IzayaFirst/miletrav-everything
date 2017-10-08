@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import Rater from 'react-rater'
 import * as Compute from '../compute'
+import * as Api from '../api'
 
 class ActivityCard extends Component {
   state = {
     total: 0,
+    totalComment: 0,
+    min: 0,
+    max: 0,
   }
   async componentDidMount() {
     const total = await Compute.get({
@@ -19,7 +23,17 @@ class ActivityCard extends Component {
         total: 0,
       })
     }
-
+    const totalComment = await Api.get({
+      url: '/getTotalComment?activityId='+this.props.id,
+    })
+    const getActivityPricing = await Api.get({
+      url: '/getActivityPrice?activityId='+this.props.id,
+    })
+    console.log(getActivityPricing)
+    this.setState({
+      totalComment: totalComment.axiosData[0].count || 0,
+      max: getActivityPricing.axiosData[0].max || 0,
+    })
   }
 
   render() {
@@ -33,16 +47,40 @@ class ActivityCard extends Component {
             <div className="card-title">
               {this.props.activity_name}
             </div>
-            <div className="detail">
-              {this.props.category}
+            <div className="category-section">
+              <span className="boxs">{this.props.category}</span> <span className="pricing">{this.state.max === 0 ? 'Free' : this.state.max +" THB"} </span>
             </div>
             <div className="rating">
-              <Rater rating={this.state.total} interactive={false} />
+              <Rater rating={this.state.total} interactive={false} />  <span className="comment-summary">{this.state.totalComment} reviews</span>
             </div>
           </div>
         </div>
         <style>
           {`
+          .category-section {
+            margin: 4px 0;
+            padding: 4px 0;
+          }
+          .boxs {
+            font-size: 12px;
+            padding: 2px 4px;
+            border: 1px solid #000;
+            border-radius: 4px;
+          }
+          .pricing {
+            padding-left: 4px;
+            font-weight: 600;
+            font-size: 14px;
+          }
+          .rating {
+            vertical-align: middle;
+          }
+          .comment-summary {
+            letter-spacing: 0.4px !important;
+            color: #484848 !important;
+            padding-left: 2px;
+            font-size: 12px;
+          }
           .react-rater a {
             font-size: 16px;
           }
@@ -56,9 +94,7 @@ class ActivityCard extends Component {
             display: -webkit-box;
             color: #4a4a4a;
             text-overflow: ellipsis;
-            -webkit-box-orient: vertical;
-            max-height: 40px;
-            -webkit-line-clamp: 1;
+            max-height: 60px;
           }
           .card-title {
             font-weight: 600;

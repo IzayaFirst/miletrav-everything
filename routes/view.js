@@ -9,6 +9,7 @@ module.exports = function (app, server, middlewareFunction) {
     server.get('/notification', middlewareFunction.requireMemberNotCompany , (req, res, next) => app.render(req, res, '/notification', middlewareFunction.getAllReqValue({ req, res })))
     server.get('/overview', middlewareFunction.requireMemberCompany , (req, res, next) => app.render(req, res, '/overview', middlewareFunction.getAllReqValue({ req, res })))
     server.get('/analytic/:uuid', middlewareFunction.requireMemberCompany , (req, res, next) => app.render(req, res, '/analytic', middlewareFunction.getAllReqValue({ req, res })))
-    server.get('/checkin/', middlewareFunction.requireMemberCompany , (req, res, next) => app.render(req, res, '/checkin', middlewareFunction.getAllReqValue({ req, res })))
+    server.get('/checkin', middlewareFunction.requireMemberCompany , (req, res, next) => app.render(req, res, '/checkin', middlewareFunction.getAllReqValue({ req, res })))
+    server.get('/list', (req, res, next) => app.render(req, res, '/list', middlewareFunction.getAllReqValue({ req, res })))
 
 }

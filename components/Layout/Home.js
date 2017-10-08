@@ -208,6 +208,7 @@ class Home extends Component {
                               background: `url('${val.cover_photo}') center center no-repeat`,
                               backgroundColor: '#404040',
                               backgroundSize: 'cover',
+                              filter: 'brightness(0.92)'
                             }}>
                             <span className="guide-tag">
                               Guide
@@ -245,7 +246,7 @@ class Home extends Component {
               <div className="section-activity">
                 <div className="section-title">
                   Historical
-            </div>
+                  </div>
                 <div>
                   <div className="row">
                     {
@@ -267,6 +268,7 @@ class Home extends Component {
         <style>
           {`
           .guide-tag {
+            filter: brightness(1.00);
             position: relative !important;
             bottom: -110px !important;
             left: 10px !important;

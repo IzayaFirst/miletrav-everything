@@ -10,6 +10,7 @@ class GuideBookCard extends Component {
               background: `url('${this.props.cover_photo}') center center no-repeat`,
               backgroundColor: '#404040',
               backgroundSize: 'cover',
+              filter: 'brightness(0.32)'
             }}>
             <span className="guide-tag">
               Guide

@@ -288,9 +288,9 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 .province {
   background: url('https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/henry-be-229092%20(1).jpg?alt=media&token=27beb1b9-56d1-4324-892f-471a053e78ed') top center no-repeat;
   background-size: cover;
-  padding: 90px 0;
   text-align: center;
-  min-height: 40vh;
+  padding-top: 20vh;
+  min-height: 70vh;
   margin-bottom: 15px;
 }
 @media only screen and (min-width: 768px) {

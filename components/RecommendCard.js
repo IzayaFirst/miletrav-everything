@@ -6,7 +6,9 @@ import * as Compute from '../compute'
 class RecommendCard extends Component {
   state = {
     total: 0,
-    activity: {}
+    activity: {},
+    totalComment: 0,
+    max: 0,
   }
   async componentDidMount() {
     const { activityId } = this.props
@@ -31,6 +33,16 @@ class RecommendCard extends Component {
         total: 0,
       })
     }
+    const totalComment = await Api.get({
+      url: '/getTotalComment?activityId='+activityId,
+    })
+    const getActivityPricing = await Api.get({
+      url: '/getActivityPrice?activityId='+activityId,
+    })
+    this.setState({
+      totalComment: totalComment.axiosData[0].count || 0,
+      max: getActivityPricing.axiosData[0].max || 0,
+    })
   }
 
   render() {
@@ -56,16 +68,40 @@ class RecommendCard extends Component {
             <div className="card-title">
               {this.state.activity.activity_name}
             </div>
-            <div className="detail">
-              {this.state.activity.category}
+             <div className="category-section">
+              <span className="boxs">{this.state.activity.category}</span> <span className="pricing">{this.state.max === 0 ? 'Free' : this.state.max +" THB"} </span>
             </div>
             <div className="rating">
-              <Rater rating={this.state.total} interactive={false} />
+              <Rater rating={this.state.total} interactive={false} /> <span className="comment-summary">{this.state.totalComment} reviews</span>
             </div>
           </div>
         </div>
         <style>
           {`
+          .rating {
+            vertical-align: middle;
+          }
+          .comment-summary {
+            letter-spacing: 0.4px !important;
+            color: #484848 !important;
+            padding-left: 2px;
+            font-size: 12px;
+          }
+          .category-section {
+            margin: 4px 0;
+            padding: 4px 0;
+          }
+          .boxs {
+            font-size: 12px;
+            padding: 2px 4px;
+            border: 1px solid #000;
+            border-radius: 4px;
+          }
+          .pricing {
+            padding-left: 4px;
+            font-weight: 600;
+            font-size: 14px;
+          }
           .banner {
             color: #FFF;
             font-weight: 600;
@@ -74,7 +110,7 @@ class RecommendCard extends Component {
             width: 60%;
             position: absolute;
             top: 20px;
-            left: 12px;
+            left: 8px;
             background: #24A6A4;
             z-index: 999;
           }

@@ -56,6 +56,7 @@ class filter extends Component {
     suggestLocation: [],
     suggestTitle: [],
     isSuggest: false,
+    searchTitle: '',
     loadingSuggest: false,
   }
   componentDidMount() {
@@ -168,6 +169,7 @@ class filter extends Component {
     this.setState({
       activity: activity.axiosData,
       querying: false,
+      searchTitle: title,
     })
   }
   async smartSearch(e) {
@@ -188,6 +190,7 @@ class filter extends Component {
       this.setState({
         activity: activity.axiosData,
         querying: false,
+        searchTitle: title,
       })
     }
   }
@@ -208,47 +211,42 @@ class filter extends Component {
           script={['//maps.googleapis.com/maps/api/js?key=AIzaSyDSLUQyHbi8scSrfpCe5uVdRxCoDzZKaZ4&libraries=places&language=en&region=TH']}
         />
         <Navbar token={this.props.token ? this.props.token : false} />
-        {
-          /**
-           * 
-
-        <div className="category-section-title txt-mt-pink" style={{
-          background: `url('${getCover(parseInt(this.state.id))}') center center no-repeat`,
-          backgroundSize: 'cover'
-        }}>
-          <div className="gradient" />
-          <div style={{ position: 'absolute', textAlign: 'center', width: '100%', color: '#fff' }}>
+        <div>
+          <div className="category-section-title txt-mt-pink" style={{
+            background: `url('${getCover(parseInt(this.state.id))}') center center no-repeat`,
+            backgroundSize: 'cover',
+            filter: 'brightness(0.32)'
+          }} />
+          <div className="title-filtering txt-mt-white">
             {this.props.category_name}
           </div>
         </div>
 
-           */
-        }
+
         <div className="content">
           {
             this.state.done && (
-
-              <div className="container">
-                <div className="filter">
-                  <div className="form-group">
-                    <label style={{ fontSize: 26, fontWeight: 600, marginBottom: 25 }}>Filter</label>
-                    <div className="row">
-                      <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
-                        <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-category">
-                          {
-                            this.state.categories.map(val => (
-                              <option key={val.id} value={val.id}>{val.category_name}</option>
-                            ))
-                          }
-                        </select>
-                      </div>
-                      <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
-                        <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-category">
-                          <option value={0}>Experience</option>
-                          <option value={1}>GuideBook</option>
-                        </select>
-                      </div>
-                      {/*
+              <div>
+                <div className="filter-container">
+                  <div className="filter">
+                    <div className="form-group">
+                      <div className="row">
+                        <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                          <select value={this.props.category} onChange={this.setCategory.bind(this)} className="form-category">
+                            {
+                              this.state.categories.map(val => (
+                                <option key={val.id} value={val.id}>{val.category_name}</option>
+                              ))
+                            }
+                          </select>
+                        </div>
+                        <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
+                          <select value={this.state.filter} onChange={this.setFilter.bind(this)} className="form-category">
+                            <option value={0}>Experience</option>
+                            <option value={1}>GuideBook</option>
+                          </select>
+                        </div>
+                        {/*
                     this.state.filter === 0 && (
                       <div className="col-xs-12 col-sm-3" style={{ marginBottom: 15 }}>
                         <Geosuggest
@@ -258,88 +256,96 @@ class filter extends Component {
                       </div>
                     )
                   */}
-                      {
-                        this.state.filter === 0 && (
-                          <div className="col-xs-12 col-sm-6" style={{ marginBottom: 15, position: 'relative' }}>
-                            <input onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title of your experience" value={this.state.title} className="form-category" />
-                            {
-                              this.state.filter === 0 && this.state.isSuggest && (
-                                <div className="typeahead-container">
-                                  <div  className="typeahead-box">
-                                    <div className="suggest-title">Activity Name</div>
-                                    {
-                                      this.state.suggestTitle.map((val, index) => (
-                                        <div onClick={this.searchTitleByClick.bind(this, val)} className="suggest-item" key={index}>
-                                          {val}
-                                        </div>
-                                      ))
-                                    }
-                                    <div className="suggest-title">Location</div>
-                                    {
-                                      this.state.suggestLocation.map((val, index) => (
-                                        <div onClick={this.searchTitleByClick.bind(this, val)} className="suggest-item" key={index}>
-                                          {val.toUpperCase() || ''}
-                                        </div>
-                                      ))
-                                    }
+                        {
+                          this.state.filter === 0 && (
+                            <div className="col-xs-12 col-sm-6" style={{ marginBottom: 15, position: 'relative' }}>
+                              <input onKeyPress={this.smartSearch.bind(this)} onChange={this.setTitle.bind(this)} type="text" placeholder="Find a title, location of your experience" value={this.state.title} className="form-category" />
+                              {
+                                this.state.filter === 0 && this.state.isSuggest && (
+                                  <div className="typeahead-container">
+                                    <div className="typeahead-box">
+                                      <div className="suggest-title">Activity Name</div>
+                                      {
+                                        this.state.suggestTitle.map((val, index) => (
+                                          <div onClick={this.searchTitleByClick.bind(this, val)} className="suggest-item" key={index}>
+                                            {val}
+                                          </div>
+                                        ))
+                                      }
+                                      <div className="suggest-title">Location</div>
+                                      {
+                                        this.state.suggestLocation.map((val, index) => (
+                                          <div onClick={this.searchTitleByClick.bind(this, val)} className="suggest-item" key={index}>
+                                            {val.toUpperCase() || ''}
+                                          </div>
+                                        ))
+                                      }
+                                    </div>
                                   </div>
-                                </div>
-                              )
-                            }
-                          </div>
-                        )
-                      }
+                                )
+                              }
+                            </div>
+                          )
+                        }
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div className="section-activity">
-                    <div className="row">
-                      {
-                        this.state.querying && (
-                          <div>
-                            <LoadingAnimation />
+                <div className="container">
+                  <div>
+                    <div className="section-activity">
+                      <div className="row">
+                        <div className="col-xs-12">
+                          <div className="result-title">
+                            {this.state.searchTitle === '' ? 'Best for you' : "Result for : " + this.state.searchTitle}
                           </div>
-                        )
-                      }
-                      {
-                        !this.state.querying && this.state.filter === 0 && this.state.activity.map((val, index) => (
-                          <div className="col-xs-12 col-sm-6 col-md-3" key={val.uuid + index}>
-                            <a target="_blank" href={`/experience/${val.uuid}`}>
-                              <ActivityCard
-                                cover_photo={val.cover_photo}
-                                activity_name={val.activity_name}
-                                city={val.city}
-                                id={val.id}
-                                category={val.category}
-                              />
-                            </a>
-                          </div>
-                        ))
-                      }
-                      {
-                        this.state.filter === 1 && this.state.guidebook.map((val, index) => (
-                          <div className="col-xs-6 col-sm-2 col-md-2" key={val.uuid + index}>
-                            <a target="_blank" href={`/experience/${val.uuid}`}>
-                              <GuideBookCard
-                                uuid={val.uuid}
-                                cover_photo={val.cover_photo}
-                                title={val.title}
-                              />
-                            </a>
-                          </div>
-                        ))
-                      }
-                      {
-                        !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
-                          <EmptyState title="No any experience" />
-                        )
-                      }
-                      {
-                        !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
-                          <EmptyState title="No any guidebook" />
-                        )
-                      }
+                        </div>
+                        {
+                          this.state.querying && (
+                            <div>
+                              <LoadingAnimation />
+                            </div>
+                          )
+                        }
+                        {
+                          !this.state.querying && this.state.filter === 0 && this.state.activity.map((val, index) => (
+                            <div className="col-xs-12 col-sm-6 col-md-3" key={val.uuid + index}>
+                              <a target="_blank" href={`/experience/${val.uuid}`}>
+                                <ActivityCard
+                                  cover_photo={val.cover_photo}
+                                  activity_name={val.activity_name}
+                                  city={val.city}
+                                  id={val.id}
+                                  category={val.category}
+                                />
+                              </a>
+                            </div>
+                          ))
+                        }
+                        {
+                          this.state.filter === 1 && this.state.guidebook.map((val, index) => (
+                            <div className="col-xs-6 col-sm-2 col-md-2" key={val.uuid + index}>
+                              <a target="_blank" href={`/experience/${val.uuid}`}>
+                                <GuideBookCard
+                                  uuid={val.uuid}
+                                  cover_photo={val.cover_photo}
+                                  title={val.title}
+                                />
+                              </a>
+                            </div>
+                          ))
+                        }
+                        {
+                          !this.state.querying && this.state.filter === 0 && this.state.activity.length === 0 && (
+                            <EmptyState title="No any experience" />
+                          )
+                        }
+                        {
+                          !this.state.querying && this.state.filter === 1 && this.state.guidebook.length === 0 && (
+                            <EmptyState title="No any guidebook" />
+                          )
+                        }
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -349,6 +355,20 @@ class filter extends Component {
         </div>
         <style jsx>
           {` 
+            .result-title {
+              font-size: 30px;
+              font-weight: 600;
+              padding: 15px 0; 
+            }
+            .title-filtering {
+              position: absolute;
+              text-align: center;
+              width: 100%;
+              font-size: 50px;
+              font-weight: 600;
+              top: 30vh;
+              
+            }
             .suggest-item {
               cursor: pointer;
               padding: 5px 15px;
@@ -395,7 +415,12 @@ class filter extends Component {
               height: 400px;
             }
             .filter {
-              margin: 10px 15px;
+              margin: 10px 45px;
+            
+            }
+            .filter-container {
+              border-bottom: 1px solid #e4e4e4 !important;
+              box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1) !important;
             }
             .search-title-container {
               padding: 7px 0;
@@ -407,6 +432,16 @@ class filter extends Component {
               font-weight: 600;
               padding-top: 22vh;
               text-align: center;
+            }
+            @media only screen and (max-width: 768px) {
+              .category-section-title {
+                height: 200px;
+              }
+              .title-filtering {
+                font-size: 45px;
+                font-weight: 600;
+                top: 16vh;
+              }
             }
             .section-activity {
               margin: 20px 15px;
