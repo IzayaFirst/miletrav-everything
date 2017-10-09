@@ -5,6 +5,7 @@ import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
 import * as Api from '../api'
 import Footer from '../components/Footer'
+import Jchart from 'jchart'
 
 class overview extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -12,17 +13,9 @@ class overview extends Component {
     return { token }
   }
   state = {
-    totalEarn: 0,
     activity: [],
-    totalBooking: 0,
-    totalTransaction: 0,
-    aid: 0,
-    ticket: [],
-    booking: [],
-    tid: 0,
-    bookingTotalEarn : 0,
-    bookingTotalTransaction: 0,
-    bookingTotalAmount: 0,
+    total_amount: [],
+    total_earn: 0,
   }
   async componentDidMount() {
     const activity = await Api.get({
@@ -36,23 +29,7 @@ class overview extends Component {
     })
     if (activity.data.length > 0) {
       const myActivity = activity.data.map(val => val.id)
-      const earn = await Api.get({
-        url: `/totalEarn`,
-        params: {
-          data: {
-            activityId: myActivity,
-          }
-        }
-      })
-      const transactionTotal = await Api.get({
-        url: `/totalTransaction`,
-        params: {
-          data: {
-            activityId: myActivity,
-          }
-        }
-      })
-      const bookTotal = await Api.get({
+      const total_amount = await Api.get({
         url: `/totalAmount`,
         params: {
           data: {
@@ -60,66 +37,63 @@ class overview extends Component {
           }
         }
       })
+      const total_earn = await Api.get({
+        url: `/totalEarn`,
+        params: {
+          data: {
+            activityId: myActivity,
+          }
+        }
+      })
       this.setState({
-        totalEarn: earn.axiosData[0].total || 0,
-        totalBooking: bookTotal.axiosData[0].total || 0,
-        totalTransaction: transactionTotal.axiosData[0].total || 0,
+        total_amount: total_amount.axiosData || [],
+        total_earn: total_earn.axiosData[0].total || 0,
       })
-    }
-  }
-  async setActivityId(id) {
-    this.setState({
-      aid: id,
-      tid: 0,
-      ticket: [],
-      bookingTotalAmount:  0,
-      bookingTotalEarn:  0,
-      booking: [],
-      bookingTotalTransaction:  0, 
-    })
-    const ticket = await Api.get({
-      url: '/tickets',
-      params: {
-        activityId: id
+      const score_data = {
+        "data": [{
+          "name": "Activity Summarize by Miletrav",
+          "type": "column",
+          "style": {
+            "columnWidth": 20,
+            "color": "#24A6A4"
+          },
+          "data": this.state.total_amount.map(val => val.total),
+          "caption": false
+        }]
       }
-    })
-    this.setState({
-      ticket: ticket.data || []
-    })
-  }
-  async setTicketId(id) {
-    console.log(id)
-    await this.setState({
-      tid: id,
-      bookingTotalAmount:  0,
-      bookingTotalEarn:  0,
-      booking: [],
-      bookingTotalTransaction:  0, 
-    })
-    const booking = await Api.get({
-      url: '/bookings',
-      params: {
-        ticketId: id,
-        $limit: 100,
+      const score_options = {
+        chart: {
+          width: window.innerWidth / 2,
+          height: window.innerHeight / 2
+        },
+        xAxis: {
+          grid: {
+            enable: false
+          },
+          tick: {
+            align: 'center'
+          },
+          label: {
+            align: 'center'
+          },
+          data: this.state.total_amount.map(val => val.name),
+        },
+        yAxis: {
+          min: 0,
+          max: this.state.total_amount.reduce((a, b) => Math.max(a.total, b.total)) === 0 ? 10000 : this.state.total_amount.reduce((a, b) => Math.max(a.total, b.total))
+        },
+        legend: {
+          enable: true,
+          marginTop: 30
+        },
+        captionMargin: 10
       }
-    })
-    const ticketPrice = this.state.ticket.filter(val => this.state.tid == val.id) 
-    const price = ticketPrice[0].price || 0
-    const bookings = booking.data || []
-    if (bookings.length > 0) {
-      let totalEarn = 0
-      let totalAmount = 0
-      let totalTransaction = bookings.length
-      bookings.map(val => {
-        const p = parseInt(val.amount) * parseInt(price)
-        totalEarn += p
-        totalAmount += parseInt(val.amount)
-      }) 
-      await this.setState({
-        bookingTotalAmount: totalAmount || 0,
-        bookingTotalEarn: totalEarn || 0,
-        bookingTotalTransaction: totalTransaction || 0,
-      })
+
+      const score_canvas = document.createElement('canvas');
+      score_canvas.width = score_options.chart.width;
+      score_canvas.height = score_options.chart.height;
+      document.getElementById("histogram").appendChild(score_canvas);
+      const miletravChart = new Jchart.bar(score_canvas, score_data.data, score_options);
     }
   }
   render() {
@@ -127,150 +101,99 @@ class overview extends Component {
       <div>
         <Header />
         <Navbar token={this.props.token ? this.props.token : false} />
-        <div className="header">
-          <div className="header-page txt-mt-white">Overview</div>
-        </div>
         <div className="content">
           <div className="container">
             <div className="row">
-              <div className="col-xs-12 col-sm-4 col-md-4">
-                <div className="card">
-                  <div className="card-title">
-                    <i className="fa fa-money" style={{ paddingRight: 10 }} />Total Income
-                  </div>
-                  <div className="total-earn">
-                    <span className="total-title" style={{ padding: '0 10px' }}>{this.state.totalEarn}</span> THB
-                  </div>
+              <div className="graph-container">
+                <div className="graph-total">
+                  <div classNane="graph-metric">You earn</div>
+                  <div>{this.state.total_earn} THB</div>
                 </div>
-              </div>
-              <div className="col-xs-12 col-sm-4 col-md-4">
-                <div className="card">
-                  <div className="card-title">
-                    <i className="fa fa-address-card" style={{ paddingRight: 10 }} />Total Transaction
+                <div className="graph">
+                  <div className="graph-title">
+                    Summary of your activity Income (THB)
                   </div>
-                  <div className="total-earn">
-                    <span className="total-title" style={{ padding: '0 10px' }}>{this.state.totalTransaction}</span> Transaction (s)
-                  </div>
-                </div>
-              </div>
-              <div className="col-xs-12 col-sm-4 col-md-4">
-                <div className="card">
-                  <div className="card-title">
-                    <i className="fa fa-users" style={{ paddingRight: 10 }} />Total Amount
-                  </div>
-                  <div className="total-earn">
-                    <span className="total-title" style={{ padding: '0 10px' }}>{this.state.totalBooking}</span> Person (s)
-                  </div>
+                  <div id="histogram" />
                 </div>
               </div>
             </div>
-            <div className="row" style={{ marginTop: 35 }}>
-              <div className="col-xs-12 col-sm-12 col-md-12">
-                <div className="card">
-                  <div className="card-title">
-                    Your Activity
-                  </div>
-                  <div className="description">
+            <div className="activity-container">
+              <div className="row">
+                <div className="col-xs-12 col-sm-6">
+                  <div className="card">
+                    <div className="card-title">
+                      Your Activity
+                    </div>
                     {
                       this.state.activity.map(val => (
-                        <a href={`/analytic/${val.uuid}`} key={val.id}>
-                          <div className="activity-row">
-                            {val.activity_name}
-                          </div>
-                        </a>
-                      ))
-                    }
-                  </div>
-                </div>
-              </div>
-              {
-                /*
-                   <div className="col-xs-12 col-sm-4 col-md-4">
-                <div className="card">
-                  <div className="card-title">
-                    Your Tickets
-                  </div>
-                  <div className="description">
-                    {
-                      this.state.ticket.map(val => (
-                        <div onClick={this.setTicketId.bind(this, val.id)} className={this.state.tid === val.id ? 'activity-row active': 'activity-row'} key={val.id}>
-                          {val.title}
+                        <div onClick={() => { window.location = "/analytic/"+val.uuid}} key={val.id} className="card-desc">
+                          {val.activity_name}
                         </div>
                       ))
                     }
                   </div>
                 </div>
               </div>
-              <div className="col-xs-12 col-sm-4 col-md-4">
-                <div className="card">
-                  <div><span className="total-title-sm" style={{ padding: '0 10px' }}>Amount : </span>{this.state.bookingTotalAmount} person(s)</div>
-                  <div><span className="total-title-sm" style={{ padding: '0 10px' }}>Total Earn : </span>{this.state.bookingTotalEarn} Baht</div>
-                  <div><span className="total-title-sm" style={{ padding: '0 10px' }}>Transaction : </span>{this.state.bookingTotalTransaction} transactions</div>
-                </div>
-              </div>
-                
-                 */
-              }
-           
             </div>
           </div>
         </div>
         <Footer />
         <style jsx>{`
-            .active {
-              background: #CCCCCC !important;
-            }
-            .activity-row {
-              padding: 8px 6px;
-              border-bottom: 1px solid #CCCCCC;
+            .card-desc {
               cursor: pointer;
-            }
-            .description > a {
-              text-decoration: none;
-              color: #000;
+              padding: 15px;
               font-size: 16px;
             }
-            .description {
-              height: 20vh;
-              overflow: auto;
-            }
-            .total-title-sm {
-              font-weight: 600;
-            }
-            .total-title {
-              font-size: 40px;
-              font-weight: 600;
-            }
-            .total-earn {
-              text-align: center;
-              font-size: 12px;
-              padding: 15px;
-            }
-            .center {
-              text-align: center;
-            }
             .card-title {
-              font-weight: 600;
-              padding: 10px 0;
-              border-bottom: 1px solid #CCCCCC;
-            }
-            .card{
-              background: #ffffff;
-              padding: 15px 25px;
-              border-radius: 4px;
-              border: 1px solid #CCCCCC;
-            }
-            .header-page {
-              text-align: left;
+              text-align: center;
               font-size: 20px;
               font-weight: 600;
+              padding: 8px 0;
             }
-            .header {
-              background: #1B3C46;
-              padding: 25px 50px;
+            .card {
+              width: 100%;
+              background: #FFF;
+              padding: 15px;
+              border: 1px solid #CCC;
+            }
+            .activity-container {
+              margin: 15px 0;
+            }
+            .graph-metric {
+              font-size: 10px;
+              font-weight: 400 !important;
+            }
+            .graph-total {
+              text-align: center;
+              position: absolute;
+              background: #24A6A4;
+              padding: 12px;
+              font-size: 12px;
+              font-weight: 600;
+              color: white;
+              top: 16px;
+              right: 48px;
+              z-index: 999;
+            }
+            .graph-container {
+              position: relative;
+              padding: 25px;
+            }
+            .graph-title {
+              padding: 15px 0;
+              font-size: 22px;
+            }
+            .graph {
+              position: relative;
+              text-align: center;
+              background: #FFF;
+              max-width: 100%;
+              border: 1px solid #CCC;
+              padding: 35px;
+              overflow-x: auto;
             }
             .content {
-              background: #F5F5FF;
+              background: #EEF3F6;
               padding: 35px 0;
               min-height: 70vh;
             }

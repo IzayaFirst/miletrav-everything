@@ -6,22 +6,26 @@ import Navbar from '../components/Nav/Navbar'
 import * as Api from '../api'
 import Footer from '../components/Footer'
 import AnalyticCard from '../components/AnalyticCard'
+import Jchart from 'jchart'
 
 class analytic extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
     const token = getCookiesFromReq(req)
     const { uuid } = req.params
+    console.log(token.data.id)
     const activity = await Api.get({
       url: '/activities',
       params: {
         uuid,
-        id: token.data.id,
+        userId: token.data.id,
       }
     })
+    console.log(activity)
     return { token, uuid, activity: activity.data[0] || {} }
   }
   state = {
     tickets: [],
+    total_each_month: [],
   }
   async componentDidMount() {
     const activityId = this.props.activity.id
@@ -31,8 +35,71 @@ class analytic extends Component {
         activityId,
       }
     })
+    const total_each_month = await Api.get({
+      url: `/getTotalEachMonth`,
+      params: {
+        activityId,
+        month: 2017
+      }
+    })
+
+    const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const total_data_arr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    const t = total_each_month.axiosData || []
+    t.map(val => {
+      console.log(val)
+      total_data_arr[val.month - 1] = val.customer_total
+    })
+    const line_data = {
+      "data": [{
+        "name": "",
+        "type": "line",
+        "data": total_data_arr,
+        "style": {
+          "line": "solid",
+          "lineWidth": 2,
+          "color": "#47C6F1"
+        }
+      }],
+      "labels": month,
+      "volume": {
+        "color": "#79848F",
+        "data": total_data_arr
+      }
+    };
+
+    const line_options = {
+      chart: {
+        width: window.innerWidth / 2,
+        height: window.innerHeight / 2
+      },
+      xAxis: {
+        data: line_data.labels,
+        label: {
+          align: 'center'
+        }
+      },
+      yAxis: {
+        min: 0,
+        max: t.reduce((a,b) => Math.max(a.customer_total, b.customer_total)) + 4 ,
+        label: {
+          align: 'left'
+        }
+      },
+      legend: {
+        enable: false,
+        marginTop: 10
+      }
+    };
+
+    const line_canvas = document.createElement('canvas');
+    line_canvas.width = line_options.chart.width;
+    line_canvas.height = line_options.chart.height;
+    document.getElementById('graph').appendChild(line_canvas);
+    const miletravChart = new Jchart.line(line_canvas, line_data.data, line_options, line_data.ipo_index, line_data.volume);
     this.setState({
       tickets: tickets.data || [],
+      total_each_month: total_data_arr || [],
     })
   }
 
@@ -47,27 +114,35 @@ class analytic extends Component {
               <div className="card-title">{this.props.activity.activity_name}</div>
               <div className="card-desc">{(this.props.activity.city || '').toUpperCase()}</div>
             </div>
-            <div className="row" style={{ marginTop: 40 }}>
-              <div className="col-xs-12 col-sm-6 col-md-6">
-                {
-                  this.state.tickets.map(val => (
-                    <div className="activity-card" style={{ marginTop: 15 }} key={val.id}>
-                      <div className="card-title">{val.title}</div>
-                      <div className="card-desc">{val.price} Baht</div>
-                      <AnalyticCard tid={val.id} />
-                    </div>
-                  ))
-                }
-
-              </div>
-              <div className="col-xs-12 col-sm-6 col-md-6">
-               
+            <div className="graph-container">
+              <div className="graph">
+                <div className="graph-title">
+                  Customer Sumarry
+                </div>
+                <div id="graph" />
               </div>
             </div>
           </div>
         </div>
         <Footer />
         <style jsx>{`
+            .graph-title {
+              padding: 15px 0;
+              font-size: 22px;
+              margin-bottom: 15px;
+            }
+            .graph {
+              position: relative;
+              text-align: center;
+              background: #FFF;
+              max-width: 100%;
+              border: 1px solid #CCC;
+              padding: 35px;
+              overflow-x: auto;
+            }
+            .graph-container {
+              margin: 25px 0;
+            }
             .center {
               text-align: center;
             }
@@ -83,7 +158,7 @@ class analytic extends Component {
               border: 1px solid #CCCCCC;
             }
             .content {
-              background: #F5F5FF;
+              background: #EEF3F6;
               padding: 35px 0;
               min-height: 70vh;
             }
