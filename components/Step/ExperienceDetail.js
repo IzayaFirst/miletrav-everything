@@ -67,6 +67,10 @@ class ExperienceDetail extends Component {
       if (check.data.length === 0) {
         return true
       } else {
+        console.log(check.data[0].id ,  this.props.id)
+        if (check.data[0].id === this.props.id) {
+          return true
+        }
         return false
       }
     }

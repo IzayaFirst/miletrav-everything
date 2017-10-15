@@ -206,7 +206,6 @@ class Navbar extends Component {
 
               </div>
               <style jsx>{`
-               
                   .error-status {
                     color: #e62117;
                     font-size: 12px;

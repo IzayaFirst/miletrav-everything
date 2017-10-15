@@ -57,7 +57,7 @@ class overview extends Component {
             "columnWidth": 20,
             "color": "#24A6A4"
           },
-          "data": this.state.total_amount.map(val => val.total),
+          "data": this.state.total_amount.map(val => val.total || 0),
           "caption": false
         }]
       }
@@ -76,11 +76,11 @@ class overview extends Component {
           label: {
             align: 'center'
           },
-          data: this.state.total_amount.map(val => val.name),
+          data: this.state.total_amount.map(val => val.name.substring(0, 10)+"..."),
         },
         yAxis: {
           min: 0,
-          max: this.state.total_amount.reduce((a, b) => Math.max(a.total, b.total)) === 0 ? 10000 : this.state.total_amount.reduce((a, b) => Math.max(a.total, b.total))
+          max: this.state.total_amount.reduce((a, b) => Math.max(a.total || 0, b.total || 0)) === 0 ? 10000 : this.state.total_amount.reduce((a, b) => Math.max(a.total, b.total))
         },
         legend: {
           enable: true,
