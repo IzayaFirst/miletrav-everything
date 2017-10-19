@@ -13,6 +13,8 @@ class Home extends Component {
     lastestSport: [],
     lastestHistorical: [],
     lastestGuideBook: [],
+    lastestFood: [],
+    lastestParty: [],
     type: '',
     recommend: [],
   }
@@ -87,6 +89,22 @@ class Home extends Component {
         status: 1,
       }
     })
+    const lastestFood = await Api.get({
+      url: '/activities',
+      params: {
+        $limit: 8,
+        category: 'Food and Drink',
+        status: 1,
+      }
+    })
+    const lastestParty = await Api.get({
+      url: '/activities',
+      params: {
+        $limit: 8,
+        category: 'Party',
+        status: 1,
+      }
+    })
     const lastestGuideBook = await Api.get({
       url: '/guidebooks',
       params: {
@@ -101,6 +119,8 @@ class Home extends Component {
       lastest: lastestActivity.data || [],
       lastestSport: lastestSport.data || [],
       lastestHistorical: lastestHistorical.data || [],
+      lastestFood: lastestFood.data || [],
+      lastestParty: lastestParty.data || [],
       loading: false,
     })
   }
@@ -115,8 +135,23 @@ class Home extends Component {
 
       <div className="content">
         <div className="province">
-          <div className="title-category">
-            <i className="fa fa-smile-o"></i>  {_content.title_box}
+          <div className="welcome-section">
+            <div className="welcome-title">
+              {_content.title_box}
+            </div>
+            <div className="category-filter">
+              <label className="category-welcome" htmlFor="">{_content.title}</label>
+              <select onChange={this.chooseCategory.bind(this)} className="form-control-form-miletrav form-category">
+                <option>Category</option>
+                {
+                  this.props.category.map(val => (
+                    <option value={val.id} key={val.id} >
+                      {val.category_name}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
           </div>
         </div>
         {
@@ -166,19 +201,6 @@ class Home extends Component {
           !this.state.loading && (
             <div className="container">
               <div className="section-activity">
-                <div className="category-filter">
-                  <label htmlFor="">{_content.title}</label>
-                  <select onChange={this.chooseCategory.bind(this)} className="form-control-form-miletrav form-category">
-                    <option>Category</option>
-                    {
-                      this.props.category.map(val => (
-                        <option value={val.id} key={val.id} >
-                          {val.category_name}
-                        </option>
-                      ))
-                    }
-                  </select>
-                </div>
                 <div className="section-title">
                   {_content.last_activity}
                 </div>
@@ -261,12 +283,70 @@ class Home extends Component {
                   </div>
                 </div>
               </div>
+              <div className="section-activity">
+                <div className="section-title">
+                  Food and Drink
+                  </div>
+                <div>
+                  <div className="row">
+                    {
+                      this.state.lastestFood.map(val => (
+                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                          <a target="_blank" href={`/experience/${val.uuid}`}>
+                            <ActivityCard {...val} />
+                          </a>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              </div>
+              <div className="section-activity">
+                <div className="section-title">
+                  Party
+                  </div>
+                <div>
+                  <div className="row">
+                    {
+                      this.state.lastestParty.map(val => (
+                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                          <a target="_blank" href={`/experience/${val.uuid}`}>
+                            <ActivityCard {...val} />
+                          </a>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              </div>
             </div>
           )
         }
-
         <style>
           {`
+          .category-welcome {
+            font-size: 30px;
+            font-weight: 600;
+            color: black;
+            margin: 10px 0;
+          }
+          .welcome-title {
+            font-size: 40px;
+            font-weight: 600;
+            color: black;
+          }
+          .welcome-section {
+            width: 70%;
+            margin: 0 auto;
+            text-align: left;
+          }
+          @media only screen and (max-width: 768px) {
+            .welcome-section {
+              width: 90%;
+              text-align: center;
+              margin: 0 auto;
+            }
+          }
           .guide-tag {
             filter: brightness(1.00);
             position: relative !important;
@@ -296,7 +376,7 @@ class Home extends Component {
             padding: 6px 0;
             height: 100%;
             font-size: 20px;
-            width: 20%;
+            width: 30%;
             border: 3px solid #003;
             padding-left: 20px;
           }
