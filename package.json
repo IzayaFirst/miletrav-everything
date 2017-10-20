@@ -38,6 +38,8 @@
     "react-dropzone": "^3.13.3",
     "react-geosuggest": "^2.3.0",
     "react-headroom": "^2.1.5",
+    "react-owl-carousel": "^2.2.0",
+    "react-qr-reader": "^1.2.1",
     "react-quill": "^1.0.0",
     "react-rater": "^0.4.4",
     "react-star-rating": "^1.4.2",

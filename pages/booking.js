@@ -23,7 +23,7 @@ class booking extends Component {
     token: this.props.token,
     step: 1,
     ticket: {},
-    date: moment(),
+    date: moment(new Date()),
     amount: 1,
     transaction: '',
     activity: {},
@@ -72,8 +72,8 @@ class booking extends Component {
     const { date } = this.state
     const number_of_day = date.day()
     const open_day = this.state.operation.map(val => val.day)
-    console.log(this.state.ticket.amount)
     if (step === 2) {
+      console.log('date', this.state.date)
       if (!this.state.date) {
         this.setState({
           booking_err: true,
@@ -97,7 +97,7 @@ class booking extends Component {
         const transaction = await Api.post({
           url: '/chargesAmountWithoutPricing',
           data: {
-            date: moment(this.state.date).format("YYYY-MM-DD HH:mm:ss"),
+            date: moment(this.state.date).format("YYYY-MM-DD"),
             amount: parseInt(this.state.amount),
             userId: this.state.token.data.id,
             ticketId: this.state.ticket.id,
@@ -122,7 +122,7 @@ class booking extends Component {
           url: '/bookings',
           data: {
             transaction: btoa(new Date().getTime()),
-            date: moment(this.state.date).format("YYYY-MM-DD HH:mm:ss"),
+            date: moment(this.state.date).format("YYYY-MM-DD"),
             amount: parseInt(this.state.amount),
             userId: this.state.token.data.id,
             ticketId: this.state.ticket.id,

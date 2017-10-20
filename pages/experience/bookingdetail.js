@@ -22,6 +22,9 @@ class bookingdetail extends Component {
     })
     const ticket = await Api.get({
       url: '/tickets',
+      params: {
+        $limit: 500,
+      }
     })
     return { token, booking: booking.data, activity: activity.data, ticket: ticket.data }
   }

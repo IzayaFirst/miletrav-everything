@@ -5,6 +5,7 @@ import Header from '../components/Header/Header'
 import Navbar from '../components/Nav/Navbar'
 import * as Api from '../api'
 import Footer from '../components/Footer'
+import CheckinList from '../components/CheckinList'
 
 class checkin extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
@@ -12,7 +13,20 @@ class checkin extends Component {
     const { transaction } = req.query
     return { token, transaction: transaction || "" }
   }
+  async componentDidMount() {
+    const myActivity = await Api.get({
+      url: '/activities',
+      params: {
+        userId: this.props.token.data.id
+      }
+    })
+    this.setState({
+      activity: myActivity.data || []
+    })
+  }
+  
   state = {
+    activity: [],
     transaction: '' || this.props.transaction,
     transactionInfo: null,
     userInfo: null,
@@ -58,10 +72,12 @@ class checkin extends Component {
             id: ticketInfo.axiosData.activityId,
           }
         })
-        console.log(getActivity)
+
         if (getActivity.data.length > 0) {
           const { userId } = getActivity.data[0]
-          if (userId === this.props.token.data.id) {
+          const today = moment(new Date()).format("MMM Do YY")
+          const tr_date = moment(findTransaction.data[0].date).format("MMM Do YY")
+          if (userId === this.props.token.data.id && today == tr_date) {
             try {
               const insert = await Api.post({
                 url: '/checkins',
@@ -114,6 +130,7 @@ class checkin extends Component {
     })
   }
   render() {
+
     return (
       <div>
         <Header />
@@ -132,7 +149,7 @@ class checkin extends Component {
               {
                 !this.state.validate_transaction && (
                   <span className="error-status">
-                    Transaction code is not match with your activity or already used
+                    Transaction code is not match with your activity, invalid date or has been used
                   </span>
                 )
               }
@@ -149,11 +166,11 @@ class checkin extends Component {
             this.state.userInfo && this.state.complete && (
               <div className="info-section">
                 <div className="title-welcome txt-mt-green">
-                  Welcome 
+                  Welcome
                 </div>
                 <div className="user-info">
                   <div className="cover-photo">
-                    <img src={this.state.userInfo.cover_photo} alt="" className="resize"/>
+                    <img src={this.state.userInfo.cover_photo} alt="" className="resize" />
                   </div>
                   <div className="name txt-mt-green">
                     {this.state.userInfo.firstname} {this.state.userInfo.lastname}
@@ -165,7 +182,7 @@ class checkin extends Component {
                     <span className="booking-title">Booking date: </span>{moment(this.state.transactionInfo.date).format("LL")}
                   </div>
                   <div className="information-booking">
-                   <span className="booking-title">Ticket : </span>{this.state.ticketInfo.title}
+                    <span className="booking-title">Ticket : </span>{this.state.ticketInfo.title}
                   </div>
                   <div className="information-booking">
                     <span className="booking-title">Price : </span>{this.state.ticketInfo.price} Baht
@@ -177,8 +194,24 @@ class checkin extends Component {
               </div>
             )
           }
+          <div className="container">
+            <div className="title-today">
+              Today Guest
+            </div>
+                {
+                  this.state.activity.map(val => (
+                    <CheckinList {...val} key={val.id}/>
+                  ))
+                }
+          </div>
         </div>
         <style jsx>{`
+          .title-today {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+            padding: 15px 0;
+          }
           .booking-title {
             padding-right: 15px;
             font-weight: 600;

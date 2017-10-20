@@ -5,6 +5,7 @@ import * as Compute from '../../compute'
 import LoadingAnimation from '../LoadingAnimation'
 import ActivityCard from '../ActivityCard'
 import RecommendCard from '../RecommendCard'
+import CompanyCard from '../CompanyCard'
 
 class Home extends Component {
   state = {
@@ -17,6 +18,7 @@ class Home extends Component {
     lastestParty: [],
     type: '',
     recommend: [],
+    company: [],
   }
 
   async componentDidMount() {
@@ -112,8 +114,13 @@ class Home extends Component {
         status: 1,
       }
     })
-    console.log(recommend)
-
+    const company = await Api.get({
+      url: '/users',
+      params: {
+        is_company: 1,
+        $limit: 8,
+      }
+    })
     this.setState({
       lastestGuideBook: lastestGuideBook.data || [],
       lastest: lastestActivity.data || [],
@@ -121,6 +128,7 @@ class Home extends Component {
       lastestHistorical: lastestHistorical.data || [],
       lastestFood: lastestFood.data || [],
       lastestParty: lastestParty.data || [],
+      company: company.data || [],
       loading: false,
     })
   }
@@ -245,6 +253,24 @@ class Home extends Component {
                       </div>
                     ))
                   }
+                </div>
+              </div>
+              <div className="section-activity">
+                <div className="section-title">
+                  Company <a href="/company/list" style={{fontSize: 16}}>(See more)</a>
+                </div>
+                <div>
+                  <div className="row">
+                    {
+                      this.state.company.map(val => (
+                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                          <a target="_blank" href={`/host/detail/${val.id}`}>
+                            <CompanyCard {...val} />
+                          </a>
+                        </div>
+                      ))
+                    }
+                  </div>
                 </div>
               </div>
               <div className="section-activity">

@@ -11,5 +11,6 @@ module.exports = function (app, server, middlewareFunction) {
     server.get('/analytic/:uuid', middlewareFunction.requireMemberCompany , (req, res, next) => app.render(req, res, '/analytic', middlewareFunction.getAllReqValue({ req, res })))
     server.get('/checkin', middlewareFunction.requireMemberCompany , (req, res, next) => app.render(req, res, '/checkin', middlewareFunction.getAllReqValue({ req, res })))
     server.get('/list', (req, res, next) => app.render(req, res, '/list', middlewareFunction.getAllReqValue({ req, res })))
+    server.get('/company/list', (req, res, next) => app.render(req, res, '/company/list', middlewareFunction.getAllReqValue({ req, res })))
 
 }

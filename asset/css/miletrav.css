@@ -289,7 +289,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
   background: url('https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/alice-donovan-rouse-194653%20(1).jpg?alt=media&token=708c0361-f63d-489c-83c5-33095698b89b') top center no-repeat;
   background-size: cover;
   padding-top: 20vh;
-  min-height: 80vh;
+  min-height: 60vh;
   margin-bottom: 15px;
 }
 @media only screen and (min-width: 768px) {

@@ -97,14 +97,14 @@ class CreditCardForm extends Component {
         const date = this.props.date
         const limit = this.props.ticket.amount
         if (limit) {
-          console.log(moment(date).format("YYYY-MM-DD HH:mm:ss"))
+          console.log(moment(date).format("YYYY-MM-DD"))
           const check = await Api.post({
             url: '/chargesAmountWithPricing',
             data: {
               total,
               userId,
               ticketId,
-              date: moment(date).format("YYYY-MM-DD HH:mm:ss"),
+              date: moment(date).format("YYYY-MM-DD"),
               amount: parseInt(this.props.amount),
               card: id,
             },
@@ -127,7 +127,7 @@ class CreditCardForm extends Component {
               total,
               userId,
               ticketId,
-              date: moment(date).format("YYYY-MM-DD HH:mm:ss"),
+              date: moment(date).format("YYYY-MM-DD"),
               isLimit,
               amount: this.props.amount,
               card: id,
@@ -142,7 +142,7 @@ class CreditCardForm extends Component {
               url: '/bookings',
               data: {
                 transaction: id,
-                date: moment(this.props.date).format("YYYY-MM-DD HH:mm:ss"),
+                date: moment(this.props.date).format("YYYY-MM-DD"),
                 amount: parseInt(this.props.amount),
                 userId,
                 ticketId,

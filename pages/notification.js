@@ -9,13 +9,17 @@ import Footer from '../components/Footer'
 class notification extends Component {
   static async getInitialProps({ req = {}, res = {} }) {
     const token = getCookiesFromReq(req)
-     const activity = await Api.get({
+    const activity = await Api.get({
       url: '/activities',
     })
     const ticket = await Api.get({
       url: '/tickets',
+      params: {
+        $limit: 500,
+      }
     })
-    return { token , activity: activity.data, ticket: ticket.data}
+    console.log(ticket)
+    return { token, activity: activity.data, ticket: ticket.data }
   }
   state = {
     oneweek: [],
@@ -29,23 +33,24 @@ class notification extends Component {
         $limit: 50,
       }
     })
-    console.log(token.data.id)
     const bookings = booking.data
-    console.log(booking.data)
+    console.log('bookings', bookings)
     const noti = bookings.filter((val) => {
       const date = moment(val.date).startOf('day')
       const today = moment(new Date()).startOf('day')
-      const is = today <= date && date <= today.add(7 , "days")
+      const is = today <= date && date <= today.add(7, "days")
       return is
     })
-    console.log(noti)
+    console.log('noti', noti)
     this.setState({
       oneweek: noti || [],
     })
   }
   getTicket(id) {
     const tickets = this.props.ticket || []
+    console.log('tickets', this.props.ticket)
     const ticket = tickets.filter(val => val.id === id)
+    console.log('ee', ticket)
     return ticket[0]
   }
   getActivity(id) {
@@ -54,6 +59,7 @@ class notification extends Component {
     return activity[0]
   }
   render() {
+    console.log(this.state.oneweek)
     return (
       <div>
         <Header />

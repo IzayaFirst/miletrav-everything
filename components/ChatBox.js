@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
 import firebaseConfig, { sendMessage } from '../helpers/uploadToFirebase'
+import * as Api from '../api'
 
 class ChatBox extends Component {
   state = {
     isOpen: false,
     message: '',
     messages: {},
+    receiver: '',
   }
   async componentDidMount() {
     const senderId = this.props.token.data.id
     const receiverId = this.props.host.id
+    const receiver = await Api.get({
+      url: '/users',
+      params: {
+        id: this.props.host.id
+      }
+    })
+
     const low = senderId < receiverId ? senderId : receiverId
     const high = senderId < receiverId ? receiverId : senderId
     const table = low + "chat" + high
@@ -71,6 +80,7 @@ class ChatBox extends Component {
                 {
                   Object.keys(this.state.messages).map((key, index) => (
                     <div className="token" key={key}>
+
                       <div className={this.state.messages[key].senderId === this.props.token.data.id ? 'chat-token right' : 'chat-token left'}>
                         {this.state.messages[key].message}
                       </div>
