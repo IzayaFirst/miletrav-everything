@@ -13,6 +13,12 @@ class checkin extends Component {
     const { transaction } = req.query
     return { token, transaction: transaction || "" }
   }
+  constructor(props){
+    super(props)
+    if(typeof window !== 'undefined') {
+      this.QrReader = require('react-qr-reader')
+    }
+  }
   async componentDidMount() {
     const myActivity = await Api.get({
       url: '/activities',
@@ -21,10 +27,11 @@ class checkin extends Component {
       }
     })
     this.setState({
-      activity: myActivity.data || []
+      activity: myActivity.data || [],
+      isRender: true,
     })
   }
-  
+
   state = {
     activity: [],
     transaction: '' || this.props.transaction,
@@ -33,6 +40,7 @@ class checkin extends Component {
     ticketInfo: null,
     validate_transaction: true,
     complete: false,
+    isRender: false,
   }
   setTransaction(e) {
     this.setState({
@@ -129,12 +137,40 @@ class checkin extends Component {
       transaction: ''
     })
   }
+  handleScan(data) {
+    this.setState({
+      transaction: data,
+    })
+  }
+  handleError(err) {
+    console.error(err)
+  }
   render() {
-
+    const previewStyle = {
+      height: 480,
+      width: 480,
+    }
+    const QrReader = this.QrReader
     return (
       <div>
         <Header />
         <div className="content">
+          {
+            this.state.isRender && (
+              <div className="qr-container">
+              <div style={{display: 'inline-block'}}>
+                  <QrReader
+                    delay={100}
+                    style={previewStyle}
+                    onError={this.handleError}
+                    onScan={this.handleScan.bind(this)}
+                  />
+              </div>
+               
+              </div>
+            )
+          }
+
           <div className="card">
             <div className="title">
               Enter a transaction code to check in
@@ -198,14 +234,20 @@ class checkin extends Component {
             <div className="title-today">
               Today Guest
             </div>
-                {
-                  this.state.activity.map(val => (
-                    <CheckinList {...val} key={val.id}/>
-                  ))
-                }
+            {
+              this.state.activity.map(val => (
+                <CheckinList {...val} key={val.id} />
+              ))
+            }
           </div>
         </div>
         <style jsx>{`
+          .qr-container {
+            text-align:center;
+            width: 60%;
+            margin: 0 auto;
+            height: auto;
+          }
           .title-today {
             text-align: center;
             font-size: 22px;
