@@ -13,9 +13,9 @@ class checkin extends Component {
     const { transaction } = req.query
     return { token, transaction: transaction || "" }
   }
-  constructor(props){
+  constructor(props) {
     super(props)
-    if(typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       this.QrReader = require('react-qr-reader')
     }
   }
@@ -154,99 +154,110 @@ class checkin extends Component {
     return (
       <div>
         <Header />
+        <Navbar token={this.props.token ? this.props.token : false} />
         <div className="content">
-          {
-            this.state.isRender && (
-              <div className="qr-container">
-              <div style={{display: 'inline-block'}}>
-                  <QrReader
-                    delay={100}
-                    style={previewStyle}
-                    onError={this.handleError}
-                    onScan={this.handleScan.bind(this)}
-                  />
-              </div>
-               
-              </div>
-            )
-          }
-
-          <div className="card">
-            <div className="title">
-              Enter a transaction code to check in
-            </div>
-            <div className="checkin">
-              <div className="checkin-input">
-                <input onChange={this.setTransaction.bind(this)} value={this.state.transaction} type="text" className="form-control form-miletrav" style={{ width: '100%' }} />
-              </div>
-              <div className="checkin-btn">
-                <a onClick={this.submitCode.bind(this)} className="btn btn-primary">Submit</a>
-              </div>
-              {
-                !this.state.validate_transaction && (
-                  <span className="error-status">
-                    Transaction code is not match with your activity, invalid date or has been used
-                  </span>
-                )
-              }
-              {
-                this.state.complete && (
-                  <span className="complete-status ">
-                    Check in complete
-                  </span>
-                )
-              }
-            </div>
-          </div>
-          {
-            this.state.userInfo && this.state.complete && (
-              <div className="info-section">
-                <div className="title-welcome txt-mt-green">
-                  Welcome
-                </div>
-                <div className="user-info">
-                  <div className="cover-photo">
-                    <img src={this.state.userInfo.cover_photo} alt="" className="resize" />
-                  </div>
-                  <div className="name txt-mt-green">
-                    {this.state.userInfo.firstname} {this.state.userInfo.lastname}
-                  </div>
-                  <div className="information-booking">
-                    <span className="booking-title">Transaction id: </span>{this.state.transactionInfo.transaction}
-                  </div>
-                  <div className="information-booking">
-                    <span className="booking-title">Booking date: </span>{moment(this.state.transactionInfo.date).format("LL")}
-                  </div>
-                  <div className="information-booking">
-                    <span className="booking-title">Ticket : </span>{this.state.ticketInfo.title}
-                  </div>
-                  <div className="information-booking">
-                    <span className="booking-title">Price : </span>{this.state.ticketInfo.price} Baht
-                  </div>
-                  <div className="information-booking">
-                    <span className="booking-title">Amount : </span>{this.state.transactionInfo.amount} persons
-                  </div>
-                </div>
-              </div>
-            )
-          }
           <div className="container">
-            <div className="title-today">
-              Today Guest
+            <div className="row">
+              <div className="col-xs-12 col-sm-6">
+                {
+                  this.state.isRender && (
+                    <div className="qr-container">
+                      <div style={{ display: 'inline-block' }}>
+                        <QrReader
+                          delay={100}
+                          style={previewStyle}
+                          onError={this.handleError}
+                          onScan={this.handleScan.bind(this)}
+                        />
+                      </div>
+
+                    </div>
+                  )
+                }
+              </div>
+              <div className="col-xs-12 col-sm-6">
+                <div className="card">
+                  <div className="title">
+                    Enter a transaction code to check in
             </div>
-            {
-              this.state.activity.map(val => (
-                <CheckinList {...val} key={val.id} />
-              ))
-            }
+                  <div className="checkin">
+                    <div className="checkin-input">
+                      <input onChange={this.setTransaction.bind(this)} value={this.state.transaction} type="text" className="form-control form-miletrav" style={{ width: '100%' }} />
+                    </div>
+                    <div className="checkin-btn">
+                      <a onClick={this.submitCode.bind(this)} className="btn btn-primary">Submit</a>
+                    </div>
+                    {
+                      !this.state.validate_transaction && (
+                        <span className="error-status">
+                          Transaction code is not match with your activity, invalid date or has been used
+                  </span>
+                      )
+                    }
+                    {
+                      this.state.complete && (
+                        <span className="complete-status ">
+                          Check in complete
+                  </span>
+                      )
+                    }
+                  </div>
+                </div>
+                {
+                  this.state.userInfo && this.state.complete && (
+                    <div className="info-section">
+                      <div className="title-welcome txt-mt-green">
+                        Welcome
+                    </div>
+                      <div className="user-info">
+                        <div className="cover-photo">
+                          <img src={this.state.userInfo.cover_photo} alt="" className="resize" />
+                        </div>
+                        <div className="name txt-mt-green">
+                          {this.state.userInfo.firstname} {this.state.userInfo.lastname}
+                        </div>
+                        <div className="information-booking">
+                          <span className="booking-title">Transaction id: </span>{this.state.transactionInfo.transaction}
+                        </div>
+                        <div className="information-booking">
+                          <span className="booking-title">Booking date: </span>{moment(this.state.transactionInfo.date).format("LL")}
+                        </div>
+                        <div className="information-booking">
+                          <span className="booking-title">Ticket : </span>{this.state.ticketInfo.title}
+                        </div>
+                        <div className="information-booking">
+                          <span className="booking-title">Price : </span>{this.state.ticketInfo.price} Baht
+                        </div>
+                        <div className="information-booking">
+                          <span className="booking-title">Amount : </span>{this.state.transactionInfo.amount} persons
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
+                  <div className="title-today">
+                    Today Guest
+                  </div>
+                  {
+                    this.state.activity.map(val => (
+                      <CheckinList {...val} key={val.id} />
+                    ))
+                  }
+                </div>
+            </div>
           </div>
+
+
+
+
         </div>
         <style jsx>{`
           .qr-container {
             text-align:center;
-            width: 60%;
-            margin: 0 auto;
+            width: 80%;
             height: auto;
+            background: #000;
+            margin: 15px auto;
           }
           .title-today {
             text-align: center;
@@ -318,7 +329,7 @@ class checkin extends Component {
             text-align: center;
           }
           .card {
-            width: 50%;
+            width: 100%;
             margin: 0 auto;
             padding: 25px 15px;
             background: #FFF;
@@ -326,7 +337,7 @@ class checkin extends Component {
             border-radius: 4px;
           }
           .user-info {
-            width: 30%;
+            width: 70%;
             margin: 0 auto;
             padding: 25px 15px;
             background: #FFF;
@@ -347,6 +358,8 @@ class checkin extends Component {
               min-height: 100vh;
           }
         `}</style>
+                <Footer />
+
       </div>
     );
   }
