@@ -358,8 +358,7 @@ class checkin extends Component {
               min-height: 100vh;
           }
         `}</style>
-                <Footer />
-
+        <Footer />
       </div>
     );
   }
