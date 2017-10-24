@@ -73,7 +73,7 @@ Header.defaultProps = {
     pdf: false,
     title: 'Miletrav - Purely you',
     metaDesc: 'Unforgettable day begins with Miletrav. Find adventures nearby or in faraway places and access unique experiences that will passionate your life.',
-    metaKeywords: ['recruitment', 'hired', 'hiring', 'team', 'integration'],
+    metaKeywords: ['travel', 'activity', 'experience', 'recommendation system', 'passion'],
     ogTitle: 'Miletrav - Purely you',
     ogDesc: 'Unforgettable day begins with Miletrav. Find adventures nearby or in faraway places and access unique experiences that will passionate your life.',
     ogImage: 'https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/OG.jpg?alt=media&token=506891bc-21d0-4430-b0c2-20bb065bbd68',
