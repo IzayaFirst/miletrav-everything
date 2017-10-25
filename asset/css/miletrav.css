@@ -288,10 +288,19 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 .province {
   background: url('https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/alice-donovan-rouse-194653%20(1).jpg?alt=media&token=708c0361-f63d-489c-83c5-33095698b89b') top center no-repeat;
   background-size: cover;
-  padding-top: 20vh;
+  padding-top: 15vh;
   min-height: 60vh;
   margin-bottom: 15px;
 }
+@media only screen and (max-width: 768px) {
+  .province {
+      padding-top: 10vh;
+   }
+}
+.register-primary:hover {
+  color: #24A6A4;
+}
+    
 @media only screen and (min-width: 768px) {
   .mobile-only {
       display: none;

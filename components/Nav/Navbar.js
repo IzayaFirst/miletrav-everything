@@ -143,12 +143,10 @@ class Navbar extends Component {
               <Menu token={this.state.token} cover_photo={this.state.cover_photo} logout={this.logout.bind(this)} _content={this.state._content}/> :
               <Bar.Collapse>
                 <Nav pullRight>
-                  <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} style={{ paddingTop: 8 }}>{this.state._content.register_company}</NavItem>
-                  <NavItem onClick={this.toggleOn.bind(this)} eventKey={2} style={{ paddingTop: 8 }}>{this.state._content.login}</NavItem>
-                  <NavItem eventKey={3}>
-                    <ButtonToolbar>
-                      <Button onClick={this.goToRegister.bind(this)} bsStyle="primary">{this.state._content.register}</Button>
-                    </ButtonToolbar>
+                  <NavItem onClick={this.goToRegisterCompany.bind(this)} eventKey={1} >{this.state._content.register_company}</NavItem>
+                  <NavItem onClick={this.toggleOn.bind(this)} eventKey={2} >{this.state._content.login}</NavItem>
+                  <NavItem bsStyle="register-primary" eventKey={3} onClick={this.goToRegister.bind(this)}>
+                   {this.state._content.register}
                   </NavItem>
                 </Nav>
               </Bar.Collapse>
@@ -206,6 +204,7 @@ class Navbar extends Component {
 
               </div>
               <style jsx>{`
+                 
                   .error-status {
                     color: #e62117;
                     font-size: 12px;
@@ -267,12 +266,12 @@ class Navbar extends Component {
             }
             .header-logo {
               display: inline-block;
-              margin: 15px 0;
+              margin: 5px 0;
               width: 120px;
             }
             @media only screen and (max-width: 768px) {
               .header-logo {
-                margin: 0;
+                padding: 0 3px;
                 width: 100px;
               }
             }
@@ -314,11 +313,11 @@ const Menu = ({ token, logout, cover_photo, _content }) => (
       token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
-            <NavItem onClick={() => window.location = '/'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-home fa-lg" /></NavItem>
-            <NavItem onClick={() => window.location = '/checkin'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-map-marker fa-lg" /></NavItem>
-            <NavItem onClick={() => window.location = '/overview'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-area-chart fa-lg" /></NavItem>
-            <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-commenting-o fa-lg" /></NavItem>
-            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
+            <NavItem onClick={() => window.location = '/'} eventKey={1} ><i className="fa fa-home fa-lg" /></NavItem>
+            <NavItem onClick={() => window.location = '/checkin'} eventKey={1} ><i className="fa fa-map-marker fa-lg" /></NavItem>
+            <NavItem onClick={() => window.location = '/overview'} eventKey={1} ><i className="fa fa-area-chart fa-lg" /></NavItem>
+            <NavItem onClick={() => window.location = '/message'} eventKey={1} ><i className="fa fa-commenting-o fa-lg" /></NavItem>
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 5 }}>
               <MenuItem onClick={() => window.location = '/company/profile'} eventKey={1.1}>Company Profile</MenuItem>
               <div className="divider" />
               <MenuItem onClick={logout} eventKey={1.3}>Logout</MenuItem>
@@ -331,9 +330,9 @@ const Menu = ({ token, logout, cover_photo, _content }) => (
       !token.data.is_company && (
         <Bar.Collapse>
           <Nav pullRight>
-            <NavItem onClick={() => window.location = '/notification'} eventKey={1} style={{ paddingTop: 8 }}><NotificationButton token={token}/></NavItem>
-            <NavItem onClick={() => window.location = '/message'} eventKey={1} style={{ paddingTop: 8 }}><i className="fa fa-commenting-o fa-lg" /></NavItem>
-            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 15 }}>
+            <NavItem onClick={() => window.location = '/notification'} eventKey={1} ><NotificationButton token={token}/></NavItem>
+            <NavItem onClick={() => window.location = '/message'} eventKey={1} ><i className="fa fa-commenting-o fa-lg" /></NavItem>
+            <DropdownButton eventKey={1} title={<ImgTitle token={token} cover_photo={cover_photo} />} style={{ marginTop: 5 }}>
               <MenuItem onClick={() => window.location = '/user/profile'} eventKey={1.1}>Profile</MenuItem>
               <MenuItem onClick={() => window.location = '/booking/detail/me'} eventKey={1.2}>History</MenuItem>
               <MenuItem onClick={() => window.location = '/guidebook/me'} eventKey={1.2}>Guide Book</MenuItem>
