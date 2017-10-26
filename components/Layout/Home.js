@@ -216,7 +216,7 @@ class Home extends Component {
                   <div className="row">
                     {
                       this.state.recommend.map(val => (
-                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                        <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
                           <RecommendCard {...val} type={this.state.type} />
                         </div>
                       ))
@@ -231,7 +231,7 @@ class Home extends Component {
                 <div className="row">
                   {
                     this.state.lastestGuideBook.map(val => (
-                      <div className="col-xs-6 col-sm-6 col-md-3" key={val.id}>
+                      <div className="col-xs-6 col-sm-6 col-md-4" key={val.id}>
                         <a target="_blank" href={`/guidebook/${val.uuid}`}>
                           <div className="guidebook-background"
                             style={{
@@ -263,7 +263,7 @@ class Home extends Component {
                   <div className="row">
                     {
                       this.state.company.map(val => (
-                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                        <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
                           <a target="_blank" href={`/host/detail/${val.id}`}>
                             <CompanyCard {...val} />
                           </a>
@@ -281,7 +281,7 @@ class Home extends Component {
                   <div className="row">
                     {
                       this.state.lastestSport.map(val => (
-                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                        <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
                           <a target="_blank" href={`/experience/${val.uuid}`}>
                             <ActivityCard {...val} />
                           </a>
@@ -299,7 +299,7 @@ class Home extends Component {
                   <div className="row">
                     {
                       this.state.lastestHistorical.map(val => (
-                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                        <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
                           <a target="_blank" href={`/experience/${val.uuid}`}>
                             <ActivityCard {...val} />
                           </a>
@@ -317,7 +317,7 @@ class Home extends Component {
                   <div className="row">
                     {
                       this.state.lastestFood.map(val => (
-                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                        <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
                           <a target="_blank" href={`/experience/${val.uuid}`}>
                             <ActivityCard {...val} />
                           </a>
@@ -335,7 +335,7 @@ class Home extends Component {
                   <div className="row">
                     {
                       this.state.lastestParty.map(val => (
-                        <div className="col-xs-12 col-sm-6 col-md-3" key={val.id}>
+                        <div className="col-xs-12 col-sm-6 col-md-4" key={val.id}>
                           <a target="_blank" href={`/experience/${val.uuid}`}>
                             <ActivityCard {...val} />
                           </a>
