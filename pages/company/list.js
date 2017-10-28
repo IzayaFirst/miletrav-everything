@@ -27,10 +27,15 @@ class list extends Component {
         <Header />
         <Navbar token={this.props.token ? this.props.token : false} />
         <div className="content">
-          <div className="container">
-            <div className="title">
-              Our Company
+          <div className="bg-tile">
+            <div className="container">
+              <div className="title txt-mt-white">
+                Our Company
+              </div>
             </div>
+          </div>
+          <div className="container">
+
             <div className="row">
               {
                 this.state.company.map(val => (
@@ -46,14 +51,24 @@ class list extends Component {
         </div>
         <style>
           {`
+          .bg-tile {
+            background: url('https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/jakob-owens-203725%20(1).jpg?alt=media&token=53756d1c-e7ba-47f8-ad64-19d8961cdcac');             
+            background-size: cover;
+            padding: 85px 0;
+            margin-bottom: 20px;
+          }
           .title {
             padding: 15px 0;
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 600;
           }
           .content {
-            padding: 50px 0; 
             min-height: 70vh;
+          }
+          @media only screen and (max-width: 768px) {
+            .title {
+              text-align: center;
+            }
           }
           
         `}
