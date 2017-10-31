@@ -12,6 +12,9 @@ class UserCheckinList extends Component {
         date: moment(new Date()).format("YYYY-MM-DD")
       }
     })
+    if (bookings.data.length > 0) {
+      this.props.setGuest()
+    }
     this.setState({
       bookings: bookings.data || [],
     })
@@ -27,6 +30,16 @@ class UserCheckinList extends Component {
            <UserCheckinDetail {...val} activity_name={this.props.activity_name}/>
           ))
         }
+       
+        <style>{`
+          .card {
+            background: #FFF;
+            padding: 15px;
+            text-align: center;
+          }
+          
+          
+          `}</style>
       </div>
     );
   }

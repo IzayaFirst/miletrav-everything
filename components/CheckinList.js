@@ -22,7 +22,7 @@ class CheckinList extends Component {
       <div>
         {
           this.state.tickets.map(val => (
-            <UserCheckinList {...val} key={val.id} activity_name={this.props.activity_name}/>
+            <UserCheckinList setGuest={this.props.setGuest} {...val} key={val.id} activity_name={this.props.activity_name}/>
           ))
         }
       </div>

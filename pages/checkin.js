@@ -41,6 +41,12 @@ class checkin extends Component {
     validate_transaction: true,
     complete: false,
     isRender: false,
+    noGuest: false,
+  }
+  setGuest(){
+    this.setState({
+      noGuest: true,
+    })
   }
   setTransaction(e) {
     this.setState({
@@ -240,8 +246,15 @@ class checkin extends Component {
                   </div>
                   {
                     this.state.activity.map(val => (
-                      <CheckinList {...val} key={val.id} />
+                      <CheckinList setGuest={this.setGuest.bind(this)} {...val} key={val.id} />
                     ))
+                  }
+                  {
+                    !this.state.noGuest && (
+                      <div className="card" style={{fontSize: 22 }}>
+                        No guest today
+                      </div>
+                    )
                   }
                 </div>
             </div>
