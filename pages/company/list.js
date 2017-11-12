@@ -51,12 +51,7 @@ class list extends Component {
         </div>
         <style>
           {`
-          .bg-tile {
-            background: url('https://firebasestorage.googleapis.com/v0/b/miletrav-4f855.appspot.com/o/jakob-owens-203725%20(1).jpg?alt=media&token=53756d1c-e7ba-47f8-ad64-19d8961cdcac');             
-            background-size: cover;
-            padding: 85px 0;
-            margin-bottom: 20px;
-          }
+
           .title {
             padding: 15px 0;
             font-size: 28px;
